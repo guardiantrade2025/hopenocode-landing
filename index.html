@@ -14,22 +14,13 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             color: white;
             transition: all 0.3s ease;
+            overflow-x: hidden;
         }
 
         body.dark-mode {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-        }
-
-        .container {
-            text-align: center;
-            max-width: 800px;
-            padding: 40px 20px;
         }
 
         .theme-toggle {
@@ -45,6 +36,7 @@
             font-size: 14px;
             transition: all 0.3s ease;
             backdrop-blur: 10px;
+            z-index: 1000;
         }
 
         .theme-toggle:hover {
@@ -52,11 +44,47 @@
             transform: scale(1.05);
         }
 
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
         h1 {
             font-size: 4rem;
             font-weight: bold;
             margin-bottom: 20px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInUp 1s ease;
         }
 
         .gradient-text {
@@ -66,19 +94,32 @@
             background-clip: text;
         }
 
-        p {
+        .hero-subtitle {
             font-size: 1.3rem;
             margin-bottom: 40px;
             opacity: 0.9;
             line-height: 1.6;
+            animation: fadeInUp 1s ease 0.2s both;
         }
 
-        .buttons {
+        .hero-buttons {
             display: flex;
             gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-bottom: 40px;
+            margin-bottom: 60px;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .btn {
@@ -115,6 +156,99 @@
             border-color: rgba(255,255,255,0.5);
         }
 
+        /* Features Section */
+        .features {
+            padding: 80px 20px;
+            background: rgba(255,255,255,0.05);
+            backdrop-blur: 10px;
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            font-weight: bold;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-blur: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .feature-description {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 80px 20px;
+        }
+
+        .testimonials-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-blur: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .testimonial-author {
+            font-weight: bold;
+            color: #4ecdc4;
+        }
+
+        /* Contact Form */
         .contact-form {
             background: rgba(255,255,255,0.1);
             padding: 30px;
@@ -207,22 +341,72 @@
             background: linear-gradient(45deg, #ff6b6b, #ee5a52);
         }
 
+        /* Footer */
+        .footer {
+            background: rgba(0,0,0,0.3);
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .footer-text {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2.5rem;
             }
             
-            p {
+            .hero-subtitle {
                 font-size: 1.1rem;
             }
             
-            .buttons {
+            .hero-buttons {
                 flex-direction: column;
                 align-items: center;
             }
 
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
             .contact-form {
                 margin: 20px;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 15px;
             }
         }
     </style>
@@ -230,40 +414,117 @@
 <body>
     <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
     
-    <div class="container">
-        <h1>Welcome to <span class="gradient-text">HopeNocode</span></h1>
-        <p>Transform your ideas into reality with our cutting-edge AI-powered development platform. No coding required, just pure innovation.</p>
-        <div class="buttons">
-            <button class="btn btn-primary" onclick="getStarted()">Get Started Free</button>
-            <button class="btn btn-secondary" onclick="watchDemo()">Watch Demo</button>
-            <button class="btn btn-secondary" onclick="toggleContact()">Contact Us</button>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Welcome to <span class="gradient-text">HopeNocode</span></h1>
+            <p class="hero-subtitle">Transform your ideas into reality with our cutting-edge AI-powered development platform. No coding required, just pure innovation.</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary" onclick="getStarted()">Get Started Free</button>
+                <button class="btn btn-secondary" onclick="watchDemo()">Watch Demo</button>
+                <button class="btn btn-secondary" onclick="toggleContact()">Contact Us</button>
+            </div>
         </div>
-        
-        <div class="contact-form" id="contactForm">
-            <h3 style="margin-bottom: 20px;">Get in Touch</h3>
-            <form onsubmit="submitForm(event)">
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" name="name" placeholder="Your name" required>
-                    <div class="error" id="nameError">Please enter your name</div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="features-container">
+            <h2 class="section-title">Why Choose HopeNocode?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3 class="feature-title">AI-Powered Development</h3>
+                    <p class="feature-description">Our advanced AI understands your requirements and generates code automatically, saving you hours of development time.</p>
                 </div>
-                
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
-                    <div class="error" id="emailError">Please enter a valid email</div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Lightning Fast</h3>
+                    <p class="feature-description">Build complete applications in minutes, not months. Our platform accelerates development by 10x.</p>
                 </div>
-                
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" rows="4" placeholder="Tell us about your project..." required></textarea>
-                    <div class="error" id="messageError">Please enter your message</div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">No Coding Required</h3>
+                    <p class="feature-description">Describe what you want in plain English, and our AI will create it for you. No technical skills needed.</p>
                 </div>
-                
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
-            </form>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="feature-title">Enterprise Security</h3>
+                    <p class="feature-description">Bank-level security with end-to-end encryption and compliance with industry standards.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3 class="feature-title">Cross-Platform</h3>
+                    <p class="feature-description">Build for web, mobile, and desktop simultaneously. One codebase, multiple platforms.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3 class="feature-title">Instant Deployment</h3>
+                    <p class="feature-description">Deploy your applications with one click. No server setup or configuration required.</p>
+                </div>
+            </div>
         </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="testimonials-container">
+            <h2 class="section-title">What Our Users Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"HopeNocode transformed our startup. We went from idea to MVP in just 2 weeks!"</p>
+                    <p class="testimonial-author">- Sarah Johnson, TechStart CEO</p>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"The AI is incredibly intelligent. It understood our complex requirements perfectly."</p>
+                    <p class="testimonial-author">- Mike Chen, Product Manager</p>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Finally, a platform that makes development accessible to everyone!"</p>
+                    <p class="testimonial-author">- Lisa Rodriguez, Entrepreneur</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form -->
+    <div class="contact-form" id="contactForm">
+        <h3 style="margin-bottom: 20px;">Get in Touch</h3>
+        <form onsubmit="submitForm(event)">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Your name" required>
+                <div class="error" id="nameError">Please enter your name</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                <div class="error" id="emailError">Please enter a valid email</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="4" placeholder="Tell us about your project..." required></textarea>
+                <div class="error" id="messageError">Please enter your message</div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+        </form>
     </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#" class="footer-link">Privacy Policy</a>
+                <a href="#" class="footer-link">Terms of Service</a>
+                <a href="#" class="footer-link">Support</a>
+                <a href="#" class="footer-link">Documentation</a>
+            </div>
+            <p class="footer-text">© 2024 HopeNocode. All rights reserved. Built with ❤️ for the future of development.</p>
+        </div>
+    </footer>
 
     <div id="notification" class="notification"></div>
 
@@ -377,16 +638,49 @@
             }, 1000);
         }
 
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all feature cards and testimonials
+        document.querySelectorAll('.feature-card, .testimonial-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+
         // Add some fun animations when the page loads
         document.addEventListener('DOMContentLoaded', function() {
-            const container = document.querySelector('.container');
-            container.style.opacity = '0';
-            container.style.transform = 'translateY(20px)';
+            const heroContent = document.querySelector('.hero-content');
+            heroContent.style.opacity = '0';
+            heroContent.style.transform = 'translateY(20px)';
             
             setTimeout(() => {
-                container.style.transition = 'all 0.8s ease';
-                container.style.opacity = '1';
-                container.style.transform = 'translateY(0)';
+                heroContent.style.transition = 'all 0.8s ease';
+                heroContent.style.opacity = '1';
+                heroContent.style.transform = 'translateY(0)';
             }, 100);
         });
     </script>
