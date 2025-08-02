@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Analytics - HopeNocode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .analytics-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: rgba(255,255,255,0.1);
+            backdrop-blur: 10px;
+            border-right: 1px solid rgba(255,255,255,0.2);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 10px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            transform: translateX(5px);
+        }
+
+        .nav-link i {
+            margin-right: 12px;
+            font-size: 1.1rem;
+        }
+
+        .user-section {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-weight: bold;
+        }
+
+        .user-details h4 {
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .user-details p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            backdrop-blur: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Analytics Grid */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-blur: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4ecdc4;
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+            opacity: 0.8;
+        }
+
+        .metric {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .metric-change {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .metric-change.positive {
+            color: #4ecdc4;
+        }
+
+        .metric-change.negative {
+            color: #ff6b6b;
+        }
+
+        /* Advanced Charts */
+        .chart-container {
+            height: 250px;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .chart-bar {
+            display: flex;
+            align-items: end;
+            height: 180px;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .chart-bar-item {
+            flex: 1;
+            background: linear-gradient(to top, #4ecdc4, #44a08d);
+            border-radius: 5px 5px 0 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .chart-bar-item:hover {
+            transform: scaleY(1.1);
+        }
+
+        .chart-label {
+            text-align: center;
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-label span {
+            flex: 1;
+            text-align: center;
+            font-size: 0.75rem;
+        }
+
+        /* Real-time Indicators */
+        .real-time-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #4ecdc4;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Report Builder */
+        .report-builder {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.1), rgba(255, 107, 107, 0.1));
+            border: 1px solid rgba(78, 205, 196, 0.3);
+        }
+
+        .report-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .report-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .report-control select, .report-control input {
+            padding: 8px 12px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            backdrop-blur: 5px;
+        }
+
+        .report-control select option {
+            background: #333;
+            color: white;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .kpi-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .kpi-card:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        .kpi-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .kpi-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Predictive Analytics */
+        .prediction-card {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(78, 205, 196, 0.1));
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+
+        .prediction-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .prediction-icon {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+
+        .prediction-content h4 {
+            margin-bottom: 3px;
+            font-size: 0.95rem;
+        }
+
+        .prediction-content p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 1000;
+                background: rgba(0,0,0,0.95);
+                backdrop-blur: 20px;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .nav-link {
+                background: rgba(255,255,255,0.1);
+                margin-bottom: 5px;
+            }
+
+            .nav-link:hover, .nav-link.active {
+                background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+                transform: translateX(5px);
+            }
+
+            .chart-label {
+                gap: 4px;
+            }
+
+            .chart-label span {
+                font-size: 0.7rem;
+            }
+
+            .report-controls {
+                flex-direction: column;
+            }
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="analytics-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo">HopeNocode</div>
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link">
+                            <i>📊</i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="analytics.html" class="nav-link active">
+                            <i>📈</i> Analytics
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#reports" class="nav-link" onclick="switchSection('reports')">
+                            <i>📋</i> Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#predictions" class="nav-link" onclick="switchSection('predictions')">
+                            <i>🔮</i> Predictions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#alerts" class="nav-link" onclick="switchSection('alerts')">
+                            <i>🔔</i> Alerts
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#export" class="nav-link" onclick="switchSection('export')">
+                            <i>📤</i> Export
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="user-section">
+                <div class="user-info">
+                    <div class="user-avatar">JD</div>
+                    <div class="user-details">
+                        <h4>John Doe</h4>
+                        <p>Analytics Pro</p>
+                    </div>
+                </div>
+                <a href="index.html" class="btn btn-secondary" style="width: 100%; justify-content: center;">
+                    <i>🏠</i> Back to Home
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <div>
+                    <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+                    <h1 class="page-title">Advanced Analytics</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="showNotification('🔔 Analytics alerts updated')">
+                        <i>🔔</i> Alerts
+                    </button>
+                    <button class="btn btn-primary" onclick="generateReport()">
+                        <i>📊</i> Generate Report
+                    </button>
+                </div>
+            </div>
+
+            <!-- Real-time Analytics -->
+            <div id="analytics-section" class="section active">
+                <div class="analytics-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span class="real-time-indicator"></span>
+                                Real-time Traffic
+                            </h3>
+                            <div class="card-icon">👥</div>
+                        </div>
+                        <div class="metric">2,847</div>
+                        <div class="metric-change positive">+15% from last hour</div>
+                        <div class="chart-container">
+                            <div class="chart-bar">
+                                <div class="chart-bar-item" style="height: 40%;" title="10AM: 40%"></div>
+                                <div class="chart-bar-item" style="height: 55%;" title="11AM: 55%"></div>
+                                <div class="chart-bar-item" style="height: 70%;" title="12PM: 70%"></div>
+                                <div class="chart-bar-item" style="height: 85%;" title="1PM: 85%"></div>
+                                <div class="chart-bar-item" style="height: 90%;" title="2PM: 90%"></div>
+                                <div class="chart-bar-item" style="height: 95%;" title="3PM: 95%"></div>
+                            </div>
+                            <div class="chart-label">
+                                <span>10AM</span>
+                                <span>11AM</span>
+                                <span>12PM</span>
+                                <span>1PM</span>
+                                <span>2PM</span>
+                                <span>3PM</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Revenue Analytics</h3>
+                            <div class="card-icon">💰</div>
+                        </div>
+                        <div class="metric">$67,420</div>
+                        <div class="metric-change positive">+23% from last month</div>
+                        <div class="chart-container">
+                            <div class="chart-bar">
+                                <div class="chart-bar-item" style="height: 30%;" title="Jan: $20.2K"></div>
+                                <div class="chart-bar-item" style="height: 45%;" title="Feb: $30.3K"></div>
+                                <div class="chart-bar-item" style="height: 60%;" title="Mar: $40.5K"></div>
+                                <div class="chart-bar-item" style="height: 75%;" title="Apr: $50.8K"></div>
+                                <div class="chart-bar-item" style="height: 85%;" title="May: $58.2K"></div>
+                                <div class="chart-bar-item" style="height: 95%;" title="Jun: $67.4K"></div>
+                            </div>
+                            <div class="chart-label">
+                                <span>Jan</span>
+                                <span>Feb</span>
+                                <span>Mar</span>
+                                <span>Apr</span>
+                                <span>May</span>
+                                <span>Jun</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Conversion Rate</h3>
+                            <div class="card-icon">📈</div>
+                        </div>
+                        <div class="metric">8.7%</div>
+                        <div class="metric-change positive">+2.1% from last week</div>
+                        <div class="chart-container">
+                            <div class="chart-bar">
+                                <div class="chart-bar-item" style="height: 50%;" title="Mon: 5.2%"></div>
+                                <div class="chart-bar-item" style="height: 60%;" title="Tue: 6.1%"></div>
+                                <div class="chart-bar-item" style="height: 70%;" title="Wed: 7.3%"></div>
+                                <div class="chart-bar-item" style="height: 80%;" title="Thu: 7.8%"></div>
+                                <div class="chart-bar-item" style="height: 85%;" title="Fri: 8.2%"></div>
+                                <div class="chart-bar-item" style="height: 95%;" title="Sat: 8.7%"></div>
+                            </div>
+                            <div class="chart-label">
+                                <span>Mon</span>
+                                <span>Tue</span>
+                                <span>Wed</span>
+                                <span>Thu</span>
+                                <span>Fri</span>
+                                <span>Sat</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">User Engagement</h3>
+                            <div class="card-icon">🎯</div>
+                        </div>
+                        <div class="metric">4.2m</div>
+                        <div class="metric-change positive">+18% from last month</div>
+                        <div class="chart-container">
+                            <div class="chart-bar">
+                                <div class="chart-bar-item" style="height: 35%;" title="Q1: 2.8M"></div>
+                                <div class="chart-bar-item" style="height: 50%;" title="Q2: 3.2M"></div>
+                                <div class="chart-bar-item" style="height: 65%;" title="Q3: 3.8M"></div>
+                                <div class="chart-bar-item" style="height: 85%;" title="Q4: 4.2M"></div>
+                            </div>
+                            <div class="chart-label">
+                                <span>Q1</span>
+                                <span>Q2</span>
+                                <span>Q3</span>
+                                <span>Q4</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI Overview -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Key Performance Indicators</h3>
+                        <div class="card-icon">📊</div>
+                    </div>
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-value">98.5%</div>
+                            <div class="kpi-label">Uptime</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value">2.3s</div>
+                            <div class="kpi-label">Avg Load Time</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value">1,247</div>
+                            <div class="kpi-label">Active Sessions</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value">89%</div>
+                            <div class="kpi-label">Satisfaction</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value">156</div>
+                            <div class="kpi-label">New Users</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value">$2.4K</div>
+                            <div class="kpi-label">Daily Revenue</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Builder -->
+            <div id="reports-section" class="section" style="display: none;">
+                <div class="analytics-grid">
+                    <div class="card report-builder" style="grid-column: 1 / -1;">
+                        <div class="card-header">
+                            <h3 class="card-title">Custom Report Builder</h3>
+                            <div class="card-icon">📋</div>
+                        </div>
+                        <div class="report-controls">
+                            <div class="report-control">
+                                <label>Date Range:</label>
+                                <select id="dateRange">
+                                    <option>Last 7 days</option>
+                                    <option>Last 30 days</option>
+                                    <option>Last 90 days</option>
+                                    <option>Custom range</option>
+                                </select>
+                            </div>
+                            <div class="report-control">
+                                <label>Metrics:</label>
+                                <select id="metrics" multiple>
+                                    <option>Traffic</option>
+                                    <option>Revenue</option>
+                                    <option>Conversions</option>
+                                    <option>Engagement</option>
+                                </select>
+                            </div>
+                            <div class="report-control">
+                                <label>Format:</label>
+                                <select id="format">
+                                    <option>PDF</option>
+                                    <option>CSV</option>
+                                    <option>Excel</option>
+                                </select>
+                            </div>
+                            <div class="report-control">
+                                <label>Schedule:</label>
+                                <input type="checkbox" id="schedule">
+                                <label for="schedule">Auto-generate</label>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 15px;">
+                            <button class="btn btn-primary" onclick="generateCustomReport()">
+                                <i>📊</i> Generate Report
+                            </button>
+                            <button class="btn btn-secondary" onclick="showNotification('📅 Report scheduled for daily generation')">
+                                <i>📅</i> Schedule Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Predictive Analytics -->
+            <div id="predictions-section" class="section" style="display: none;">
+                <div class="analytics-grid">
+                    <div class="card prediction-card" style="grid-column: 1 / -1;">
+                        <div class="card-header">
+                            <h3 class="card-title">AI-Powered Predictions</h3>
+                            <div class="card-icon">🔮</div>
+                        </div>
+                        <div class="prediction-item">
+                            <div class="prediction-icon">📈</div>
+                            <div class="prediction-content">
+                                <h4>Revenue Forecast</h4>
+                                <p>Expected to reach $85K by end of month (+26% growth)</p>
+                            </div>
+                        </div>
+                        <div class="prediction-item">
+                            <div class="prediction-icon">👥</div>
+                            <div class="prediction-content">
+                                <h4>User Growth</h4>
+                                <p>Predicted 3,500 new users in next 30 days</p>
+                            </div>
+                        </div>
+                        <div class="prediction-item">
+                            <div class="prediction-icon">🎯</div>
+                            <div class="prediction-content">
+                                <h4>Conversion Optimization</h4>
+                                <p>Implementing suggested changes could increase conversions by 15%</p>
+                            </div>
+                        </div>
+                        <div class="prediction-item">
+                            <div class="prediction-icon">📊</div>
+                            <div class="prediction-content">
+                                <h4>Peak Performance</h4>
+                                <p>Optimal posting time identified: 2-4 PM for maximum engagement</p>
+                            </div>
+                        </div>
+                        <div class="prediction-item">
+                            <div class="prediction-icon">💰</div>
+                            <div class="prediction-content">
+                                <h4>Revenue Opportunities</h4>
+                                <p>Untapped market segments could generate additional $12K monthly</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Smart Alerts -->
+            <div id="alerts-section" class="section" style="display: none;">
+                <div class="analytics-grid">
+                    <div class="card" style="grid-column: 1 / -1;">
+                        <div class="card-header">
+                            <h3 class="card-title">Smart Alerts & Notifications</h3>
+                            <div class="card-icon">🔔</div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                            <div>
+                                <h4 style="margin-bottom: 15px; color: #4ecdc4;">Active Alerts</h4>
+                                <div class="prediction-item">
+                                    <div class="prediction-icon">⚠️</div>
+                                    <div class="prediction-content">
+                                        <h4>High Traffic Alert</h4>
+                                        <p>Traffic increased by 45% in the last hour</p>
+                                    </div>
+                                </div>
+                                <div class="prediction-item">
+                                    <div class="prediction-icon">🎉</div>
+                                    <div class="prediction-content">
+                                        <h4>Revenue Milestone</h4>
+                                        <p>Monthly revenue target achieved 3 days early!</p>
+                                    </div>
+                                </div>
+                                <div class="prediction-item">
+                                    <div class="prediction-icon">📈</div>
+                                    <div class="prediction-content">
+                                        <h4>Performance Boost</h4>
+                                        <p>Page load time improved by 23%</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 style="margin-bottom: 15px; color: #4ecdc4;">Alert Settings</h4>
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    <label style="display: flex; align-items: center; gap: 10px;">
+                                        <input type="checkbox" checked> Traffic spikes
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 10px;">
+                                        <input type="checkbox" checked> Revenue milestones
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 10px;">
+                                        <input type="checkbox" checked> Performance issues
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 10px;">
+                                        <input type="checkbox"> Weekly summaries
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 10px;">
+                                        <input type="checkbox"> Predictive insights
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export Tools -->
+            <div id="export-section" class="section" style="display: none;">
+                <div class="analytics-grid">
+                    <div class="card" style="grid-column: 1 / -1;">
+                        <div class="card-header">
+                            <h3 class="card-title">Export & Integration</h3>
+                            <div class="card-icon">📤</div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                            <div>
+                                <h4 style="margin-bottom: 15px; color: #4ecdc4;">Export Options</h4>
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    <button class="btn btn-secondary" onclick="exportData('pdf')">
+                                        <i>📄</i> Export as PDF
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="exportData('csv')">
+                                        <i>📊</i> Export as CSV
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="exportData('excel')">
+                                        <i>📈</i> Export to Excel
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="exportData('json')">
+                                        <i>🔧</i> Export as JSON
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 style="margin-bottom: 15px; color: #4ecdc4;">Integrations</h4>
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    <button class="btn btn-secondary" onclick="showNotification('🔗 Connected to Google Analytics')">
+                                        <i>📊</i> Google Analytics
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="showNotification('🔗 Connected to Facebook Ads')">
+                                        <i>📱</i> Facebook Ads
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="showNotification('🔗 Connected to Mailchimp')">
+                                        <i>📧</i> Mailchimp
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="showNotification('🔗 Connected to Slack')">
+                                        <i>💬</i> Slack Notifications
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        let currentSection = 'analytics';
+
+        function switchSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+            
+            // Show selected section
+            document.getElementById(section + '-section').style.display = 'block';
+            
+            // Update navigation
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update page title
+            const titles = {
+                'analytics': 'Advanced Analytics',
+                'reports': 'Report Builder',
+                'predictions': 'Predictive Analytics',
+                'alerts': 'Smart Alerts',
+                'export': 'Export Tools'
+            };
+            document.querySelector('.page-title').textContent = titles[section];
+            
+            currentSection = section;
+            
+            // Close mobile sidebar if on mobile
+            if (window.innerWidth <= 768) {
+                const sidebar = document.getElementById('sidebar');
+                sidebar.classList.remove('open');
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function generateReport() {
+            showNotification('📊 Generating comprehensive analytics report...');
+            setTimeout(() => {
+                showNotification('✅ Report generated successfully! Download ready.');
+            }, 2000);
+        }
+
+        function generateCustomReport() {
+            const dateRange = document.getElementById('dateRange').value;
+            const format = document.getElementById('format').value;
+            
+            showNotification(`📊 Generating ${format} report for ${dateRange}...`);
+            setTimeout(() => {
+                showNotification('✅ Custom report generated and sent to your email!');
+            }, 2500);
+        }
+
+        function exportData(format) {
+            showNotification(`📤 Exporting data as ${format.toUpperCase()}...`);
+            setTimeout(() => {
+                showNotification(`✅ Data exported successfully as ${format.toUpperCase()}!`);
+            }, 1500);
+        }
+
+        // Real-time updates simulation
+        setInterval(() => {
+            const metrics = document.querySelectorAll('.metric');
+            if (metrics.length > 0 && Math.random() > 0.8) {
+                const randomMetric = metrics[Math.floor(Math.random() * metrics.length)];
+                const currentText = randomMetric.textContent;
+                const currentValue = parseInt(currentText.replace(/[^0-9]/g, ''));
+                
+                // Set reasonable limits for each metric type
+                let maxValue;
+                if (currentText.includes('$')) {
+                    maxValue = 999999; // Revenue limit
+                } else if (currentText.includes('%')) {
+                    maxValue = 100; // Percentage limit
+                } else if (currentText.includes('m')) {
+                    maxValue = 9999999; // Million limit
+                } else {
+                    maxValue = 99999; // Other metrics limit
+                }
+                
+                const newValue = Math.min(currentValue + Math.floor(Math.random() * 10), maxValue);
+                randomMetric.textContent = currentText.replace(/[0-9,]+/, newValue.toLocaleString());
+            }
+        }, 15000); // 15 seconds interval
+
+        // Initialize analytics
+        document.addEventListener('DOMContentLoaded', function() {
+            showNotification('🎉 Advanced Analytics Dashboard loaded!');
+            
+            // Add tap-to-close functionality for mobile sidebar
+            const mainContent = document.querySelector('.main-content');
+            mainContent.addEventListener('click', function(event) {
+                // Don't close if clicking on the hamburger menu button
+                if (event.target.closest('.mobile-menu-btn')) {
+                    return;
+                }
+                
+                if (window.innerWidth <= 768) {
+                    const sidebar = document.getElementById('sidebar');
+                    if (sidebar.classList.contains('open')) {
+                        sidebar.classList.remove('open');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
