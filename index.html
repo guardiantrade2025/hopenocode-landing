@@ -23,6 +23,87 @@
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
         }
 
+        /* Logo Styles */
+        .logo-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-blur: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .logo-icon {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .logo-letter {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .logo-letter:first-child {
+            transform: translateY(-1px);
+        }
+
+        .logo-letter:last-child {
+            transform: translateY(1px);
+        }
+
+        .logo-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+            opacity: 0.9;
+            letter-spacing: 0.5px;
+        }
+
+        /* Mobile responsive logo */
+        @media (max-width: 768px) {
+            .logo-container {
+                top: 15px;
+                left: 15px;
+            }
+
+            .logo {
+                padding: 8px 12px;
+                gap: 8px;
+            }
+
+            .logo-letter {
+                font-size: 1.5rem;
+            }
+
+            .logo-text {
+                font-size: 0.8rem;
+            }
+        }
+
         .theme-toggle {
             position: fixed;
             top: 20px;
@@ -1187,7 +1268,18 @@
     </style>
 </head>
 <body>
-            <button class="theme-toggle" onclick="toggleTheme()">☀️ Light Mode</button>
+    <!-- Logo Section -->
+    <div class="logo-container">
+        <div class="logo">
+            <div class="logo-icon">
+                <span class="logo-letter">H</span>
+                <span class="logo-letter">N</span>
+            </div>
+            <span class="logo-text">HopeNocode</span>
+        </div>
+    </div>
+
+    <button class="theme-toggle" onclick="toggleTheme()">☀️ Light Mode</button>
     
     <!-- Hero Section -->
     <section class="hero">
