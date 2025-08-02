@@ -30,10 +30,10 @@
             background: rgba(255,255,255,0.1);
             border: 2px solid rgba(255,255,255,0.3);
             color: white;
-            padding: 10px 15px;
-            border-radius: 25px;
+            padding: 8px 12px;
+            border-radius: 20px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 12px;
             transition: all 0.3s ease;
             backdrop-blur: 10px;
             z-index: 1000;
@@ -1101,7 +1101,7 @@
     </style>
 </head>
 <body>
-    <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+            <button class="theme-toggle" onclick="toggleTheme()">☀️ Light Mode</button>
     
     <!-- Hero Section -->
     <section class="hero">
@@ -1529,7 +1529,7 @@
     <div id="notification" class="notification"></div>
 
     <script>
-        let isDarkMode = false;
+        let isDarkMode = true;
         let isAnnualPricing = false;
 
         function showNotification(message, isError = false) {
@@ -1977,6 +1977,11 @@
 
         // Add some fun animations when the page loads
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize dark mode
+            document.body.classList.add('dark-mode');
+            const toggleBtn = document.querySelector('.theme-toggle');
+            toggleBtn.textContent = '☀️ Light Mode';
+            
             const heroContent = document.querySelector('.hero-content');
             heroContent.style.opacity = '0';
             heroContent.style.transform = 'translateY(20px)';
