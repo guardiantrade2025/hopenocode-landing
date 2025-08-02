@@ -116,15 +116,21 @@
         }
 
         .lang-btn.active {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            border-color: transparent;
-            box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4) !important;
+            border-color: transparent !important;
+            box-shadow: 0 5px 15px rgba(255,107,107,0.3) !important;
+            color: white !important;
+            font-weight: bold !important;
         }
 
         .lang-btn.active:hover {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4) !important;
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255,107,107,0.4);
+            box-shadow: 0 8px 20px rgba(255,107,107,0.4) !important;
+        }
+
+        .lang-btn.active::before {
+            display: none;
         }
 
         .input-area {
@@ -713,15 +719,15 @@ Examples:
         function selectLanguage(lang) {
             currentLanguage = lang;
             
-            // Update active button
+            // Remove active class from all buttons
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             
-            // Find and activate the clicked button
-            const clickedButton = document.querySelector(`[onclick="selectLanguage('${lang}')"]`);
-            if (clickedButton) {
-                clickedButton.classList.add('active');
+            // Add active class to the selected button
+            const selectedButton = document.querySelector(`button[onclick="selectLanguage('${lang}')"]`);
+            if (selectedButton) {
+                selectedButton.classList.add('active');
             }
             
             // Update code language display
@@ -729,6 +735,14 @@ Examples:
             
             // Update placeholder based on language
             updatePlaceholder();
+            
+            // Add visual feedback
+            if (selectedButton) {
+                selectedButton.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    selectedButton.style.transform = '';
+                }, 150);
+            }
         }
 
         function updatePlaceholder() {
@@ -1137,6 +1151,12 @@ public class ${generateClassName(description)} {
         document.addEventListener('DOMContentLoaded', function() {
             updatePlaceholder();
             addMobileTouchSupport();
+            
+            // Ensure JavaScript button is active by default
+            const jsButton = document.querySelector('button[onclick="selectLanguage(\'javascript\')"]');
+            if (jsButton) {
+                jsButton.classList.add('active');
+            }
         });
     </script>
 </body>
