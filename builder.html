@@ -387,10 +387,7 @@
                 border: 1px solid rgba(255,255,255,0.2);
             }
 
-            /* Hide desktop action buttons on mobile */
-            .desktop-action-buttons {
-                display: none;
-            }
+
 
             /* Mobile action buttons container */
             .mobile-action-buttons {
@@ -483,55 +480,7 @@
             display: none;
         }
 
-        /* Desktop action buttons - Show on desktop */
-        .desktop-action-buttons {
-            display: flex;
-            gap: 15px;
-            margin: 20px;
-            justify-content: center;
-        }
 
-        /* Desktop preview button */
-        .desktop-preview-btn {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        /* Desktop export button */
-        .desktop-export-btn {
-            background: linear-gradient(45deg, #4ecdc4, #ff6b6b);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        .desktop-preview-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-            background: linear-gradient(45deg, #ff5252, #26a69a);
-        }
-
-        .desktop-export-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-            background: linear-gradient(45deg, #26a69a, #ff5252);
-        }
 
         /* Hide mobile action buttons on desktop */
         .mobile-action-buttons {
@@ -740,14 +689,14 @@
                     <button class="btn btn-secondary" onclick="showTemplates()">
                         <i>📋</i> Templates
                     </button>
-                    <button class="btn btn-secondary" onclick="window.location.href='index.html'">
-                        <i>🏠</i> Back Home
+                    <button class="btn btn-secondary" onclick="exportCode()">
+                        <i>📤</i> Export
                     </button>
                     <button class="btn btn-primary" onclick="previewPage()">
                         <i>👁️</i> Preview
                     </button>
-                    <button class="btn btn-secondary" onclick="exportCode()">
-                        <i>📤</i> Export
+                    <button class="btn btn-secondary" onclick="window.location.href='index.html'">
+                        <i>🏠</i> Back Home
                     </button>
                 </div>
             </div>
@@ -761,15 +710,7 @@
                 </div>
             </div>
             
-            <!-- Desktop Action Buttons - Positioned under drag & drop area -->
-            <div class="desktop-action-buttons">
-                <button class="desktop-preview-btn" onclick="previewPage()">
-                    👁️ PREVIEW YOUR PAGE
-                </button>
-                <button class="desktop-export-btn" onclick="exportCode()">
-                    📤 EXPORT CODE
-                </button>
-            </div>
+
 
             <!-- Mobile Action Buttons - Positioned under drag & drop area -->
             <div class="mobile-action-buttons">
