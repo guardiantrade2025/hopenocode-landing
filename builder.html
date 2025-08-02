@@ -392,69 +392,104 @@
             /* Mobile action buttons container */
             .mobile-action-buttons {
                 display: flex;
-                gap: 15px;
-                margin: 15px 20px;
+                gap: 12px;
+                margin: 20px;
                 width: calc(100% - 40px);
+                padding: 0 5px;
             }
 
             /* Mobile preview button */
             .mobile-preview-btn {
                 display: block !important;
-                background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 color: white;
                 border: none;
-                padding: 15px 20px;
-                border-radius: 25px;
-                font-size: 1rem;
-                font-weight: bold;
+                padding: 18px 16px;
+                border-radius: 20px;
+                font-size: 0.95rem;
+                font-weight: 600;
                 cursor: pointer;
                 flex: 1;
-                transition: all 0.3s ease;
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 text-align: center;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
                 position: relative;
                 z-index: 100;
+                overflow: hidden;
+                letter-spacing: 0.5px;
             }
 
             /* Mobile export button */
             .mobile-export-btn {
                 display: block !important;
-                background: linear-gradient(45deg, #4ecdc4, #ff6b6b);
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
                 color: white;
                 border: none;
-                padding: 15px 20px;
-                border-radius: 25px;
-                font-size: 1rem;
-                font-weight: bold;
+                padding: 18px 16px;
+                border-radius: 20px;
+                font-size: 0.95rem;
+                font-weight: 600;
                 cursor: pointer;
                 flex: 1;
-                transition: all 0.3s ease;
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 text-align: center;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                box-shadow: 0 8px 25px rgba(240, 147, 251, 0.4);
                 position: relative;
                 z-index: 100;
+                overflow: hidden;
+                letter-spacing: 0.5px;
             }
 
             .mobile-preview-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-                background: linear-gradient(45deg, #ff5252, #26a69a);
+                transform: translateY(-3px) scale(1.02);
+                box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+                background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
             }
 
             .mobile-preview-btn:active {
-                transform: translateY(0);
-                box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+                transform: translateY(-1px) scale(0.98);
+                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+                transition: all 0.1s ease;
             }
 
             .mobile-export-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-                background: linear-gradient(45deg, #26a69a, #ff5252);
+                transform: translateY(-3px) scale(1.02);
+                box-shadow: 0 12px 35px rgba(240, 147, 251, 0.6);
+                background: linear-gradient(135deg, #e085e8 0%, #e54b5f 100%);
             }
 
             .mobile-export-btn:active {
-                transform: translateY(0);
-                box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+                transform: translateY(-1px) scale(0.98);
+                box-shadow: 0 6px 20px rgba(240, 147, 251, 0.5);
+                transition: all 0.1s ease;
+            }
+
+            /* Enhanced button states for better UX */
+            .mobile-preview-btn:focus,
+            .mobile-export-btn:focus {
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+            }
+
+            /* Button ripple effect */
+            .mobile-preview-btn::before,
+            .mobile-export-btn::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 0;
+                height: 0;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.3);
+                transform: translate(-50%, -50%);
+                transition: width 0.6s, height 0.6s;
+            }
+
+            .mobile-preview-btn:active::before,
+            .mobile-export-btn:active::before {
+                width: 300px;
+                height: 300px;
             }
 
             .mobile-preview-title {
@@ -715,10 +750,10 @@
             <!-- Mobile Action Buttons - Positioned under drag & drop area -->
             <div class="mobile-action-buttons">
                 <button class="mobile-preview-btn" onclick="previewPage()">
-                    👁️ PREVIEW YOUR PAGE
+                    👁️ Preview Page
                 </button>
                 <button class="mobile-export-btn" onclick="exportCode()">
-                    📤 EXPORT CODE
+                    📤 Export Code
                 </button>
             </div>
 
