@@ -1,20 +1,172 @@
+require('dotenv').config({ path: './config.env' });
 const express = require('express');
 const cors = require('cors');
-const stripe = require('stripe')('sk_test_51H1234567890abcdefghijklmnopqrstuvwxyz');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const path = require('path');
+const rateLimit = require('express-rate-limit');
+const { authenticateToken, generateToken, registerUser, loginUser } = require('./middleware/auth');
+const analytics = require('./services/analytics');
+const aiService = require('./services/ai');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Rate limiting
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    message: 'Too many requests from this IP, please try again later.'
+});
+
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
+app.use('/api/', limiter);
 
 // Sample data storage (in production, use a database)
 let orders = [];
 let subscriptions = [];
 let customers = [];
+
+// Authentication Routes
+app.post('/api/auth/register', async (req, res) => {
+    try {
+        const { email, password, name } = req.body;
+        
+        if (!email || !password || !name) {
+            return res.status(400).json({ error: 'All fields are required' });
+        }
+
+        const user = registerUser({ email, password, name });
+        const token = generateToken(user);
+
+        res.json({
+            token,
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                role: user.role
+            }
+        });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.post('/api/auth/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        
+        if (!email || !password) {
+            return res.status(400).json({ error: 'Email and password are required' });
+        }
+
+        const user = loginUser(email, password);
+        const token = generateToken(user);
+
+        res.json({
+            token,
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                role: user.role
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ error: error.message });
+    }
+});
+
+// Protected route example
+app.get('/api/auth/profile', authenticateToken, (req, res) => {
+    res.json({ user: req.user });
+});
+
+// Analytics Routes
+app.get('/api/analytics', authenticateToken, (req, res) => {
+    try {
+        const analyticsData = analytics.getAnalytics();
+        res.json(analyticsData);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post('/api/analytics/track', (req, res) => {
+    try {
+        const { eventType, data, userId } = req.body;
+        analytics.trackEvent(eventType, data, userId);
+        res.json({ success: true });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post('/api/analytics/pageview', (req, res) => {
+    try {
+        const { page, userId } = req.body;
+        analytics.trackPageView(page, userId);
+        res.json({ success: true });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// AI Routes
+app.post('/api/ai/generate-code', async (req, res) => {
+    try {
+        const { description, language, template } = req.body;
+        const result = await aiService.generateCode(description, language, template);
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post('/api/ai/chat', async (req, res) => {
+    try {
+        const { message, conversationId } = req.body;
+        const result = await aiService.chat(message, conversationId);
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/api/ai/templates', (req, res) => {
+    try {
+        const templates = aiService.getTemplates();
+        res.json(templates);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/api/ai/conversation/:id', (req, res) => {
+    try {
+        const { id } = req.params;
+        const conversation = aiService.getConversation(id);
+        res.json(conversation);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.delete('/api/ai/conversation/:id', (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = aiService.clearConversation(id);
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
 // Routes
 app.get('/', (req, res) => {

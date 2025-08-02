@@ -1,0 +1,5 @@
+[33m5b9a964[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Fixed language selector button active state and code language display synchronization
+[33m34e6f1e[m Fixed language selector button active state with proper visual indicator and improved selection logic
+[33m8b6f1db[m Fixed language selector button functionality and improved hover/active states for better user interaction
+[33md0d55d0[m Enhanced mobile responsiveness for code generator with better touch interactions and responsive design
+[33m211afc2[m Enhanced code display with better styling, syntax highlighting, collapsible sections, and improved UX

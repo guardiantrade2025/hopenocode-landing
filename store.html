@@ -913,8 +913,25 @@
             payButton.disabled = true;
 
             try {
+                // Calculate total amount
+                const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+                // Create payment intent on server
+                const response = await fetch('/api/create-payment-intent', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        amount: totalAmount,
+                        items: cart
+                    })
+                });
+
+                const { clientSecret } = await response.json();
+
                 // Create payment method
-                const { paymentMethod, error } = await stripe.createPaymentMethod({
+                const { paymentMethod, error: paymentMethodError } = await stripe.createPaymentMethod({
                     type: 'card',
                     card: {
                         number: cardNumber.replace(/\s/g, ''),
@@ -924,12 +941,32 @@
                     },
                 });
 
-                if (error) {
-                    throw new Error(error.message);
+                if (paymentMethodError) {
+                    throw new Error(paymentMethodError.message);
                 }
 
-                // Simulate payment processing
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                // Confirm payment
+                const { error: confirmError } = await stripe.confirmCardPayment(clientSecret, {
+                    payment_method: paymentMethod.id
+                });
+
+                if (confirmError) {
+                    throw new Error(confirmError.message);
+                }
+
+                // Create order on server
+                await fetch('/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        items: cart,
+                        total: totalAmount,
+                        paymentIntentId: paymentMethod.id
+                    })
+                });
 
                 // Clear cart and show success
                 cart = [];
@@ -965,6 +1002,9 @@
         document.getElementById('categoryFilter').addEventListener('change', filterProducts);
         document.getElementById('priceFilter').addEventListener('change', filterProducts);
         document.getElementById('sortFilter').addEventListener('change', filterProducts);
+
+        // Initialize Stripe
+        const stripe = Stripe('pk_test_51H1234567890abcdefghijklmnopqrstuvwxyz');
 
         // Initialize store
         initStore();

@@ -85,23 +85,6 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 500;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .lang-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .lang-btn:hover::before {
-            left: 100%;
         }
 
         .lang-btn:hover {
@@ -110,27 +93,12 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        .lang-btn:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-
         .lang-btn.active {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4) !important;
-            border-color: transparent !important;
-            box-shadow: 0 5px 15px rgba(255,107,107,0.3) !important;
-            color: white !important;
-            font-weight: bold !important;
-        }
-
-        .lang-btn.active:hover {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4) !important;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255,107,107,0.4) !important;
-        }
-
-        .lang-btn.active::before {
-            display: none;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-color: transparent;
+            box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+            color: white;
+            font-weight: bold;
         }
 
         .input-area {
@@ -189,8 +157,6 @@
             color: #d4d4d4;
             white-space: pre-wrap;
             overflow-y: auto;
-            position: relative;
-            opacity: 0.9;
         }
 
         .code-header {
@@ -208,94 +174,6 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-
-        .code-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .code-action-btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 4px;
-            padding: 4px 8px;
-            color: #ccc;
-            font-size: 11px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .code-action-btn:hover {
-            background: rgba(255,255,255,0.1);
-            color: white;
-        }
-
-        .code-content {
-            position: relative;
-        }
-
-        .code-line-numbers {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 30px;
-            color: #666;
-            font-size: 11px;
-            text-align: right;
-            padding-right: 10px;
-            user-select: none;
-        }
-
-        .code-text {
-            padding-left: 40px;
-        }
-
-        .code-section {
-            margin-bottom: 15px;
-            border-left: 3px solid rgba(255,255,255,0.1);
-            padding-left: 10px;
-        }
-
-        .code-section-title {
-            font-size: 11px;
-            color: #888;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .code-collapsible {
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .code-collapsible:hover {
-            background: rgba(255,255,255,0.05);
-        }
-
-        .code-collapsible-content {
-            display: none;
-            padding-left: 15px;
-            border-left: 1px solid rgba(255,255,255,0.1);
-            margin-top: 5px;
-        }
-
-        .code-collapsible-content.show {
-            display: block;
-        }
-
-        .code-toggle {
-            font-size: 10px;
-            color: #666;
-            margin-right: 5px;
-        }
-
-        .syntax-keyword { color: #569cd6; }
-        .syntax-string { color: #ce9178; }
-        .syntax-comment { color: #6a9955; }
-        .syntax-function { color: #dcdcaa; }
-        .syntax-number { color: #b5cea8; }
-        .syntax-operator { color: #d4d4d4; }
 
         .output-actions {
             display: flex;
@@ -385,226 +263,6 @@
             .output-actions {
                 flex-direction: column;
             }
-
-            .main-content {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .input-section, .output-section {
-                padding: 20px;
-                border-radius: 15px;
-            }
-
-            .section-title {
-                font-size: 1.3rem;
-                margin-bottom: 15px;
-            }
-
-            .language-selector {
-                justify-content: center;
-                gap: 8px;
-                margin-bottom: 15px;
-            }
-
-            .lang-btn {
-                padding: 8px 15px;
-                font-size: 14px;
-                border-radius: 20px;
-            }
-
-            .input-area {
-                min-height: 150px;
-                font-size: 14px;
-                padding: 15px;
-            }
-
-            .generate-btn {
-                padding: 12px;
-                font-size: 1rem;
-                margin-top: 15px;
-            }
-
-            .code-output {
-                min-height: 180px;
-                max-height: 300px;
-                padding: 12px;
-                font-size: 12px;
-                line-height: 1.3;
-            }
-
-            .code-header {
-                margin-bottom: 8px;
-                padding-bottom: 6px;
-                flex-direction: column;
-                gap: 8px;
-                align-items: flex-start;
-            }
-
-            .code-language {
-                font-size: 11px;
-            }
-
-            .code-actions {
-                gap: 6px;
-                flex-wrap: wrap;
-            }
-
-            .code-action-btn {
-                padding: 6px 10px;
-                font-size: 10px;
-                border-radius: 3px;
-            }
-
-            .code-text {
-                padding-left: 35px;
-                font-size: 11px;
-            }
-
-            .code-line-numbers {
-                width: 25px;
-                font-size: 10px;
-                padding-right: 8px;
-            }
-
-            .code-section {
-                margin-bottom: 12px;
-                padding-left: 8px;
-            }
-
-            .code-section-title {
-                font-size: 10px;
-                margin-bottom: 4px;
-            }
-
-            .code-collapsible-content {
-                padding-left: 12px;
-                margin-top: 4px;
-                font-size: 10px;
-            }
-
-            .code-toggle {
-                font-size: 9px;
-                margin-right: 4px;
-            }
-
-            .output-actions {
-                flex-direction: column;
-                gap: 8px;
-                margin-top: 15px;
-            }
-
-            .action-btn {
-                padding: 10px 15px;
-                font-size: 14px;
-                border-radius: 15px;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-                margin-top: 20px;
-            }
-
-            .feature-card {
-                padding: 15px;
-                border-radius: 12px;
-            }
-
-            .feature-icon {
-                font-size: 1.5rem;
-                margin-bottom: 10px;
-            }
-
-            .feature-title {
-                font-size: 1rem;
-                margin-bottom: 8px;
-            }
-
-            .feature-description {
-                font-size: 14px;
-                line-height: 1.4;
-            }
-
-            .loading {
-                padding: 15px;
-            }
-
-            .loading-spinner {
-                width: 30px;
-                height: 30px;
-                margin-bottom: 10px;
-            }
-
-            .header {
-                margin-bottom: 30px;
-            }
-
-            .logo {
-                font-size: 1.8rem;
-                margin-bottom: 8px;
-            }
-
-            .subtitle {
-                font-size: 1rem;
-                margin-bottom: 25px;
-            }
-        }
-
-        /* Extra Small Mobile Devices */
-        @media (max-width: 480px) {
-            .container {
-                padding: 15px;
-            }
-
-            .input-section, .output-section {
-                padding: 15px;
-            }
-
-            .language-selector {
-                gap: 6px;
-            }
-
-            .lang-btn {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-
-            .code-output {
-                min-height: 160px;
-                max-height: 250px;
-                padding: 10px;
-                font-size: 11px;
-            }
-
-            .code-action-btn {
-                padding: 4px 8px;
-                font-size: 9px;
-            }
-
-            .code-text {
-                padding-left: 30px;
-                font-size: 10px;
-            }
-
-            .code-line-numbers {
-                width: 22px;
-                font-size: 9px;
-                padding-right: 6px;
-            }
-
-            .action-btn {
-                padding: 8px 12px;
-                font-size: 13px;
-            }
-
-            .logo {
-                font-size: 1.6rem;
-            }
-
-            .subtitle {
-                font-size: 0.9rem;
-            }
         }
     </style>
 </head>
@@ -624,14 +282,14 @@
                 </div>
                 
                 <div class="language-selector">
-                    <button class="lang-btn active" onclick="selectLanguage('javascript')">JavaScript</button>
-                    <button class="lang-btn" onclick="selectLanguage('python')">Python</button>
-                    <button class="lang-btn" onclick="selectLanguage('react')">React</button>
-                    <button class="lang-btn" onclick="selectLanguage('vue')">Vue.js</button>
-                    <button class="lang-btn" onclick="selectLanguage('angular')">Angular</button>
-                    <button class="lang-btn" onclick="selectLanguage('php')">PHP</button>
-                    <button class="lang-btn" onclick="selectLanguage('java')">Java</button>
-                    <button class="lang-btn" onclick="selectLanguage('csharp')">C#</button>
+                    <button class="lang-btn active" data-lang="javascript">JavaScript</button>
+                    <button class="lang-btn" data-lang="python">Python</button>
+                    <button class="lang-btn" data-lang="react">React</button>
+                    <button class="lang-btn" data-lang="vue">Vue.js</button>
+                    <button class="lang-btn" data-lang="angular">Angular</button>
+                    <button class="lang-btn" data-lang="php">PHP</button>
+                    <button class="lang-btn" data-lang="java">Java</button>
+                    <button class="lang-btn" data-lang="csharp">C#</button>
                 </div>
 
                 <textarea class="input-area" id="codeInput" placeholder="Describe what you want to build in plain English...
@@ -661,17 +319,9 @@ Examples:
                 <div class="code-output" id="codeOutput">
                     <div class="code-header">
                         <div class="code-language" id="codeLanguage">JavaScript</div>
-                        <div class="code-actions">
-                            <button class="code-action-btn" onclick="toggleLineNumbers()">📋 Lines</button>
-                            <button class="code-action-btn" onclick="toggleSyntaxHighlight()">🎨 Syntax</button>
-                            <button class="code-action-btn" onclick="toggleCodeSections()">📁 Sections</button>
-                        </div>
                     </div>
-                    <div class="code-content">
-                        <div class="code-line-numbers" id="lineNumbers"></div>
-                        <div class="code-text" id="codeText">
-                            Your generated code will appear here...
-                        </div>
+                    <div id="codeText">
+                        Your generated code will appear here...
                     </div>
                 </div>
                 
@@ -712,49 +362,38 @@ Examples:
     <script>
         let currentLanguage = 'javascript';
         let generatedCode = '';
-        let showLineNumbers = false;
-        let showSyntaxHighlight = false;
-        let showCodeSections = false;
 
-        function selectLanguage(lang) {
-            // Update current language
-            currentLanguage = lang;
+        // Language selection
+        document.addEventListener('DOMContentLoaded', function() {
+            const langButtons = document.querySelectorAll('.lang-btn');
             
-            // Remove active class from all language buttons
-            const allButtons = document.querySelectorAll('.lang-btn');
-            allButtons.forEach(btn => {
-                btn.classList.remove('active');
+            langButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    langButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Update current language
+                    currentLanguage = this.getAttribute('data-lang');
+                    
+                    // Update code language display
+                    document.getElementById('codeLanguage').textContent = 
+                        currentLanguage.charAt(0).toUpperCase() + currentLanguage.slice(1);
+                    
+                    // Update placeholder
+                    updatePlaceholder();
+                    
+                    // Clear existing code
+                    generatedCode = '';
+                    document.getElementById('codeText').textContent = 'Your generated code will appear here...';
+                });
             });
             
-            // Find the clicked button and add active class
-            const clickedButton = document.querySelector(`button[onclick="selectLanguage('${lang}')"]`);
-            if (clickedButton) {
-                clickedButton.classList.add('active');
-            }
-            
-            // Update the code language display in the output section
-            const codeLanguageElement = document.getElementById('codeLanguage');
-            if (codeLanguageElement) {
-                codeLanguageElement.textContent = lang.charAt(0).toUpperCase() + lang.slice(1);
-            }
-            
-            // Update placeholder text based on selected language
+            // Set initial placeholder
             updatePlaceholder();
-            
-            // Add visual feedback animation
-            if (clickedButton) {
-                clickedButton.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    clickedButton.style.transform = '';
-                }, 150);
-            }
-            
-            // Clear any existing generated code when language changes
-            if (generatedCode) {
-                generatedCode = '';
-                document.getElementById('codeText').textContent = 'Your generated code will appear here...';
-            }
-        }
+        });
 
         function updatePlaceholder() {
             const placeholders = {
@@ -788,14 +427,14 @@ Examples:
                 const code = generateCodeForLanguage(input, currentLanguage);
                 generatedCode = code;
                 
-                // Format and display code
-                displayFormattedCode(code);
+                // Display code
+                document.getElementById('codeText').textContent = code;
                 
                 // Hide loading
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('codeOutput').style.display = 'block';
                 document.getElementById('generateBtn').disabled = false;
-            }, 2000 + Math.random() * 2000);
+            }, 2000);
         }
 
         function generateCodeForLanguage(description, language) {
@@ -947,194 +586,6 @@ public class ${generateClassName(description)} {
             return words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
         }
 
-        function displayFormattedCode(code) {
-            const codeText = document.getElementById('codeText');
-            const lineNumbers = document.getElementById('lineNumbers');
-            
-            if (showCodeSections) {
-                codeText.innerHTML = formatCodeWithSections(code);
-            } else if (showSyntaxHighlight) {
-                codeText.innerHTML = applySyntaxHighlight(code);
-            } else {
-                codeText.textContent = code;
-            }
-            
-            if (showLineNumbers) {
-                const lines = code.split('\n');
-                lineNumbers.innerHTML = lines.map((_, index) => index + 1).join('\n');
-                lineNumbers.style.display = 'block';
-            } else {
-                lineNumbers.style.display = 'none';
-            }
-        }
-
-        function formatCodeWithSections(code) {
-            const sections = {
-                'imports': [],
-                'functions': [],
-                'classes': [],
-                'usage': []
-            };
-            
-            const lines = code.split('\n');
-            let currentSection = 'functions';
-            
-            lines.forEach(line => {
-                const trimmed = line.trim();
-                if (trimmed.startsWith('import') || trimmed.startsWith('using') || trimmed.startsWith('<?php')) {
-                    sections.imports.push(line);
-                } else if (trimmed.startsWith('// Usage') || trimmed.startsWith('# Usage') || trimmed.includes('main(')) {
-                    sections.usage.push(line);
-                } else if (trimmed.startsWith('class') || trimmed.startsWith('export class')) {
-                    sections.classes.push(line);
-                } else {
-                    sections[currentSection].push(line);
-                }
-            });
-            
-            let formatted = '';
-            Object.entries(sections).forEach(([section, lines]) => {
-                if (lines.length > 0) {
-                    formatted += `<div class="code-section">
-                        <div class="code-collapsible" onclick="toggleSection(this)">
-                            <span class="code-toggle">▶</span>
-                            <span class="code-section-title">${section.charAt(0).toUpperCase() + section.slice(1)}</span>
-                        </div>
-                        <div class="code-collapsible-content">
-                            ${lines.join('\n')}
-                        </div>
-                    </div>`;
-                }
-            });
-            
-            return formatted;
-        }
-
-        function applySyntaxHighlight(code) {
-            return code
-                .replace(/\b(function|const|let|var|return|if|else|for|while|class|import|export|default)\b/g, '<span class="syntax-keyword">$1</span>')
-                .replace(/\b(console\.log|alert|document\.getElementById)\b/g, '<span class="syntax-function">$1</span>')
-                .replace(/"([^"]*)"/g, '<span class="syntax-string">"$1"</span>')
-                .replace(/'([^']*)'/g, '<span class="syntax-string">\'$1\'</span>')
-                .replace(/(\/\/.*)/g, '<span class="syntax-comment">$1</span>')
-                .replace(/(\d+)/g, '<span class="syntax-number">$1</span>')
-                .replace(/([+\-*/=<>!&|])/g, '<span class="syntax-operator">$1</span>');
-        }
-
-        function toggleLineNumbers() {
-            showLineNumbers = !showLineNumbers;
-            if (generatedCode) {
-                displayFormattedCode(generatedCode);
-            }
-        }
-
-        function toggleSyntaxHighlight() {
-            showSyntaxHighlight = !showSyntaxHighlight;
-            if (generatedCode) {
-                displayFormattedCode(generatedCode);
-            }
-        }
-
-        function toggleCodeSections() {
-            showCodeSections = !showCodeSections;
-            if (generatedCode) {
-                displayFormattedCode(generatedCode);
-            }
-        }
-
-        function toggleSection(element) {
-            const content = element.nextElementSibling;
-            const toggle = element.querySelector('.code-toggle');
-            
-            if (content.classList.contains('show')) {
-                content.classList.remove('show');
-                toggle.textContent = '▶';
-            } else {
-                content.classList.add('show');
-                toggle.textContent = '▼';
-            }
-        }
-
-        // Mobile touch improvements
-        function addMobileTouchSupport() {
-            // Add touch feedback for buttons
-            const buttons = document.querySelectorAll('.lang-btn, .code-action-btn, .action-btn, .generate-btn');
-            buttons.forEach(btn => {
-                btn.addEventListener('touchstart', function() {
-                    this.style.transform = 'scale(0.95)';
-                    this.style.transition = 'transform 0.1s ease';
-                });
-                btn.addEventListener('touchend', function() {
-                    this.style.transform = '';
-                    this.style.transition = 'all 0.3s ease';
-                });
-                btn.addEventListener('touchcancel', function() {
-                    this.style.transform = '';
-                    this.style.transition = 'all 0.3s ease';
-                });
-            });
-
-            // Improve code scrolling on mobile
-            const codeOutput = document.getElementById('codeOutput');
-            if (codeOutput) {
-                codeOutput.style.webkitOverflowScrolling = 'touch';
-            }
-
-            // Add swipe support for language selector on very small screens
-            const languageSelector = document.querySelector('.language-selector');
-            if (languageSelector && window.innerWidth <= 480) {
-                languageSelector.style.overflowX = 'auto';
-                languageSelector.style.webkitOverflowScrolling = 'touch';
-                languageSelector.style.paddingBottom = '10px';
-            }
-
-                    // Add click event listeners for language buttons to ensure they work
-        const langButtons = document.querySelectorAll('.lang-btn');
-        langButtons.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                // Prevent default to avoid double triggering
-                e.preventDefault();
-                
-                // Get the language from the onclick attribute
-                const onclickAttr = this.getAttribute('onclick');
-                const langMatch = onclickAttr.match(/selectLanguage\('([^']+)'\)/);
-                if (langMatch) {
-                    const lang = langMatch[1];
-                    
-                    // Remove active class from all buttons
-                    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-                    
-                    // Add active class to clicked button
-                    this.classList.add('active');
-                    
-                    // Update current language
-                    currentLanguage = lang;
-                    
-                    // Update code language display
-                    const codeLanguageElement = document.getElementById('codeLanguage');
-                    if (codeLanguageElement) {
-                        codeLanguageElement.textContent = lang.charAt(0).toUpperCase() + lang.slice(1);
-                    }
-                    
-                    // Update placeholder
-                    updatePlaceholder();
-                    
-                    // Clear existing generated code
-                    if (generatedCode) {
-                        generatedCode = '';
-                        document.getElementById('codeText').textContent = 'Your generated code will appear here...';
-                    }
-                }
-                
-                // Add visual feedback
-                this.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 150);
-            });
-        });
-        }
-
         function copyCode() {
             if (generatedCode) {
                 navigator.clipboard.writeText(generatedCode).then(() => {
@@ -1188,32 +639,6 @@ public class ${generateClassName(description)} {
                 alert('No code to optimize');
             }
         }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            // Set up initial state
-            updatePlaceholder();
-            addMobileTouchSupport();
-            
-            // Ensure JavaScript button is active by default
-            const jsButton = document.querySelector('button[onclick="selectLanguage(\'javascript\')"]');
-            if (jsButton) {
-                jsButton.classList.add('active');
-            }
-            
-            // Ensure code language display shows JavaScript initially
-            const codeLanguageElement = document.getElementById('codeLanguage');
-            if (codeLanguageElement) {
-                codeLanguageElement.textContent = 'JavaScript';
-            }
-            
-            // Clear any existing generated code
-            generatedCode = '';
-            const codeTextElement = document.getElementById('codeText');
-            if (codeTextElement) {
-                codeTextElement.textContent = 'Your generated code will appear here...';
-            }
-        });
     </script>
 </body>
 </html> 
