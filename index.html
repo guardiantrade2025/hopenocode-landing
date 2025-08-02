@@ -27,21 +27,31 @@
             position: fixed;
             top: 20px;
             right: 20px;
+            width: 50px;
+            height: 50px;
             background: rgba(255,255,255,0.1);
             border: 2px solid rgba(255,255,255,0.3);
             color: white;
-            padding: 8px 12px;
-            border-radius: 20px;
+            border-radius: 50%;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 18px;
             transition: all 0.3s ease;
             backdrop-blur: 10px;
             z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         .theme-toggle:hover {
             background: rgba(255,255,255,0.2);
-            transform: scale(1.05);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
         }
 
         /* Hero Section */
@@ -1101,7 +1111,7 @@
     </style>
 </head>
 <body>
-            <button class="theme-toggle" onclick="toggleTheme()">☀️ Light Mode</button>
+            <button class="theme-toggle" onclick="toggleTheme()">☀️</button>
     
     <!-- Hero Section -->
     <section class="hero">
@@ -1978,12 +1988,28 @@
             showNotification(`📈 Chart updated to show ${type} data`);
         }
 
+        // Theme toggle function
+        function toggleTheme() {
+            const body = document.body;
+            const toggleBtn = document.querySelector('.theme-toggle');
+            
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                toggleBtn.textContent = '🌙';
+                showNotification('☀️ Switched to Light Mode');
+            } else {
+                body.classList.add('dark-mode');
+                toggleBtn.textContent = '☀️';
+                showNotification('🌙 Switched to Dark Mode');
+            }
+        }
+
         // Add some fun animations when the page loads
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize dark mode
             document.body.classList.add('dark-mode');
             const toggleBtn = document.querySelector('.theme-toggle');
-            toggleBtn.textContent = '☀️ Light Mode';
+            toggleBtn.textContent = '☀️';
             
             const heroContent = document.querySelector('.hero-content');
             heroContent.style.opacity = '0';
