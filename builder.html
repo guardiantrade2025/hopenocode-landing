@@ -397,9 +397,10 @@
                 border-radius: 25px;
                 font-size: 1rem;
                 cursor: pointer;
-                margin: 20px auto;
-                width: fit-content;
+                margin: 10px 20px;
+                width: calc(100% - 40px);
                 transition: all 0.3s ease;
+                text-align: center;
             }
 
             .mobile-preview-btn:hover {
@@ -645,12 +646,13 @@
                         <div class="drop-zone-text">🎨 Drag & Drop Components Here</div>
                         <div class="drop-zone-subtext">Start building your page by dragging components from the sidebar</div>
                     </div>
-                    <!-- Mobile Preview Button -->
-                    <button class="mobile-preview-btn" onclick="previewPage()">
-                        👁️ Preview Page
-                    </button>
                 </div>
             </div>
+            
+            <!-- Mobile Preview Button - Positioned under drag & drop area -->
+            <button class="mobile-preview-btn" onclick="previewPage()">
+                👁️ Preview Page
+            </button>
 
             <!-- Mobile Preview Section -->
             <div class="mobile-preview">
