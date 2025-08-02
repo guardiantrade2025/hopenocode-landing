@@ -717,31 +717,42 @@ Examples:
         let showCodeSections = false;
 
         function selectLanguage(lang) {
+            // Update current language
             currentLanguage = lang;
             
-            // Remove active class from all buttons
-            document.querySelectorAll('.lang-btn').forEach(btn => {
+            // Remove active class from all language buttons
+            const allButtons = document.querySelectorAll('.lang-btn');
+            allButtons.forEach(btn => {
                 btn.classList.remove('active');
             });
             
-            // Add active class to the selected button
-            const selectedButton = document.querySelector(`button[onclick="selectLanguage('${lang}')"]`);
-            if (selectedButton) {
-                selectedButton.classList.add('active');
+            // Find the clicked button and add active class
+            const clickedButton = document.querySelector(`button[onclick="selectLanguage('${lang}')"]`);
+            if (clickedButton) {
+                clickedButton.classList.add('active');
             }
             
-            // Update code language display
-            document.getElementById('codeLanguage').textContent = lang.charAt(0).toUpperCase() + lang.slice(1);
+            // Update the code language display in the output section
+            const codeLanguageElement = document.getElementById('codeLanguage');
+            if (codeLanguageElement) {
+                codeLanguageElement.textContent = lang.charAt(0).toUpperCase() + lang.slice(1);
+            }
             
-            // Update placeholder based on language
+            // Update placeholder text based on selected language
             updatePlaceholder();
             
-            // Add visual feedback
-            if (selectedButton) {
-                selectedButton.style.transform = 'scale(0.95)';
+            // Add visual feedback animation
+            if (clickedButton) {
+                clickedButton.style.transform = 'scale(0.95)';
                 setTimeout(() => {
-                    selectedButton.style.transform = '';
+                    clickedButton.style.transform = '';
                 }, 150);
+            }
+            
+            // Clear any existing generated code when language changes
+            if (generatedCode) {
+                generatedCode = '';
+                document.getElementById('codeText').textContent = 'Your generated code will appear here...';
             }
         }
 
@@ -1077,20 +1088,51 @@ public class ${generateClassName(description)} {
                 languageSelector.style.paddingBottom = '10px';
             }
 
-            // Add click event listeners for language buttons to ensure they work
-            const langButtons = document.querySelectorAll('.lang-btn');
-            langButtons.forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    // Prevent default to avoid double triggering
-                    e.preventDefault();
+                    // Add click event listeners for language buttons to ensure they work
+        const langButtons = document.querySelectorAll('.lang-btn');
+        langButtons.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // Prevent default to avoid double triggering
+                e.preventDefault();
+                
+                // Get the language from the onclick attribute
+                const onclickAttr = this.getAttribute('onclick');
+                const langMatch = onclickAttr.match(/selectLanguage\('([^']+)'\)/);
+                if (langMatch) {
+                    const lang = langMatch[1];
                     
-                    // Add visual feedback
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 150);
-                });
+                    // Remove active class from all buttons
+                    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Update current language
+                    currentLanguage = lang;
+                    
+                    // Update code language display
+                    const codeLanguageElement = document.getElementById('codeLanguage');
+                    if (codeLanguageElement) {
+                        codeLanguageElement.textContent = lang.charAt(0).toUpperCase() + lang.slice(1);
+                    }
+                    
+                    // Update placeholder
+                    updatePlaceholder();
+                    
+                    // Clear existing generated code
+                    if (generatedCode) {
+                        generatedCode = '';
+                        document.getElementById('codeText').textContent = 'Your generated code will appear here...';
+                    }
+                }
+                
+                // Add visual feedback
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
             });
+        });
         }
 
         function copyCode() {
@@ -1149,6 +1191,7 @@ public class ${generateClassName(description)} {
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
+            // Set up initial state
             updatePlaceholder();
             addMobileTouchSupport();
             
@@ -1156,6 +1199,19 @@ public class ${generateClassName(description)} {
             const jsButton = document.querySelector('button[onclick="selectLanguage(\'javascript\')"]');
             if (jsButton) {
                 jsButton.classList.add('active');
+            }
+            
+            // Ensure code language display shows JavaScript initially
+            const codeLanguageElement = document.getElementById('codeLanguage');
+            if (codeLanguageElement) {
+                codeLanguageElement.textContent = 'JavaScript';
+            }
+            
+            // Clear any existing generated code
+            generatedCode = '';
+            const codeTextElement = document.getElementById('codeText');
+            if (codeTextElement) {
+                codeTextElement.textContent = 'Your generated code will appear here...';
             }
         });
     </script>
