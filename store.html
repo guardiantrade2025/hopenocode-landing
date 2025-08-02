@@ -146,6 +146,54 @@
             font-weight: bold;
         }
 
+        /* Back to Home Button */
+        .back-button {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin-right: 15px;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .back-button i {
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+
+        /* Mobile Back Arrow */
+        .back-arrow {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 15px;
+        }
+
+        .back-arrow:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .back-arrow i {
+            font-size: 1.2rem;
+        }
+
         /* Filters */
         .filters {
             display: flex;
@@ -403,7 +451,9 @@
             }
 
             .store-header {
-                flex-direction: column;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
                 gap: 15px;
             }
 
@@ -414,6 +464,15 @@
 
             .products-grid {
                 grid-template-columns: 1fr;
+            }
+
+            /* Show mobile back arrow, hide desktop back button */
+            .back-button {
+                display: none;
+            }
+
+            .back-arrow {
+                display: flex;
             }
         }
     </style>
@@ -470,6 +529,16 @@
         <!-- Main Content -->
         <div class="main-content">
             <div class="store-header">
+                <!-- Desktop Back Button -->
+                <a href="index.html" class="back-button">
+                    <i>🏠</i> Back to Home
+                </a>
+                
+                <!-- Mobile Back Arrow -->
+                <div class="back-arrow" onclick="window.location.href='index.html'">
+                    <i>←</i>
+                </div>
+                
                 <div class="search-bar">
                     <input type="text" placeholder="Search products..." id="searchInput">
                 </div>
