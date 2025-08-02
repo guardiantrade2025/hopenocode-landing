@@ -420,6 +420,8 @@
                 transform: translateX(-100%);
                 transition: transform 0.3s ease;
                 z-index: 1000;
+                background: rgba(0,0,0,0.95);
+                backdrop-blur: 20px;
             }
 
             .sidebar.open {
@@ -444,6 +446,16 @@
             .header-actions {
                 width: 100%;
                 justify-content: space-between;
+            }
+
+            .nav-link {
+                background: rgba(255,255,255,0.1);
+                margin-bottom: 5px;
+            }
+
+            .nav-link:hover, .nav-link.active {
+                background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+                transform: translateX(5px);
             }
         }
 
@@ -976,7 +988,7 @@
 
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
-            showNotification('🎉 Welcome back! Your dashboard is ready.');
+            showNotification('🎉 Dashboard ready!');
         });
     </script>
 </body>
