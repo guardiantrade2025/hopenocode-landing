@@ -387,19 +387,45 @@
                 border: 1px solid rgba(255,255,255,0.2);
             }
 
+            /* Mobile action buttons container */
+            .mobile-action-buttons {
+                display: flex;
+                gap: 15px;
+                margin: 15px 20px;
+                width: calc(100% - 40px);
+            }
+
             /* Mobile preview button */
             .mobile-preview-btn {
                 display: block !important;
                 background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
                 color: white;
                 border: none;
-                padding: 15px 30px;
+                padding: 15px 20px;
                 border-radius: 25px;
-                font-size: 1.1rem;
+                font-size: 1rem;
                 font-weight: bold;
                 cursor: pointer;
-                margin: 15px 20px;
-                width: calc(100% - 40px);
+                flex: 1;
+                transition: all 0.3s ease;
+                text-align: center;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                position: relative;
+                z-index: 100;
+            }
+
+            /* Mobile export button */
+            .mobile-export-btn {
+                display: block !important;
+                background: linear-gradient(45deg, #4ecdc4, #ff6b6b);
+                color: white;
+                border: none;
+                padding: 15px 20px;
+                border-radius: 25px;
+                font-size: 1rem;
+                font-weight: bold;
+                cursor: pointer;
+                flex: 1;
                 transition: all 0.3s ease;
                 text-align: center;
                 box-shadow: 0 4px 15px rgba(0,0,0,0.3);
@@ -414,6 +440,17 @@
             }
 
             .mobile-preview-btn:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            }
+
+            .mobile-export-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+                background: linear-gradient(45deg, #26a69a, #ff5252);
+            }
+
+            .mobile-export-btn:active {
                 transform: translateY(0);
                 box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             }
@@ -441,8 +478,18 @@
             display: none;
         }
 
+        /* Hide mobile action buttons on desktop */
+        .mobile-action-buttons {
+            display: none;
+        }
+
         /* Hide mobile preview button on desktop */
         .mobile-preview-btn {
+            display: none;
+        }
+
+        /* Hide mobile export button on desktop */
+        .mobile-export-btn {
             display: none;
         }
 
@@ -644,9 +691,6 @@
                     <button class="btn btn-primary" onclick="previewPage()">
                         <i>👁️</i> Preview
                     </button>
-                    <button class="btn btn-secondary" onclick="exportCode()">
-                        <i>📤</i> Export
-                    </button>
                 </div>
             </div>
 
@@ -659,10 +703,15 @@
                 </div>
             </div>
             
-            <!-- Mobile Preview Button - Positioned under drag & drop area -->
-            <button class="mobile-preview-btn" onclick="previewPage()">
-                👁️ PREVIEW YOUR PAGE
-            </button>
+            <!-- Action Buttons - Positioned under drag & drop area -->
+            <div class="mobile-action-buttons">
+                <button class="mobile-preview-btn" onclick="previewPage()">
+                    👁️ PREVIEW YOUR PAGE
+                </button>
+                <button class="mobile-export-btn" onclick="exportCode()">
+                    📤 EXPORT CODE
+                </button>
+            </div>
 
             <!-- Mobile Preview Section -->
             <div class="mobile-preview">
