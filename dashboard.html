@@ -250,12 +250,22 @@
             transform: scaleY(1.1);
         }
 
-        .chart-label {
-            text-align: center;
-            font-size: 0.8rem;
-            opacity: 0.8;
-            margin-top: 10px;
-        }
+                 .chart-label {
+             text-align: center;
+             font-size: 0.8rem;
+             opacity: 0.8;
+             margin-top: 10px;
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             gap: 8px;
+         }
+         
+         .chart-label span {
+             flex: 1;
+             text-align: center;
+             font-size: 0.75rem;
+         }
 
         /* Project Management */
         .project-grid {
@@ -453,11 +463,19 @@
                 margin-bottom: 5px;
             }
 
-            .nav-link:hover, .nav-link.active {
-                background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-                transform: translateX(5px);
-            }
-        }
+                         .nav-link:hover, .nav-link.active {
+                 background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+                 transform: translateX(5px);
+             }
+             
+             .chart-label {
+                 gap: 4px;
+             }
+             
+             .chart-label span {
+                 font-size: 0.7rem;
+             }
+         }
 
         .mobile-menu-btn {
             display: none;
@@ -623,7 +641,15 @@
                                 <div class="chart-bar-item" style="height: 85%;" title="Sat: 85%"></div>
                                 <div class="chart-bar-item" style="height: 70%;" title="Sun: 70%"></div>
                             </div>
-                            <div class="chart-label">Mon Tue Wed Thu Fri Sat Sun</div>
+                                                         <div class="chart-label">
+                                 <span>Mon</span>
+                                 <span>Tue</span>
+                                 <span>Wed</span>
+                                 <span>Thu</span>
+                                 <span>Fri</span>
+                                 <span>Sat</span>
+                                 <span>Sun</span>
+                             </div>
                         </div>
                     </div>
 
@@ -751,7 +777,14 @@
                                 <div class="chart-bar-item" style="height: 90%;" title="May: 90%"></div>
                                 <div class="chart-bar-item" style="height: 95%;" title="Jun: 95%"></div>
                             </div>
-                            <div class="chart-label">Jan Feb Mar Apr May Jun</div>
+                                                         <div class="chart-label">
+                                 <span>Jan</span>
+                                 <span>Feb</span>
+                                 <span>Mar</span>
+                                 <span>Apr</span>
+                                 <span>May</span>
+                                 <span>Jun</span>
+                             </div>
                         </div>
                     </div>
 
@@ -767,7 +800,12 @@
                                 <div class="chart-bar-item" style="height: 60%;" title="Q3: $27.1K"></div>
                                 <div class="chart-bar-item" style="height: 75%;" title="Q4: $33.8K"></div>
                             </div>
-                            <div class="chart-label">Q1 Q2 Q3 Q4</div>
+                                                         <div class="chart-label">
+                                 <span>Q1</span>
+                                 <span>Q2</span>
+                                 <span>Q3</span>
+                                 <span>Q4</span>
+                             </div>
                         </div>
                     </div>
                 </div>
