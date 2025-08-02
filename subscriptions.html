@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscriptions - HopeNocode</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .subscriptions-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: rgba(255,255,255,0.1);
+            backdrop-blur: 10px;
+            border-right: 1px solid rgba(255,255,255,0.2);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 10px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            transform: translateX(5px);
+        }
+
+        .nav-link i {
+            margin-right: 12px;
+            font-size: 1.1rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 20px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            backdrop-blur: 10px;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        /* Plans Grid */
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .plan-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-blur: 10px;
+            border: 2px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            text-align: center;
+        }
+
+        .plan-card.featured {
+            border-color: #4ecdc4;
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(78, 205, 196, 0.3);
+        }
+
+        .plan-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.15);
+        }
+
+        .plan-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .plan-badge {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .plan-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .plan-price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .plan-period {
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .plan-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .plan-features li:before {
+            content: "✓";
+            color: #4ecdc4;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Current Subscriptions */
+        .current-subscriptions {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-blur: 10px;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .subscription-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-blur: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .subscription-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .subscription-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .subscription-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-active {
+            background: #4ecdc4;
+            color: white;
+        }
+
+        .status-cancelled {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .subscription-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .detail-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-weight: bold;
+        }
+
+        .subscription-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Payment Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: rgba(255,255,255,0.1);
+            backdrop-blur: 20px;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: white;
+            outline: none;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .plans-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .subscription-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="subscriptions-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">HopeNocode</div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i>🏠</i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link">
+                        <i>📊</i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="store.html" class="nav-link">
+                        <i>🛒</i> Store
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="subscriptions.html" class="nav-link active">
+                        <i>🔄</i> Subscriptions
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="portal.html" class="nav-link">
+                        <i>👤</i> Portal
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="contact.html" class="nav-link">
+                        <i>📧</i> Contact
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Subscription Plans</h1>
+                <div class="user-info">
+                    Choose the perfect plan for your needs
+                </div>
+            </div>
+
+            <!-- Current Subscriptions -->
+            <div class="current-subscriptions">
+                <h2 class="section-title">Your Current Subscriptions</h2>
+                <div id="currentSubscriptions">
+                    <!-- Current subscriptions will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Available Plans -->
+            <h2 class="section-title">Available Plans</h2>
+            <div class="plans-grid">
+                <div class="plan-card">
+                    <div class="plan-icon">🚀</div>
+                    <div class="plan-name">Starter</div>
+                    <div class="plan-price">$9.99</div>
+                    <div class="plan-period">per month</div>
+                    <ul class="plan-features">
+                        <li>5 projects</li>
+                        <li>Basic AI assistance</li>
+                        <li>Email support</li>
+                        <li>1GB storage</li>
+                        <li>Community access</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="subscribeToPlan('starter', 9.99)">Subscribe Now</button>
+                </div>
+
+                <div class="plan-card featured">
+                    <div class="plan-badge">Most Popular</div>
+                    <div class="plan-icon">⚡</div>
+                    <div class="plan-name">Pro</div>
+                    <div class="plan-price">$29.99</div>
+                    <div class="plan-period">per month</div>
+                    <ul class="plan-features">
+                        <li>Unlimited projects</li>
+                        <li>Advanced AI features</li>
+                        <li>Priority support</li>
+                        <li>10GB storage</li>
+                        <li>Custom domains</li>
+                        <li>Analytics dashboard</li>
+                        <li>Team collaboration</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="subscribeToPlan('pro', 29.99)">Subscribe Now</button>
+                </div>
+
+                <div class="plan-card">
+                    <div class="plan-icon">🏢</div>
+                    <div class="plan-name">Enterprise</div>
+                    <div class="plan-price">$99.99</div>
+                    <div class="plan-period">per month</div>
+                    <ul class="plan-features">
+                        <li>Everything in Pro</li>
+                        <li>Unlimited storage</li>
+                        <li>Dedicated support</li>
+                        <li>Custom integrations</li>
+                        <li>White-label options</li>
+                        <li>Advanced security</li>
+                        <li>SLA guarantee</li>
+                        <li>Onboarding support</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="subscribeToPlan('enterprise', 99.99)">Subscribe Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Subscribe to <span id="selectedPlanName">Pro</span></h2>
+                <button onclick="closePaymentModal()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">×</button>
+            </div>
+            <div class="payment-form">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="subscriptionEmail" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Card Number</label>
+                    <input type="text" id="subscriptionCardNumber" placeholder="4242 4242 4242 4242">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Expiry</label>
+                        <input type="text" id="subscriptionCardExpiry" placeholder="MM/YY">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>CVC</label>
+                        <input type="text" id="subscriptionCardCvc" placeholder="123">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Billing Address</label>
+                    <input type="text" id="billingAddress" placeholder="123 Main St">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>City</label>
+                        <input type="text" id="billingCity" placeholder="New York">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>ZIP</label>
+                        <input type="text" id="billingZip" placeholder="10001">
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="processSubscription()" style="width: 100%; margin-top: 20px;">
+                    Subscribe for $<span id="subscriptionPrice">29.99</span>/month
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Stripe
+        const stripe = Stripe('pk_test_51H1234567890abcdefghijklmnopqrstuvwxyz');
+
+        // Sample current subscriptions
+        const currentSubscriptions = [
+            {
+                id: "sub_001",
+                name: "HopeNocode Pro",
+                price: 29.99,
+                status: "active",
+                startDate: "2024-01-01",
+                nextBilling: "2024-02-01",
+                features: ["Unlimited projects", "Advanced AI features", "Priority support"]
+            }
+        ];
+
+        // Selected plan for subscription
+        let selectedPlan = null;
+
+        // Load current subscriptions
+        function loadCurrentSubscriptions() {
+            const container = document.getElementById('currentSubscriptions');
+            container.innerHTML = '';
+
+            if (currentSubscriptions.length === 0) {
+                container.innerHTML = '<p style="opacity: 0.8;">No active subscriptions</p>';
+                return;
+            }
+
+            currentSubscriptions.forEach(sub => {
+                const card = document.createElement('div');
+                card.className = 'subscription-card';
+                card.innerHTML = `
+                    <div class="subscription-header">
+                        <div class="subscription-name">${sub.name}</div>
+                        <div class="subscription-status status-${sub.status}">${sub.status}</div>
+                    </div>
+                    <div class="subscription-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Price</div>
+                            <div class="detail-value">$${sub.price}/month</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Started</div>
+                            <div class="detail-value">${formatDate(sub.startDate)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Next Billing</div>
+                            <div class="detail-value">${formatDate(sub.nextBilling)}</div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>Features:</strong>
+                        <ul style="margin-top: 5px; padding-left: 20px;">
+                            ${sub.features.map(feature => `<li>${feature}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="subscription-actions">
+                        <button class="btn btn-secondary" onclick="manageSubscription('${sub.id}')">Manage</button>
+                        <button class="btn btn-secondary" onclick="cancelSubscription('${sub.id}')">Cancel</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Subscribe to plan
+        function subscribeToPlan(planName, price) {
+            selectedPlan = { name: planName, price: price };
+            
+            // Update modal content
+            document.getElementById('selectedPlanName').textContent = planName.charAt(0).toUpperCase() + planName.slice(1);
+            document.getElementById('subscriptionPrice').textContent = price.toFixed(2);
+            
+            // Show modal
+            document.getElementById('paymentModal').style.display = 'flex';
+        }
+
+        // Process subscription payment
+        async function processSubscription() {
+            const email = document.getElementById('subscriptionEmail').value;
+            const cardNumber = document.getElementById('subscriptionCardNumber').value;
+            const cardExpiry = document.getElementById('subscriptionCardExpiry').value;
+            const cardCvc = document.getElementById('subscriptionCardCvc').value;
+            const address = document.getElementById('billingAddress').value;
+            const city = document.getElementById('billingCity').value;
+            const zip = document.getElementById('billingZip').value;
+
+            if (!email || !cardNumber || !cardExpiry || !cardCvc || !address || !city || !zip) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (!selectedPlan) {
+                alert('No plan selected');
+                return;
+            }
+
+            // Show loading state
+            const subscribeButton = document.querySelector('.btn-primary');
+            const originalText = subscribeButton.innerHTML;
+            subscribeButton.innerHTML = 'Processing...';
+            subscribeButton.disabled = true;
+
+            try {
+                // Create payment method
+                const { paymentMethod, error } = await stripe.createPaymentMethod({
+                    type: 'card',
+                    card: {
+                        number: cardNumber.replace(/\s/g, ''),
+                        exp_month: parseInt(cardExpiry.split('/')[0]),
+                        exp_year: parseInt('20' + cardExpiry.split('/')[1]),
+                        cvc: cardCvc,
+                    },
+                    billing_details: {
+                        email: email,
+                        address: {
+                            line1: address,
+                            city: city,
+                            postal_code: zip,
+                        }
+                    }
+                });
+
+                if (error) {
+                    throw new Error(error.message);
+                }
+
+                // Simulate subscription creation
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                // Add to current subscriptions
+                const newSubscription = {
+                    id: "sub_" + Date.now(),
+                    name: `HopeNocode ${selectedPlan.name.charAt(0).toUpperCase() + selectedPlan.name.slice(1)}`,
+                    price: selectedPlan.price,
+                    status: "active",
+                    startDate: new Date().toISOString().split('T')[0],
+                    nextBilling: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                    features: getPlanFeatures(selectedPlan.name)
+                };
+
+                currentSubscriptions.push(newSubscription);
+                loadCurrentSubscriptions();
+
+                // Close modal and show success
+                closePaymentModal();
+                alert('Subscription successful! Welcome to HopeNocode!');
+
+            } catch (error) {
+                alert('Subscription failed: ' + error.message);
+            } finally {
+                subscribeButton.innerHTML = originalText;
+                subscribeButton.disabled = false;
+            }
+        }
+
+        // Get plan features
+        function getPlanFeatures(planName) {
+            const features = {
+                starter: ["5 projects", "Basic AI assistance", "Email support", "1GB storage", "Community access"],
+                pro: ["Unlimited projects", "Advanced AI features", "Priority support", "10GB storage", "Custom domains", "Analytics dashboard", "Team collaboration"],
+                enterprise: ["Everything in Pro", "Unlimited storage", "Dedicated support", "Custom integrations", "White-label options", "Advanced security", "SLA guarantee", "Onboarding support"]
+            };
+            return features[planName] || [];
+        }
+
+        // Manage subscription
+        function manageSubscription(subscriptionId) {
+            alert('Redirecting to subscription management...');
+        }
+
+        // Cancel subscription
+        function cancelSubscription(subscriptionId) {
+            if (confirm('Are you sure you want to cancel this subscription? You will lose access to premium features at the end of your billing period.')) {
+                const subscription = currentSubscriptions.find(sub => sub.id === subscriptionId);
+                if (subscription) {
+                    subscription.status = 'cancelled';
+                    loadCurrentSubscriptions();
+                    alert('Subscription cancelled successfully');
+                }
+            }
+        }
+
+        // Close payment modal
+        function closePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+            selectedPlan = null;
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Initialize
+        loadCurrentSubscriptions();
+    </script>
+</body>
+</html> 

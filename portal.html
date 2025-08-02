@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Portal - HopeNocode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .portal-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: rgba(255,255,255,0.1);
+            backdrop-blur: 10px;
+            border-right: 1px solid rgba(255,255,255,0.2);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .user-profile {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 15px;
+        }
+
+        .user-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .user-email {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 10px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            transform: translateX(5px);
+        }
+
+        .nav-link i {
+            margin-right: 12px;
+            font-size: 1.1rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 20px;
+        }
+
+        .portal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            backdrop-blur: 10px;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-blur: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* Orders Section */
+        .orders-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-blur: 10px;
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .filter-select {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: white;
+            padding: 8px 12px;
+            outline: none;
+        }
+
+        .filter-select option {
+            background: #333;
+            color: white;
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .orders-table th,
+        .orders-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .orders-table th {
+            font-weight: bold;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .order-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-completed {
+            background: #4ecdc4;
+            color: white;
+        }
+
+        .status-pending {
+            background: #ffd93d;
+            color: #333;
+        }
+
+        .status-processing {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .status-cancelled {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Order Details Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: rgba(255,255,255,0.1);
+            backdrop-blur: 20px;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .order-items {
+            margin: 20px 0;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .order-item-image {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-radius: 8px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .order-item-details {
+            flex: 1;
+        }
+
+        .order-item-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .order-item-price {
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+
+        /* Account Settings */
+        .settings-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-blur: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: white;
+            outline: none;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .portal-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .orders-table {
+                font-size: 0.9rem;
+            }
+
+            .orders-table th,
+            .orders-table td {
+                padding: 10px 8px;
+            }
+
+            .filter-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="portal-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">HopeNocode</div>
+            
+            <div class="user-profile">
+                <div class="user-avatar">👤</div>
+                <div class="user-name">John Doe</div>
+                <div class="user-email">john@example.com</div>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" onclick="showSection('overview')">
+                        <i>📊</i> Overview
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('orders')">
+                        <i>📦</i> Orders
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('subscriptions')">
+                        <i>🔄</i> Subscriptions
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('downloads')">
+                        <i>⬇️</i> Downloads
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('settings')">
+                        <i>⚙️</i> Settings
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('support')">
+                        <i>💬</i> Support
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i>🏠</i> Back to Home
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Overview Section -->
+            <div id="overview" class="section">
+                <div class="portal-header">
+                    <h1 class="page-title">Customer Portal</h1>
+                    <div class="user-info">
+                        Welcome back, John! 👋
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Total Orders</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔄</div>
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Active Subscriptions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⬇️</div>
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">Downloads</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-value">$1,247</div>
+                        <div class="stat-label">Total Spent</div>
+                    </div>
+                </div>
+
+                <div class="orders-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Recent Orders</h2>
+                        <a href="#" onclick="showSection('orders')" class="btn btn-secondary">View All</a>
+                    </div>
+                    <div id="recentOrders">
+                        <!-- Recent orders will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Section -->
+            <div id="orders" class="section" style="display: none;">
+                <div class="portal-header">
+                    <h1 class="page-title">Order History</h1>
+                    <div class="filter-controls">
+                        <select class="filter-select" id="orderStatusFilter">
+                            <option value="">All Status</option>
+                            <option value="completed">Completed</option>
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                        <select class="filter-select" id="orderDateFilter">
+                            <option value="">All Time</option>
+                            <option value="7">Last 7 days</option>
+                            <option value="30">Last 30 days</option>
+                            <option value="90">Last 90 days</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="orders-section">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <!-- Orders will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Subscriptions Section -->
+            <div id="subscriptions" class="section" style="display: none;">
+                <div class="portal-header">
+                    <h1 class="page-title">Subscriptions</h1>
+                </div>
+
+                <div class="orders-section">
+                    <div id="subscriptionsList">
+                        <!-- Subscriptions will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Downloads Section -->
+            <div id="downloads" class="section" style="display: none;">
+                <div class="portal-header">
+                    <h1 class="page-title">Downloads</h1>
+                </div>
+
+                <div class="orders-section">
+                    <div id="downloadsList">
+                        <!-- Downloads will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings" class="section" style="display: none;">
+                <div class="portal-header">
+                    <h1 class="page-title">Account Settings</h1>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Personal Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" value="John" placeholder="First Name">
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" value="Doe" placeholder="Last Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" value="john@example.com" placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" value="+1 (555) 123-4567" placeholder="Phone">
+                    </div>
+
+                    <h3 style="margin-top: 30px;">Billing Information</h3>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <input type="text" value="123 Main St" placeholder="Address">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" value="New York" placeholder="City">
+                        </div>
+                        <div class="form-group">
+                            <label>State</label>
+                            <input type="text" value="NY" placeholder="State">
+                        </div>
+                        <div class="form-group">
+                            <label>ZIP Code</label>
+                            <input type="text" value="10001" placeholder="ZIP Code">
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 30px;">Preferences</h3>
+                    <div class="form-group">
+                        <label>Email Notifications</label>
+                        <select>
+                            <option value="all">All notifications</option>
+                            <option value="orders">Orders only</option>
+                            <option value="none">No notifications</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-primary" style="margin-top: 20px;">Save Changes</button>
+                </div>
+            </div>
+
+            <!-- Support Section -->
+            <div id="support" class="section" style="display: none;">
+                <div class="portal-header">
+                    <h1 class="page-title">Support</h1>
+                </div>
+
+                <div class="orders-section">
+                    <h3>Need Help?</h3>
+                    <p style="margin-bottom: 20px;">We're here to help! Contact our support team or check our documentation.</p>
+                    
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <button class="btn btn-primary">📧 Contact Support</button>
+                        <button class="btn btn-secondary">📚 Documentation</button>
+                        <button class="btn btn-secondary">❓ FAQ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Order Details</h2>
+                <button onclick="closeOrderModal()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">×</button>
+            </div>
+            <div id="orderModalContent">
+                <!-- Order details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data
+        const orders = [
+            {
+                id: "ORD-001",
+                date: "2024-01-15",
+                items: [
+                    { name: "AI Website Builder Pro", price: 99.99, quantity: 1, image: "🚀" },
+                    { name: "E-commerce Component Pack", price: 49.99, quantity: 1, image: "🛒" }
+                ],
+                total: 149.98,
+                status: "completed"
+            },
+            {
+                id: "ORD-002",
+                date: "2024-01-10",
+                items: [
+                    { name: "Analytics Dashboard Plugin", price: 29.99, quantity: 1, image: "📊" }
+                ],
+                total: 29.99,
+                status: "completed"
+            },
+            {
+                id: "ORD-003",
+                date: "2024-01-05",
+                items: [
+                    { name: "React Masterclass Course", price: 199.99, quantity: 1, image: "📚" }
+                ],
+                total: 199.99,
+                status: "processing"
+            },
+            {
+                id: "ORD-004",
+                date: "2024-01-01",
+                items: [
+                    { name: "UI/UX Design System", price: 79.99, quantity: 1, image: "🎨" }
+                ],
+                total: 79.99,
+                status: "pending"
+            }
+        ];
+
+        const subscriptions = [
+            {
+                id: "SUB-001",
+                name: "HopeNocode Pro",
+                price: 29.99,
+                status: "active",
+                nextBilling: "2024-02-15",
+                features: ["Unlimited projects", "Priority support", "Advanced analytics"]
+            },
+            {
+                id: "SUB-002",
+                name: "AI Builder Enterprise",
+                price: 99.99,
+                status: "active",
+                nextBilling: "2024-02-15",
+                features: ["Team collaboration", "Custom integrations", "White-label options"]
+            }
+        ];
+
+        const downloads = [
+            {
+                name: "AI Website Builder Pro",
+                version: "2.1.0",
+                downloadDate: "2024-01-15",
+                size: "45.2 MB",
+                image: "🚀"
+            },
+            {
+                name: "E-commerce Component Pack",
+                version: "1.5.2",
+                downloadDate: "2024-01-10",
+                size: "23.8 MB",
+                image: "🛒"
+            },
+            {
+                name: "Analytics Dashboard Plugin",
+                version: "3.0.1",
+                downloadDate: "2024-01-05",
+                size: "12.4 MB",
+                image: "📊"
+            }
+        ];
+
+        // Show section
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+
+            // Show selected section
+            document.getElementById(sectionName).style.display = 'block';
+
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Load section data
+            switch(sectionName) {
+                case 'orders':
+                    loadOrders();
+                    break;
+                case 'subscriptions':
+                    loadSubscriptions();
+                    break;
+                case 'downloads':
+                    loadDownloads();
+                    break;
+                case 'overview':
+                    loadRecentOrders();
+                    break;
+            }
+        }
+
+        // Load orders
+        function loadOrders() {
+            const tbody = document.getElementById('ordersTableBody');
+            tbody.innerHTML = '';
+
+            orders.forEach(order => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${order.id}</td>
+                    <td>${formatDate(order.date)}</td>
+                    <td>${order.items.length} item${order.items.length > 1 ? 's' : ''}</td>
+                    <td>$${order.total.toFixed(2)}</td>
+                    <td><span class="order-status status-${order.status}">${order.status}</span></td>
+                    <td>
+                        <button class="btn btn-primary" onclick="viewOrder('${order.id}')">View</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Load subscriptions
+        function loadSubscriptions() {
+            const container = document.getElementById('subscriptionsList');
+            container.innerHTML = '';
+
+            subscriptions.forEach(sub => {
+                const card = document.createElement('div');
+                card.style.cssText = `
+                    background: rgba(255,255,255,0.1);
+                    border-radius: 15px;
+                    padding: 20px;
+                    margin-bottom: 20px;
+                    backdrop-blur: 10px;
+                    border: 1px solid rgba(255,255,255,0.2);
+                `;
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3>${sub.name}</h3>
+                        <span class="order-status status-${sub.status}">${sub.status}</span>
+                    </div>
+                    <p style="margin-bottom: 10px;">$${sub.price}/month</p>
+                    <p style="margin-bottom: 15px; opacity: 0.8;">Next billing: ${formatDate(sub.nextBilling)}</p>
+                    <div style="margin-bottom: 15px;">
+                        <strong>Features:</strong>
+                        <ul style="margin-top: 5px; padding-left: 20px;">
+                            ${sub.features.map(feature => `<li>${feature}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-primary">Manage</button>
+                        <button class="btn btn-secondary">Cancel</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Load downloads
+        function loadDownloads() {
+            const container = document.getElementById('downloadsList');
+            container.innerHTML = '';
+
+            downloads.forEach(download => {
+                const card = document.createElement('div');
+                card.style.cssText = `
+                    background: rgba(255,255,255,0.1);
+                    border-radius: 15px;
+                    padding: 20px;
+                    margin-bottom: 20px;
+                    backdrop-blur: 10px;
+                    border: 1px solid rgba(255,255,255,0.2);
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+                `;
+                card.innerHTML = `
+                    <div style="font-size: 2rem;">${download.image}</div>
+                    <div style="flex: 1;">
+                        <h3 style="margin-bottom: 5px;">${download.name}</h3>
+                        <p style="opacity: 0.8; margin-bottom: 5px;">Version ${download.version} • ${download.size}</p>
+                        <p style="opacity: 0.6; font-size: 0.9rem;">Downloaded on ${formatDate(download.downloadDate)}</p>
+                    </div>
+                    <button class="btn btn-primary">Download</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Load recent orders for overview
+        function loadRecentOrders() {
+            const container = document.getElementById('recentOrders');
+            container.innerHTML = '';
+
+            orders.slice(0, 3).forEach(order => {
+                const card = document.createElement('div');
+                card.style.cssText = `
+                    background: rgba(255,255,255,0.1);
+                    border-radius: 10px;
+                    padding: 15px;
+                    margin-bottom: 15px;
+                    backdrop-blur: 10px;
+                    border: 1px solid rgba(255,255,255,0.2);
+                `;
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>${order.id}</strong>
+                            <p style="opacity: 0.8; margin: 5px 0;">${formatDate(order.date)}</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-weight: bold;">$${order.total.toFixed(2)}</div>
+                            <span class="order-status status-${order.status}">${order.status}</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // View order details
+        function viewOrder(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            if (!order) return;
+
+            const modal = document.getElementById('orderModal');
+            const content = document.getElementById('orderModalContent');
+
+            content.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <strong>Order ID:</strong> ${order.id}<br>
+                    <strong>Date:</strong> ${formatDate(order.date)}<br>
+                    <strong>Status:</strong> <span class="order-status status-${order.status}">${order.status}</span>
+                </div>
+                <div class="order-items">
+                    <h3>Items</h3>
+                    ${order.items.map(item => `
+                        <div class="order-item">
+                            <div class="order-item-image">${item.image}</div>
+                            <div class="order-item-details">
+                                <div class="order-item-title">${item.name}</div>
+                                <div class="order-item-price">$${item.price.toFixed(2)} × ${item.quantity}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div style="text-align: right; font-size: 1.2rem; font-weight: bold; margin-top: 20px;">
+                    Total: $${order.total.toFixed(2)}
+                </div>
+            `;
+
+            modal.style.display = 'flex';
+        }
+
+        // Close order modal
+        function closeOrderModal() {
+            document.getElementById('orderModal').style.display = 'none';
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Initialize portal
+        function initPortal() {
+            loadRecentOrders();
+        }
+
+        // Initialize
+        initPortal();
+    </script>
+</body>
+</html> 
