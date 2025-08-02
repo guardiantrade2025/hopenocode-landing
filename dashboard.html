@@ -937,6 +937,12 @@
             document.querySelector('.page-title').textContent = titles[section];
             
             currentSection = section;
+            
+            // Close mobile sidebar if on mobile
+            if (window.innerWidth <= 768) {
+                const sidebar = document.getElementById('sidebar');
+                sidebar.classList.remove('open');
+            }
         }
 
         function toggleSidebar() {
