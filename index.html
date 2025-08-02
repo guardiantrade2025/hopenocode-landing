@@ -409,82 +409,7 @@
             color: #4ecdc4;
         }
 
-        /* Contact Form */
-        .contact-form {
-            background: rgba(255,255,255,0.1);
-            padding: 30px;
-            border-radius: 20px;
-            backdrop-blur: 10px;
-            border: 1px solid rgba(255,255,255,0.2);
-            max-width: 500px;
-            margin: 0 auto;
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
 
-        .contact-form.show {
-            display: block;
-            animation: slideUp 0.5s ease;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: white;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 10px;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #4ecdc4;
-            background: rgba(255,255,255,0.2);
-        }
-
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: rgba(255,255,255,0.7);
-        }
-
-        .error {
-            color: #ff6b6b;
-            font-size: 14px;
-            margin-top: 5px;
-            display: none;
-        }
 
         .notification {
             position: fixed;
@@ -1186,7 +1111,7 @@
             <div class="hero-buttons">
                 <button class="btn btn-primary" onclick="getStarted()">Get Started Free</button>
                 <button class="btn btn-secondary" onclick="watchDemo()">Watch Demo</button>
-                <button class="btn btn-secondary" onclick="toggleContact()">Contact Us</button>
+                <button class="btn btn-secondary" onclick="window.location.href='contact.html'">Contact Us</button>
             </div>
         </div>
     </section>
@@ -1586,32 +1511,7 @@
         </div>
     </section>
 
-    <!-- Contact Form -->
-    <div class="contact-form" id="contactForm">
-        <button class="close-btn" onclick="toggleContact()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: white; font-size: 24px; cursor: pointer; opacity: 0.7; transition: opacity 0.3s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">×</button>
-        <h3 style="margin-bottom: 20px;">Get in Touch</h3>
-        <form onsubmit="submitForm(event)">
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" id="name" name="name" placeholder="Your name" required>
-                <div class="error" id="nameError">Please enter your name</div>
-            </div>
-            
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="your@email.com" required>
-                <div class="error" id="emailError">Please enter a valid email</div>
-            </div>
-            
-            <div class="form-group">
-                <label for="message">Message</label>
-                <textarea id="message" name="message" rows="4" placeholder="Tell us about your project..." required></textarea>
-                <div class="error" id="messageError">Please enter your message</div>
-            </div>
-            
-            <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
-        </form>
-    </div>
+
 
     <!-- Footer -->
     <footer class="footer">
@@ -1854,71 +1754,7 @@
             });
         });
 
-        function toggleContact() {
-            const form = document.getElementById('contactForm');
-            const isVisible = form.classList.contains('show');
-            
-            if (isVisible) {
-                form.classList.remove('show');
-                setTimeout(() => {
-                    form.style.display = 'none';
-                }, 500);
-            } else {
-                form.style.display = 'block';
-                setTimeout(() => {
-                    form.classList.add('show');
-                }, 10);
-            }
-        }
 
-        function validateForm() {
-            let isValid = true;
-            const name = document.getElementById('name');
-            const email = document.getElementById('email');
-            const message = document.getElementById('message');
-            
-            // Reset errors
-            document.querySelectorAll('.error').forEach(error => error.style.display = 'none');
-            
-            // Validate name
-            if (!name.value.trim()) {
-                document.getElementById('nameError').style.display = 'block';
-                isValid = false;
-            }
-            
-            // Validate email
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email.value)) {
-                document.getElementById('emailError').style.display = 'block';
-                isValid = false;
-            }
-            
-            // Validate message
-            if (!message.value.trim()) {
-                document.getElementById('messageError').style.display = 'block';
-                isValid = false;
-            }
-            
-            return isValid;
-        }
-
-        function submitForm(event) {
-            event.preventDefault();
-            
-            if (validateForm()) {
-                showNotification('✅ Message sent successfully! We\'ll get back to you soon.');
-                
-                // Reset form
-                event.target.reset();
-                
-                // Hide form after successful submission
-                setTimeout(() => {
-                    toggleContact();
-                }, 2000);
-            } else {
-                showNotification('❌ Please fix the errors in the form.', true);
-            }
-        }
 
         function getStarted() {
             showNotification('🚀 Redirecting to signup page...');
