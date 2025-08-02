@@ -1048,7 +1048,12 @@
              
              // Add tap-to-close functionality for mobile sidebar
              const mainContent = document.querySelector('.main-content');
-             mainContent.addEventListener('click', function() {
+             mainContent.addEventListener('click', function(event) {
+                 // Don't close if clicking on the hamburger menu button
+                 if (event.target.closest('.mobile-menu-btn')) {
+                     return;
+                 }
+                 
                  if (window.innerWidth <= 768) {
                      const sidebar = document.getElementById('sidebar');
                      if (sidebar.classList.contains('open')) {
