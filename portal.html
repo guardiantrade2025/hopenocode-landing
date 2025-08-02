@@ -830,6 +830,12 @@
                     loadRecentOrders();
                     break;
             }
+
+            // Close mobile sidebar on mobile devices
+            if (window.innerWidth <= 768) {
+                const sidebar = document.querySelector('.sidebar');
+                sidebar.classList.remove('open');
+            }
         }
 
         // Load orders
@@ -1009,6 +1015,17 @@
         // Initialize portal
         function initPortal() {
             loadRecentOrders();
+            
+            // Add tap-to-close functionality for mobile sidebar
+            const mainContent = document.querySelector('.main-content');
+            mainContent.addEventListener('click', function(event) {
+                if (window.innerWidth <= 768) {
+                    const sidebar = document.querySelector('.sidebar');
+                    if (sidebar.classList.contains('open')) {
+                        sidebar.classList.remove('open');
+                    }
+                }
+            });
         }
 
         // Initialize
