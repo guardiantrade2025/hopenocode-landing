@@ -1164,6 +1164,29 @@
             .analytics-table {
                 font-size: 0.9rem;
             }
+
+            /* Fix chart display on mobile */
+            .chart-bar {
+                width: 12% !important;
+                min-width: 35px;
+                margin: 0 2px;
+            }
+
+            .chart-bar-label {
+                font-size: 0.7rem;
+                right: 2px;
+                white-space: nowrap;
+                transform: translateY(-50%) rotate(-45deg);
+                transform-origin: center;
+            }
+
+            .chart-canvas {
+                display: flex;
+                gap: 2px;
+                overflow-x: auto;
+                padding: 10px 0;
+                min-height: 200px;
+            }
         }
     </style>
 </head>
