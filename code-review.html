@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Code Review & Optimization - HopeNocode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 350px;
+            background: rgba(255,255,255,0.1);
+            backdrop-blur: 10px;
+            border-right: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .ai-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: #4ecdc4;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .review-tabs {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 10px;
+        }
+
+        .review-tab {
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .review-tab:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateX(5px);
+        }
+
+        .review-tab.active {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-color: transparent;
+        }
+
+        .tab-icon {
+            font-size: 1.2rem;
+        }
+
+        .tab-title {
+            font-weight: 500;
+        }
+
+        .tab-description {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            backdrop-blur: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-color: transparent;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .content-body {
+            flex: 1;
+            display: flex;
+            gap: 20px;
+            padding: 20px 30px;
+        }
+
+        /* Code Editor */
+        .code-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .language-selector {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .code-editor {
+            flex: 1;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #e0e0e0;
+            resize: none;
+            outline: none;
+        }
+
+        /* Analysis Panel */
+        .analysis-section {
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .analysis-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-blur: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .card-icon {
+            font-size: 1.2rem;
+        }
+
+        .card-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .score-display {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .score-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .score-excellent {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        }
+
+        .score-good {
+            background: linear-gradient(45deg, #ffd93d, #ff6b6b);
+        }
+
+        .score-poor {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .issues-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .issue-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            border-left: 3px solid;
+        }
+
+        .issue-critical {
+            border-left-color: #ff6b6b;
+        }
+
+        .issue-warning {
+            border-left-color: #ffd93d;
+        }
+
+        .issue-info {
+            border-left-color: #4ecdc4;
+        }
+
+        .issue-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .issue-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.4;
+        }
+
+        .suggestion-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            background: rgba(78, 205, 196, 0.1);
+            border-radius: 8px;
+            border-left: 3px solid #4ecdc4;
+        }
+
+        .suggestion-title {
+            font-weight: bold;
+            color: #4ecdc4;
+            margin-bottom: 5px;
+        }
+
+        .suggestion-description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 200px;
+            }
+
+            .content-body {
+                flex-direction: column;
+                padding: 15px;
+            }
+
+            .analysis-section {
+                width: 100%;
+            }
+
+            .code-editor {
+                min-height: 300px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .analysis-card {
+            animation: fadeInUp 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">HopeNocode</div>
+                <div class="ai-status">
+                    <div class="status-indicator"></div>
+                    AI Code Review Active
+                </div>
+            </div>
+
+            <div class="review-tabs">
+                <div class="review-tab active" onclick="switchTab('quality')">
+                    <div class="tab-icon">📊</div>
+                    <div>
+                        <div class="tab-title">Code Quality</div>
+                        <div class="tab-description">Analyze code structure and best practices</div>
+                    </div>
+                </div>
+                <div class="review-tab" onclick="switchTab('performance')">
+                    <div class="tab-icon">⚡</div>
+                    <div>
+                        <div class="tab-title">Performance</div>
+                        <div class="tab-description">Optimize speed and efficiency</div>
+                    </div>
+                </div>
+                <div class="review-tab" onclick="switchTab('security')">
+                    <div class="tab-icon">🔒</div>
+                    <div>
+                        <div class="tab-title">Security</div>
+                        <div class="tab-description">Detect vulnerabilities and risks</div>
+                    </div>
+                </div>
+                <div class="review-tab" onclick="switchTab('documentation')">
+                    <div class="tab-icon">📝</div>
+                    <div>
+                        <div class="tab-title">Documentation</div>
+                        <div class="tab-description">Generate comprehensive docs</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content-header">
+                <div class="header-title">AI Code Review & Optimization</div>
+                <div class="header-actions">
+                    <button class="btn" onclick="analyzeCode()">🔍 Analyze Code</button>
+                    <button class="btn btn-primary" onclick="optimizeCode()">⚡ Optimize</button>
+                </div>
+            </div>
+
+            <div class="content-body">
+                <!-- Code Editor -->
+                <div class="code-section">
+                    <div class="code-header">
+                        <h3>Your Code</h3>
+                        <select class="language-selector" onchange="changeLanguage()">
+                            <option value="javascript">JavaScript</option>
+                            <option value="python">Python</option>
+                            <option value="react">React</option>
+                            <option value="vue">Vue.js</option>
+                            <option value="angular">Angular</option>
+                            <option value="php">PHP</option>
+                            <option value="java">Java</option>
+                            <option value="csharp">C#</option>
+                        </select>
+                    </div>
+                    <textarea class="code-editor" id="codeEditor" placeholder="Paste your code here for AI analysis...&#10;&#10;Example:&#10;function calculateSum(numbers) {&#10;    let sum = 0;&#10;    for(let i = 0; i < numbers.length; i++) {&#10;        sum += numbers[i];&#10;    }&#10;    return sum;&#10;}"></textarea>
+                </div>
+
+                <!-- Analysis Panel -->
+                <div class="analysis-section">
+                    <!-- Code Quality Score -->
+                    <div class="analysis-card">
+                        <div class="card-header">
+                            <div class="card-icon">📊</div>
+                            <div class="card-title">Code Quality Score</div>
+                        </div>
+                        <div class="score-display">
+                            <div class="score-circle score-excellent" id="qualityScore">85</div>
+                            <div>
+                                <div class="score-label">Excellent</div>
+                                <div style="font-size: 0.8rem; opacity: 0.7;">Good practices followed</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Issues Found -->
+                    <div class="analysis-card">
+                        <div class="card-header">
+                            <div class="card-icon">⚠️</div>
+                            <div class="card-title">Issues Found</div>
+                        </div>
+                        <div class="issues-list" id="issuesList">
+                            <div class="issue-item issue-warning">
+                                <div class="issue-title">Missing Error Handling</div>
+                                <div class="issue-description">Consider adding try-catch blocks for better error management</div>
+                            </div>
+                            <div class="issue-item issue-info">
+                                <div class="issue-title">Variable Naming</div>
+                                <div class="issue-description">Use more descriptive variable names for better readability</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Optimization Suggestions -->
+                    <div class="analysis-card">
+                        <div class="card-header">
+                            <div class="card-icon">💡</div>
+                            <div class="card-title">Optimization Suggestions</div>
+                        </div>
+                        <div class="issues-list" id="suggestionsList">
+                            <div class="suggestion-item">
+                                <div class="suggestion-title">Use Array.reduce()</div>
+                                <div class="suggestion-description">Replace the for loop with Array.reduce() for more functional programming approach</div>
+                            </div>
+                            <div class="suggestion-item">
+                                <div class="suggestion-title">Add Input Validation</div>
+                                <div class="suggestion-description">Validate input parameters to ensure they are arrays</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTab = 'quality';
+        let currentLanguage = 'javascript';
+
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Update active tab
+            document.querySelectorAll('.review-tab').forEach(t => t.classList.remove('active'));
+            event.target.closest('.review-tab').classList.add('active');
+            
+            // Update analysis based on tab
+            updateAnalysis();
+        }
+
+        function changeLanguage() {
+            currentLanguage = document.querySelector('.language-selector').value;
+            analyzeCode();
+        }
+
+        function analyzeCode() {
+            const code = document.getElementById('codeEditor').value;
+            if (!code.trim()) {
+                alert('Please enter some code to analyze');
+                return;
+            }
+
+            // Simulate AI analysis
+            showTypingIndicator();
+            
+            setTimeout(() => {
+                const qualityScore = Math.floor(Math.random() * 40) + 60; // 60-100
+                updateQualityScore(qualityScore);
+                updateIssues();
+                updateSuggestions();
+                hideTypingIndicator();
+            }, 2000);
+        }
+
+        function optimizeCode() {
+            const code = document.getElementById('codeEditor').value;
+            if (!code.trim()) {
+                alert('Please enter some code to optimize');
+                return;
+            }
+
+            // Simulate AI optimization
+            showTypingIndicator();
+            
+            setTimeout(() => {
+                const optimizedCode = generateOptimizedCode(code);
+                document.getElementById('codeEditor').value = optimizedCode;
+                hideTypingIndicator();
+                alert('Code optimized successfully! Check the updated code in the editor.');
+            }, 3000);
+        }
+
+        function updateQualityScore(score) {
+            const scoreElement = document.getElementById('qualityScore');
+            const scoreCircle = scoreElement.parentElement;
+            
+            scoreElement.textContent = score;
+            
+            // Update score class based on value
+            scoreCircle.className = 'score-circle';
+            if (score >= 80) {
+                scoreCircle.classList.add('score-excellent');
+            } else if (score >= 60) {
+                scoreCircle.classList.add('score-good');
+            } else {
+                scoreCircle.classList.add('score-poor');
+            }
+        }
+
+        function updateIssues() {
+            const issuesList = document.getElementById('issuesList');
+            const issues = generateIssues();
+            
+            issuesList.innerHTML = issues.map(issue => `
+                <div class="issue-item issue-${issue.type}">
+                    <div class="issue-title">${issue.title}</div>
+                    <div class="issue-description">${issue.description}</div>
+                </div>
+            `).join('');
+        }
+
+        function updateSuggestions() {
+            const suggestionsList = document.getElementById('suggestionsList');
+            const suggestions = generateSuggestions();
+            
+            suggestionsList.innerHTML = suggestions.map(suggestion => `
+                <div class="suggestion-item">
+                    <div class="suggestion-title">${suggestion.title}</div>
+                    <div class="suggestion-description">${suggestion.description}</div>
+                </div>
+            `).join('');
+        }
+
+        function generateIssues() {
+            const issues = [
+                {
+                    type: 'warning',
+                    title: 'Missing Error Handling',
+                    description: 'Consider adding try-catch blocks for better error management'
+                },
+                {
+                    type: 'info',
+                    title: 'Variable Naming',
+                    description: 'Use more descriptive variable names for better readability'
+                },
+                {
+                    type: 'critical',
+                    title: 'Potential Memory Leak',
+                    description: 'Large objects should be properly disposed to prevent memory leaks'
+                }
+            ];
+            
+            return issues.slice(0, Math.floor(Math.random() * 3) + 1);
+        }
+
+        function generateSuggestions() {
+            const suggestions = [
+                {
+                    title: 'Use Array.reduce()',
+                    description: 'Replace the for loop with Array.reduce() for more functional programming approach'
+                },
+                {
+                    title: 'Add Input Validation',
+                    description: 'Validate input parameters to ensure they are arrays'
+                },
+                {
+                    title: 'Implement Caching',
+                    description: 'Cache frequently accessed data to improve performance'
+                },
+                {
+                    title: 'Use Modern ES6+ Features',
+                    description: 'Consider using arrow functions, destructuring, and template literals'
+                }
+            ];
+            
+            return suggestions.slice(0, Math.floor(Math.random() * 3) + 1);
+        }
+
+        function generateOptimizedCode(originalCode) {
+            // Simple optimization example
+            if (originalCode.includes('for(let i = 0; i < numbers.length; i++)')) {
+                return originalCode.replace(
+                    /for\(let i = 0; i < numbers\.length; i\+\+\)\s*\{\s*sum \+= numbers\[i\];\s*\}/,
+                    'return numbers.reduce((sum, num) => sum + num, 0);'
+                );
+            }
+            return originalCode;
+        }
+
+        function showTypingIndicator() {
+            // Add typing indicator to analysis cards
+            const cards = document.querySelectorAll('.analysis-card');
+            cards.forEach(card => {
+                card.style.opacity = '0.5';
+            });
+        }
+
+        function hideTypingIndicator() {
+            const cards = document.querySelectorAll('.analysis-card');
+            cards.forEach(card => {
+                card.style.opacity = '1';
+            });
+        }
+
+        function updateAnalysis() {
+            // Update analysis based on current tab
+            const tabTitles = {
+                'quality': 'Code Quality Analysis',
+                'performance': 'Performance Analysis',
+                'security': 'Security Analysis',
+                'documentation': 'Documentation Analysis'
+            };
+            
+            document.querySelector('.header-title').textContent = tabTitles[currentTab];
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default code example
+            const defaultCode = `function calculateSum(numbers) {
+    let sum = 0;
+    for(let i = 0; i < numbers.length; i++) {
+        sum += numbers[i];
+    }
+    return sum;
+}`;
+            document.getElementById('codeEditor').value = defaultCode;
+        });
+    </script>
+</body>
+</html> 
