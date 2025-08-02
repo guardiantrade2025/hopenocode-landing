@@ -697,6 +697,17 @@
             displayProducts();
             updateCartCount();
             loadCart();
+            
+            // Add tap-to-close functionality for mobile sidebar
+            const mainContent = document.querySelector('.main-content');
+            mainContent.addEventListener('click', function(event) {
+                if (window.innerWidth <= 768) {
+                    const sidebar = document.querySelector('.sidebar');
+                    if (sidebar.classList.contains('open')) {
+                        sidebar.classList.remove('open');
+                    }
+                }
+            });
         }
 
         // Display products
