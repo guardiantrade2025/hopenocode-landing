@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Code Generator Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .language-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .lang-btn {
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .lang-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .lang-btn.active {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4) !important;
+            border-color: transparent !important;
+            box-shadow: 0 5px 15px rgba(255,107,107,0.3) !important;
+            transform: translateY(-2px) !important;
+            font-weight: bold !important;
+            color: white !important;
+        }
+        
+        .lang-btn.active::after {
+            content: '✓';
+            margin-left: 8px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .input-area {
+            width: 100%;
+            min-height: 100px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .output-area {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 20px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            min-height: 100px;
+        }
+        
+        .status {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Simple Code Generator Test</h1>
+        
+        <div class="status" id="status">
+            Status: Ready to test
+        </div>
+        
+        <div class="language-selector">
+            <button class="lang-btn" data-lang="javascript">JavaScript</button>
+            <button class="lang-btn" data-lang="python">Python</button>
+            <button class="lang-btn" data-lang="react">React</button>
+            <button class="lang-btn" data-lang="vue">Vue</button>
+        </div>
+        
+        <textarea class="input-area" id="codeInput" placeholder="Describe what you want to build..."></textarea>
+        
+        <button class="generate-btn" onclick="generateCode()">Generate Code</button>
+        
+        <div class="output-area" id="codeOutput">Your generated code will appear here...</div>
+    </div>
+
+    <script>
+        let currentLanguage = 'javascript';
+        let generatedCode = '';
+
+        // Language button functionality
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Update current language
+                currentLanguage = this.getAttribute('data-lang');
+                
+                // Update status
+                document.getElementById('status').textContent = `Status: Language selected - ${currentLanguage}`;
+                
+                // Add visual feedback
+                this.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+            });
+        });
+
+        // Set initial active state
+        document.querySelector('.lang-btn[data-lang="javascript"]').classList.add('active');
+
+        function generateCode() {
+            const input = document.getElementById('codeInput').value.trim();
+            if (!input) {
+                alert('Please describe what you want to build');
+                return;
+            }
+
+            document.getElementById('status').textContent = `Status: Generating ${currentLanguage} code...`;
+            document.getElementById('generateBtn').disabled = true;
+
+            // Simulate AI processing
+            setTimeout(() => {
+                try {
+                    generatedCode = generateCodeForLanguage(input, currentLanguage);
+                    document.getElementById('codeOutput').textContent = generatedCode;
+                    document.getElementById('status').textContent = `Status: Code generated successfully for ${currentLanguage}`;
+                } catch (error) {
+                    console.error('Error generating code:', error);
+                    document.getElementById('codeOutput').textContent = 'Error: Failed to generate code. Please try again.';
+                    document.getElementById('status').textContent = 'Status: Error occurred';
+                } finally {
+                    document.getElementById('generateBtn').disabled = false;
+                }
+            }, 1500);
+        }
+
+        function generateCodeForLanguage(description, language) {
+            const codeTemplates = {
+                'javascript': '// ' + description + '\nfunction ' + generateFunctionName(description) + '() {\n    console.log("Hello from JavaScript!");\n    return "Generated code";\n}\n\n// Usage\nconst result = ' + generateFunctionName(description) + '();\nconsole.log(result);',
+                'python': '# ' + description + '\ndef ' + generateFunctionName(description) + '():\n    print("Hello from Python!")\n    return "Generated code"\n\n# Usage\nresult = ' + generateFunctionName(description) + '()\nprint(result)',
+                'react': 'import React from \'react\';\n\n// ' + description + '\nconst ' + generateComponentName(description) + ' = () => {\n    return (\n        <div>\n            <h2>Generated React Component</h2>\n            <p>Hello from React!</p>\n        </div>\n    );\n};\n\nexport default ' + generateComponentName(description) + ';',
+                'vue': '<template>\n    <div>\n        <h2>Generated Vue Component</h2>\n        <p>Hello from Vue!</p>\n    </div>\n</template>\n\n<script>\n// ' + description + '\nexport default {\n    name: \'' + generateComponentName(description) + '\'\n}\n</script>'
+            };
+
+            return codeTemplates[language] || codeTemplates['javascript'];
+        }
+
+        function generateFunctionName(description) {
+            const words = description.toLowerCase().split(' ').slice(0, 3);
+            return words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('') + 'Function';
+        }
+
+        function generateComponentName(description) {
+            const words = description.toLowerCase().split(' ').slice(0, 3);
+            return words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('') + 'Component';
+        }
+    </script>
+</body>
+</html> 
