@@ -952,36 +952,36 @@
     <script>
         let currentSection = 'dashboard';
 
-        function switchSection(section) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-            
-            // Show selected section
-            document.getElementById(section + '-section').style.display = 'block';
-            
-            // Update navigation
-            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Update page title
-            const titles = {
-                'dashboard': 'Dashboard',
-                'projects': 'Projects',
-                'analytics': 'Analytics',
-                'team': 'Team',
-                'ai': 'AI Insights',
-                'settings': 'Settings'
-            };
-            document.querySelector('.page-title').textContent = titles[section];
-            
-            currentSection = section;
-            
-            // Close mobile sidebar if on mobile
-            if (window.innerWidth <= 768) {
-                const sidebar = document.getElementById('sidebar');
-                sidebar.classList.remove('open');
-            }
-        }
+                 function switchSection(section) {
+             // Hide all sections
+             document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+             
+             // Show selected section
+             document.getElementById(section + '-section').style.display = 'block';
+             
+             // Update navigation
+             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+             event.target.classList.add('active');
+             
+             // Update page title
+             const titles = {
+                 'dashboard': 'Dashboard',
+                 'projects': 'Projects',
+                 'analytics': 'Analytics',
+                 'team': 'Team',
+                 'ai': 'AI Insights',
+                 'settings': 'Settings'
+             };
+             document.querySelector('.page-title').textContent = titles[section];
+             
+             currentSection = section;
+             
+             // Close mobile sidebar if on mobile (for all sections including dashboard)
+             if (window.innerWidth <= 768) {
+                 const sidebar = document.getElementById('sidebar');
+                 sidebar.classList.remove('open');
+             }
+         }
 
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -1019,21 +1019,44 @@
             }, 1000);
         }
 
-        // Real-time updates simulation
-        setInterval(() => {
-            const metrics = document.querySelectorAll('.metric');
-            if (metrics.length > 0 && Math.random() > 0.7) {
-                const randomMetric = metrics[Math.floor(Math.random() * metrics.length)];
-                const currentValue = parseInt(randomMetric.textContent.replace(/[^0-9]/g, ''));
-                const newValue = currentValue + Math.floor(Math.random() * 10);
-                randomMetric.textContent = randomMetric.textContent.replace(/[0-9]+/, newValue);
-            }
-        }, 5000);
+                 // Real-time updates simulation with limits
+         setInterval(() => {
+             const metrics = document.querySelectorAll('.metric');
+             if (metrics.length > 0 && Math.random() > 0.7) {
+                 const randomMetric = metrics[Math.floor(Math.random() * metrics.length)];
+                 const currentText = randomMetric.textContent;
+                 const currentValue = parseInt(currentText.replace(/[^0-9]/g, ''));
+                 
+                 // Set reasonable limits for each metric type
+                 let maxValue;
+                 if (currentText.includes('$')) {
+                     maxValue = 99999; // Revenue limit
+                 } else if (currentText.includes(',')) {
+                     maxValue = 9999; // User count limit
+                 } else {
+                     maxValue = 999; // Other metrics limit
+                 }
+                 
+                 const newValue = Math.min(currentValue + Math.floor(Math.random() * 5), maxValue);
+                 randomMetric.textContent = currentText.replace(/[0-9,]+/, newValue.toLocaleString());
+             }
+         }, 10000); // Increased interval to 10 seconds
 
-        // Initialize dashboard
-        document.addEventListener('DOMContentLoaded', function() {
-            showNotification('🎉 Dashboard ready!');
-        });
+                 // Initialize dashboard
+         document.addEventListener('DOMContentLoaded', function() {
+             showNotification('🎉 Dashboard ready!');
+             
+             // Add tap-to-close functionality for mobile sidebar
+             const mainContent = document.querySelector('.main-content');
+             mainContent.addEventListener('click', function() {
+                 if (window.innerWidth <= 768) {
+                     const sidebar = document.getElementById('sidebar');
+                     if (sidebar.classList.contains('open')) {
+                         sidebar.classList.remove('open');
+                     }
+                 }
+             });
+         });
     </script>
 </body>
 </html> 
