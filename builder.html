@@ -392,8 +392,8 @@
             /* Mobile action buttons container */
             .mobile-action-buttons {
                 display: flex;
-                gap: 12px;
-                margin: 20px;
+                gap: 10px;
+                margin: 15px 20px;
                 width: calc(100% - 40px);
                 padding: 0 5px;
             }
@@ -404,19 +404,18 @@
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 color: white;
                 border: none;
-                padding: 18px 16px;
-                border-radius: 20px;
-                font-size: 0.95rem;
+                padding: 14px 12px;
+                border-radius: 15px;
+                font-size: 0.85rem;
                 font-weight: 600;
                 cursor: pointer;
                 flex: 1;
-                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                transition: all 0.3s ease;
                 text-align: center;
-                box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
                 position: relative;
                 z-index: 100;
-                overflow: hidden;
-                letter-spacing: 0.5px;
+                letter-spacing: 0.3px;
             }
 
             /* Mobile export button */
@@ -425,42 +424,41 @@
                 background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
                 color: white;
                 border: none;
-                padding: 18px 16px;
-                border-radius: 20px;
-                font-size: 0.95rem;
+                padding: 14px 12px;
+                border-radius: 15px;
+                font-size: 0.85rem;
                 font-weight: 600;
                 cursor: pointer;
                 flex: 1;
-                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                transition: all 0.3s ease;
                 text-align: center;
-                box-shadow: 0 8px 25px rgba(240, 147, 251, 0.4);
+                box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3);
                 position: relative;
                 z-index: 100;
-                overflow: hidden;
-                letter-spacing: 0.5px;
+                letter-spacing: 0.3px;
             }
 
             .mobile-preview-btn:hover {
-                transform: translateY(-3px) scale(1.02);
-                box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
                 background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
             }
 
             .mobile-preview-btn:active {
-                transform: translateY(-1px) scale(0.98);
-                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+                transform: translateY(0);
+                box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
                 transition: all 0.1s ease;
             }
 
             .mobile-export-btn:hover {
-                transform: translateY(-3px) scale(1.02);
-                box-shadow: 0 12px 35px rgba(240, 147, 251, 0.6);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(240, 147, 251, 0.4);
                 background: linear-gradient(135deg, #e085e8 0%, #e54b5f 100%);
             }
 
             .mobile-export-btn:active {
-                transform: translateY(-1px) scale(0.98);
-                box-shadow: 0 6px 20px rgba(240, 147, 251, 0.5);
+                transform: translateY(0);
+                box-shadow: 0 2px 10px rgba(240, 147, 251, 0.3);
                 transition: all 0.1s ease;
             }
 
@@ -532,8 +530,44 @@
             display: none;
         }
 
+        /* Desktop Export Button */
+        .desktop-export-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .desktop-export-btn {
+            background: linear-gradient(45deg, #4ecdc4, #ff6b6b);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .desktop-export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+            background: linear-gradient(45deg, #26a69a, #ff5252);
+        }
+
         @media (min-width: 769px) {
             .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        /* Hide desktop export button on mobile */
+        @media (max-width: 768px) {
+            .desktop-export-container {
                 display: none;
             }
         }
@@ -724,9 +758,6 @@
                     <button class="btn btn-secondary" onclick="showTemplates()">
                         <i>📋</i> Templates
                     </button>
-                    <button class="btn btn-secondary" onclick="exportCode()">
-                        <i>📤</i> Export
-                    </button>
                     <button class="btn btn-primary" onclick="previewPage()">
                         <i>👁️</i> Preview
                     </button>
@@ -742,6 +773,12 @@
                         <div class="drop-zone-text">🎨 Drag & Drop Components Here</div>
                         <div class="drop-zone-subtext">Start building your page by dragging components from the sidebar</div>
                     </div>
+                </div>
+                <!-- Desktop Export Button -->
+                <div class="desktop-export-container">
+                    <button class="desktop-export-btn" onclick="exportCode()">
+                        <i>📤</i> Export Code
+                    </button>
                 </div>
             </div>
             
