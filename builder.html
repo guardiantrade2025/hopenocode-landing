@@ -392,13 +392,13 @@
             /* Mobile action buttons container */
             .mobile-action-buttons {
                 display: flex !important;
-                gap: 10px;
-                margin: 15px 20px;
+                gap: 8px;
+                margin: 10px 20px;
                 width: calc(100% - 40px);
-                padding: 15px;
-                background: rgba(255, 255, 255, 0.2);
-                border-radius: 15px;
-                border: 3px solid rgba(255, 255, 255, 0.5);
+                padding: 12px;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
+                border: 2px solid rgba(255, 255, 255, 0.3);
                 backdrop-blur: 10px;
                 position: relative;
                 z-index: 200;
@@ -407,68 +407,69 @@
             /* Mobile preview button */
             .mobile-preview-btn {
                 display: block !important;
-                background: linear-gradient(135deg, #ff0000 0%, #00ff00 100%);
+                background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
                 color: white;
-                border: 4px solid #ff0000;
-                padding: 18px 16px;
-                border-radius: 15px;
-                font-size: 1rem;
-                font-weight: bold;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                padding: 12px 16px;
+                border-radius: 20px;
+                font-size: 0.9rem;
+                font-weight: 600;
                 cursor: pointer;
                 flex: 1;
                 transition: all 0.3s ease;
                 text-align: center;
-                box-shadow: 0 8px 25px rgba(255, 0, 0, 0.7);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
                 position: relative;
                 z-index: 300;
-                letter-spacing: 0.5px;
-                margin: 5px;
+                letter-spacing: 0.3px;
+                margin: 2px;
             }
 
             /* Mobile export button */
             .mobile-export-btn {
                 display: block !important;
-                background: linear-gradient(135deg, #0000ff 0%, #ff00ff 100%);
+                background: rgba(255, 255, 255, 0.2);
                 color: white;
-                border: 4px solid #0000ff;
-                padding: 18px 16px;
-                border-radius: 15px;
-                font-size: 1rem;
-                font-weight: bold;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                padding: 12px 16px;
+                border-radius: 20px;
+                font-size: 0.9rem;
+                font-weight: 600;
                 cursor: pointer;
                 flex: 1;
                 transition: all 0.3s ease;
                 text-align: center;
-                box-shadow: 0 8px 25px rgba(0, 0, 255, 0.7);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
                 position: relative;
                 z-index: 300;
-                letter-spacing: 0.5px;
-                margin: 5px;
+                letter-spacing: 0.3px;
+                margin: 2px;
+                backdrop-blur: 5px;
             }
 
             .mobile-preview-btn:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 8px 25px rgba(255, 107, 107, 0.6);
-                background: linear-gradient(135deg, #ff5252 0%, #26a69a 100%);
-                border-color: #ff3742;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+                background: linear-gradient(45deg, #ff5252, #26a69a);
+                border-color: rgba(255, 255, 255, 0.5);
             }
 
             .mobile-preview-btn:active {
                 transform: translateY(-1px);
-                box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
                 transition: all 0.1s ease;
             }
 
             .mobile-export-btn:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 8px 25px rgba(78, 205, 196, 0.6);
-                background: linear-gradient(135deg, #26a69a 0%, #ff5252 100%);
-                border-color: #00bcd4;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+                background: rgba(255, 255, 255, 0.3);
+                border-color: rgba(255, 255, 255, 0.5);
             }
 
             .mobile-export-btn:active {
                 transform: translateY(-1px);
-                box-shadow: 0 4px 15px rgba(78, 205, 196, 0.4);
+                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
                 transition: all 0.1s ease;
             }
 
