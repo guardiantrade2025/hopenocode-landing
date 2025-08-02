@@ -194,6 +194,28 @@
             font-size: 1.2rem;
         }
 
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 15px;
+        }
+
+        .mobile-menu-toggle:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .mobile-menu-toggle i {
+            font-size: 1.2rem;
+        }
+
         /* Filters */
         .filters {
             display: flex;
@@ -474,6 +496,11 @@
             .back-arrow {
                 display: flex;
             }
+
+            /* Show mobile menu toggle */
+            .mobile-menu-toggle {
+                display: flex;
+            }
         }
     </style>
 </head>
@@ -537,6 +564,11 @@
                 <!-- Mobile Back Arrow -->
                 <div class="back-arrow" onclick="window.location.href='index.html'">
                     <i>←</i>
+                </div>
+                
+                <!-- Mobile Menu Toggle -->
+                <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                    <i>☰</i>
                 </div>
                 
                 <div class="search-bar">
@@ -822,6 +854,12 @@
         function toggleCart() {
             const modal = document.getElementById('cartModal');
             modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('open');
         }
 
         // Filter products
