@@ -174,25 +174,19 @@
 
 
 
-        /* Mobile Menu Toggle */
-        .mobile-menu-toggle {
+        /* Mobile Menu Toggle Button */
+        .mobile-menu-btn {
             display: none;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-right: 15px;
-        }
-
-        .mobile-menu-toggle:hover {
-            background: rgba(255,255,255,0.2);
-        }
-
-        .mobile-menu-toggle i {
             font-size: 1.2rem;
         }
 
@@ -476,9 +470,9 @@
                 display: none;
             }
 
-            /* Show mobile menu toggle */
-            .mobile-menu-toggle {
-                display: flex;
+            /* Show mobile menu button */
+            .mobile-menu-btn {
+                display: block;
             }
         }
     </style>
@@ -540,10 +534,8 @@
                     <i>🏠</i> Back to Home
                 </a>
                 
-                <!-- Mobile Menu Toggle -->
-                <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
-                    <i>☰</i>
-                </div>
+                <!-- Mobile Menu Toggle Button -->
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
                 
                 <div class="search-bar">
                     <input type="text" placeholder="Search products..." id="searchInput">
@@ -949,6 +941,12 @@
         function viewProduct(productId) {
             const product = products.find(p => p.id === productId);
             alert(`${product.name}\n\n${product.description}\n\nPrice: $${product.price.toFixed(2)}`);
+        }
+
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('open');
         }
 
         // Event listeners
