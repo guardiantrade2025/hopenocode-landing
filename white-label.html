@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>White-label Solutions - HopeNocode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .white-label-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .white-label-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .section-title {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .branding-preview {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .preview-header {
+            margin-bottom: 20px;
+        }
+
+        .preview-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .preview-title {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .preview-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .branding-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            text-align: left;
+        }
+
+        .control-label {
+            color: white;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .control-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .control-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .color-picker {
+            width: 100%;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .api-endpoints {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .endpoint-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .endpoint-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .endpoint-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .endpoint-method {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .method-get {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .method-post {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196F3;
+            border: 1px solid rgba(33, 150, 243, 0.3);
+        }
+
+        .method-put {
+            background: rgba(255, 193, 7, 0.2);
+            color: #FFC107;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+
+        .method-delete {
+            background: rgba(244, 67, 54, 0.2);
+            color: #F44336;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .endpoint-url {
+            color: white;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+
+        .endpoint-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        .reseller-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .stat-value {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.8rem;
+        }
+
+        .domain-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .domain-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .domain-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .domain-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .domain-name {
+            color: white;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+
+        .domain-status {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .status-active {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #FFC107;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+
+        .domain-info {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.8rem;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .white-label-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .branding-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .reseller-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 White-label Solutions</h1>
+            <p>Custom branding, white-label API, reseller portal, and custom domain support</p>
+        </div>
+
+        <div class="white-label-grid">
+            <!-- Custom Branding -->
+            <div class="white-label-section">
+                <div class="section-title">
+                    <span>🎨</span>
+                    Custom Branding
+                </div>
+                <div class="branding-preview">
+                    <div class="preview-header">
+                        <div class="preview-logo" id="previewLogo">HN</div>
+                        <div class="preview-title" id="previewTitle">HopeNocode</div>
+                        <div class="preview-subtitle" id="previewSubtitle">AI-Powered Development Platform</div>
+                    </div>
+                </div>
+                <div class="branding-controls">
+                    <div class="control-group">
+                        <label class="control-label">Company Name</label>
+                        <input type="text" class="control-input" id="companyName" placeholder="Enter company name" onchange="updatePreview()">
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Tagline</label>
+                        <input type="text" class="control-input" id="tagline" placeholder="Enter tagline" onchange="updatePreview()">
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Primary Color</label>
+                        <input type="color" class="color-picker" id="primaryColor" value="#667eea" onchange="updatePreview()">
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Secondary Color</label>
+                        <input type="color" class="color-picker" id="secondaryColor" value="#764ba2" onchange="updatePreview()">
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-small" onclick="saveBranding()">💾 Save Branding</button>
+                    <button class="btn btn-secondary btn-small" onclick="exportBranding()">📤 Export</button>
+                </div>
+            </div>
+
+            <!-- White-label API -->
+            <div class="white-label-section">
+                <div class="section-title">
+                    <span>🔌</span>
+                    White-label API
+                </div>
+                <div class="api-endpoints">
+                    <div class="endpoint-item">
+                        <div class="endpoint-header">
+                            <div class="endpoint-method method-get">GET</div>
+                            <div class="endpoint-url">/api/v1/products</div>
+                        </div>
+                        <div class="endpoint-description">Retrieve all products with custom branding</div>
+                    </div>
+
+                    <div class="endpoint-item">
+                        <div class="endpoint-header">
+                            <div class="endpoint-method method-post">POST</div>
+                            <div class="endpoint-url">/api/v1/orders</div>
+                        </div>
+                        <div class="endpoint-description">Create new orders with white-label integration</div>
+                    </div>
+
+                    <div class="endpoint-item">
+                        <div class="endpoint-header">
+                            <div class="endpoint-method method-put">PUT</div>
+                            <div class="endpoint-url">/api/v1/branding</div>
+                        </div>
+                        <div class="endpoint-description">Update branding settings and customizations</div>
+                    </div>
+
+                    <div class="endpoint-item">
+                        <div class="endpoint-header">
+                            <div class="endpoint-method method-get">GET</div>
+                            <div class="endpoint-url">/api/v1/analytics</div>
+                        </div>
+                        <div class="endpoint-description">Retrieve analytics with custom branding</div>
+                    </div>
+
+                    <div class="endpoint-item">
+                        <div class="endpoint-header">
+                            <div class="endpoint-method method-delete">DELETE</div>
+                            <div class="endpoint-url">/api/v1/sessions</div>
+                        </div>
+                        <div class="endpoint-description">Clear user sessions and cache</div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-small" onclick="generateApiKey()">🔑 Generate API Key</button>
+                    <button class="btn btn-secondary btn-small" onclick="viewDocumentation()">📖 Documentation</button>
+                </div>
+            </div>
+
+            <!-- Reseller Portal -->
+            <div class="white-label-section">
+                <div class="section-title">
+                    <span>👥</span>
+                    Reseller Portal
+                </div>
+                <div class="reseller-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">156</div>
+                        <div class="stat-label">Active Resellers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">$45,678</div>
+                        <div class="stat-label">Total Revenue</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">23.5%</div>
+                        <div class="stat-label">Commission Rate</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">89</div>
+                        <div class="stat-label">New This Month</div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-small" onclick="addReseller()">➕ Add Reseller</button>
+                    <button class="btn btn-secondary btn-small" onclick="manageCommissions()">💰 Commissions</button>
+                </div>
+            </div>
+
+            <!-- Custom Domains -->
+            <div class="white-label-section">
+                <div class="section-title">
+                    <span>🌐</span>
+                    Custom Domains
+                </div>
+                <div class="domain-list">
+                    <div class="domain-item">
+                        <div class="domain-header">
+                            <div class="domain-name">app.hopenocode.com</div>
+                            <div class="domain-status status-active">Active</div>
+                        </div>
+                        <div class="domain-info">Primary domain • SSL: Active • DNS: Configured</div>
+                    </div>
+
+                    <div class="domain-item">
+                        <div class="domain-header">
+                            <div class="domain-name">api.hopenocode.com</div>
+                            <div class="domain-status status-active">Active</div>
+                        </div>
+                        <div class="domain-info">API domain • Rate limiting: Enabled • CORS: Configured</div>
+                    </div>
+
+                    <div class="domain-item">
+                        <div class="domain-header">
+                            <div class="domain-name">dashboard.hopenocode.com</div>
+                            <div class="domain-status status-pending">Pending</div>
+                        </div>
+                        <div class="domain-info">Dashboard domain • DNS verification in progress</div>
+                    </div>
+
+                    <div class="domain-item">
+                        <div class="domain-header">
+                            <div class="domain-name">store.hopenocode.com</div>
+                            <div class="domain-status status-active">Active</div>
+                        </div>
+                        <div class="domain-info">E-commerce domain • Payment gateway: Connected</div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-small" onclick="addDomain()">➕ Add Domain</button>
+                    <button class="btn btn-secondary btn-small" onclick="manageSSL()">🔒 SSL Settings</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons" style="justify-content: center; margin-top: 30px;">
+            <button class="btn" onclick="deployWhiteLabel()">🚀 Deploy White-label</button>
+            <button class="btn btn-secondary" onclick="whiteLabelSettings()">⚙️ Settings</button>
+            <button class="btn btn-secondary" onclick="exportWhiteLabel()">📤 Export Package</button>
+        </div>
+    </div>
+
+    <script>
+        function updatePreview() {
+            const companyName = document.getElementById('companyName').value || 'HopeNocode';
+            const tagline = document.getElementById('tagline').value || 'AI-Powered Development Platform';
+            const primaryColor = document.getElementById('primaryColor').value;
+            const secondaryColor = document.getElementById('secondaryColor').value;
+
+            document.getElementById('previewTitle').textContent = companyName;
+            document.getElementById('previewSubtitle').textContent = tagline;
+            document.getElementById('previewLogo').style.background = `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`;
+        }
+
+        function saveBranding() {
+            alert('Branding settings saved successfully!');
+        }
+
+        function exportBranding() {
+            alert('Exporting branding package...');
+        }
+
+        function generateApiKey() {
+            alert('Generating new API key...');
+        }
+
+        function viewDocumentation() {
+            alert('Opening API documentation...');
+        }
+
+        function addReseller() {
+            alert('Opening reseller registration form...');
+        }
+
+        function manageCommissions() {
+            alert('Opening commission management...');
+        }
+
+        function addDomain() {
+            alert('Opening domain configuration...');
+        }
+
+        function manageSSL() {
+            alert('Opening SSL certificate management...');
+        }
+
+        function deployWhiteLabel() {
+            alert('Deploying white-label solution...');
+        }
+
+        function whiteLabelSettings() {
+            alert('Opening white-label settings...');
+        }
+
+        function exportWhiteLabel() {
+            alert('Exporting white-label package...');
+        }
+
+        // Initialize preview
+        updatePreview();
+    </script>
+</body>
+</html> 

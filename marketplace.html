@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace Dashboard - HopeNocode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h3 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .marketplace-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .marketplace-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .section-title {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .vendor-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .vendor-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .vendor-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .vendor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .vendor-name {
+            color: white;
+            font-weight: bold;
+        }
+
+        .vendor-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-approved {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #FFC107;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+
+        .status-rejected {
+            background: rgba(244, 67, 54, 0.2);
+            color: #F44336;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .vendor-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            font-size: 0.8rem;
+        }
+
+        .vendor-stat {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .vendor-stat strong {
+            color: white;
+            display: block;
+        }
+
+        .product-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .product-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .product-name {
+            color: white;
+            font-weight: bold;
+        }
+
+        .product-price {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .commission-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .commission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .commission-title {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .commission-amount {
+            color: #4CAF50;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .commission-progress {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .commission-bar {
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .commission-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .commission-stat {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .commission-stat strong {
+            color: white;
+            display: block;
+            font-size: 1.1rem;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .marketplace-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .vendor-stats {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+
+            .commission-stats {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛒 Marketplace Dashboard</h1>
+            <p>Multi-vendor marketplace management with commission tracking and vendor analytics</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>247</h3>
+                <p>Active Vendors</p>
+            </div>
+            <div class="stat-card">
+                <h3>1,234</h3>
+                <p>Products Listed</p>
+            </div>
+            <div class="stat-card">
+                <h3>$45,678</h3>
+                <p>Total Revenue</p>
+            </div>
+            <div class="stat-card">
+                <h3>12.5%</h3>
+                <p>Commission Rate</p>
+            </div>
+        </div>
+
+        <div class="marketplace-grid">
+            <!-- Vendor Management -->
+            <div class="marketplace-section">
+                <div class="section-title">
+                    <span>👥</span>
+                    Vendor Management
+                </div>
+                <div class="vendor-list">
+                    <div class="vendor-item">
+                        <div class="vendor-header">
+                            <div class="vendor-name">TechCorp Solutions</div>
+                            <div class="vendor-status status-approved">Approved</div>
+                        </div>
+                        <div class="vendor-stats">
+                            <div class="vendor-stat">
+                                <strong>45</strong>
+                                Products
+                            </div>
+                            <div class="vendor-stat">
+                                <strong>$12,450</strong>
+                                Revenue
+                            </div>
+                            <div class="vendor-stat">
+                                <strong>4.8★</strong>
+                                Rating
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-small" onclick="viewVendor('techcorp')">View Details</button>
+                            <button class="btn btn-secondary btn-small" onclick="manageVendor('techcorp')">Manage</button>
+                        </div>
+                    </div>
+
+                    <div class="vendor-item">
+                        <div class="vendor-header">
+                            <div class="vendor-name">Digital Innovations</div>
+                            <div class="vendor-status status-pending">Pending</div>
+                        </div>
+                        <div class="vendor-stats">
+                            <div class="vendor-stat">
+                                <strong>23</strong>
+                                Products
+                            </div>
+                            <div class="vendor-stat">
+                                <strong>$8,920</strong>
+                                Revenue
+                            </div>
+                            <div class="vendor-stat">
+                                <strong>4.6★</strong>
+                                Rating
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-small" onclick="approveVendor('digital')">Approve</button>
+                            <button class="btn btn-secondary btn-small" onclick="rejectVendor('digital')">Reject</button>
+                        </div>
+                    </div>
+
+                    <div class="vendor-item">
+                        <div class="vendor-header">
+                            <div class="vendor-name">Cloud Systems Pro</div>
+                            <div class="vendor-status status-approved">Approved</div>
+                        </div>
+                        <div class="vendor-stats">
+                            <div class="vendor-stat">
+                                <strong>67</strong>
+                                Products
+                            </div>
+                            <div class="vendor-stat">
+                                <strong>$18,750</strong>
+                                Revenue
+                            </div>
+                            <div class="vendor-stat">
+                                <strong>4.9★</strong>
+                                Rating
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-small" onclick="viewVendor('cloud')">View Details</button>
+                            <button class="btn btn-secondary btn-small" onclick="manageVendor('cloud')">Manage</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Management -->
+            <div class="marketplace-section">
+                <div class="section-title">
+                    <span>📦</span>
+                    Product Management
+                </div>
+                <div class="vendor-list">
+                    <div class="product-item">
+                        <div class="product-header">
+                            <div class="product-name">AI Code Assistant Pro</div>
+                            <div class="product-price">$299</div>
+                        </div>
+                        <div class="product-meta">
+                            <span>Vendor: TechCorp</span>
+                            <span>Sales: 156</span>
+                            <span>Rating: 4.8★</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-small" onclick="viewProduct('ai-assistant')">View</button>
+                            <button class="btn btn-secondary btn-small" onclick="editProduct('ai-assistant')">Edit</button>
+                        </div>
+                    </div>
+
+                    <div class="product-item">
+                        <div class="product-header">
+                            <div class="product-name">No-Code Website Builder</div>
+                            <div class="product-price">$199</div>
+                        </div>
+                        <div class="product-meta">
+                            <span>Vendor: Digital Innovations</span>
+                            <span>Sales: 89</span>
+                            <span>Rating: 4.6★</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-small" onclick="viewProduct('website-builder')">View</button>
+                            <button class="btn btn-secondary btn-small" onclick="editProduct('website-builder')">Edit</button>
+                        </div>
+                    </div>
+
+                    <div class="product-item">
+                        <div class="product-header">
+                            <div class="product-name">Cloud Database Manager</div>
+                            <div class="product-price">$399</div>
+                        </div>
+                        <div class="product-meta">
+                            <span>Vendor: Cloud Systems Pro</span>
+                            <span>Sales: 234</span>
+                            <span>Rating: 4.9★</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-small" onclick="viewProduct('database-manager')">View</button>
+                            <button class="btn btn-secondary btn-small" onclick="editProduct('database-manager')">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Commission Tracking -->
+        <div class="marketplace-section">
+            <div class="section-title">
+                <span>💰</span>
+                Commission Tracking
+            </div>
+            <div class="commission-card">
+                <div class="commission-header">
+                    <div class="commission-title">This Month's Commission</div>
+                    <div class="commission-amount">$5,678</div>
+                </div>
+                <div class="commission-progress">
+                    <div class="commission-bar" style="width: 75%"></div>
+                </div>
+                <div class="commission-stats">
+                    <div class="commission-stat">
+                        <strong>247</strong>
+                        Vendors
+                    </div>
+                    <div class="commission-stat">
+                        <strong>1,234</strong>
+                        Products
+                    </div>
+                    <div class="commission-stat">
+                        <strong>12.5%</strong>
+                        Rate
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons" style="justify-content: center; margin-top: 30px;">
+            <button class="btn" onclick="addVendor()">➕ Add Vendor</button>
+            <button class="btn btn-secondary" onclick="exportData()">📊 Export Data</button>
+            <button class="btn btn-secondary" onclick="settings()">⚙️ Settings</button>
+        </div>
+    </div>
+
+    <script>
+        function viewVendor(vendorId) {
+            alert(`Viewing vendor: ${vendorId}`);
+        }
+
+        function manageVendor(vendorId) {
+            alert(`Managing vendor: ${vendorId}`);
+        }
+
+        function approveVendor(vendorId) {
+            alert(`Approved vendor: ${vendorId}`);
+            // Update UI to show approved status
+        }
+
+        function rejectVendor(vendorId) {
+            alert(`Rejected vendor: ${vendorId}`);
+            // Update UI to show rejected status
+        }
+
+        function viewProduct(productId) {
+            alert(`Viewing product: ${productId}`);
+        }
+
+        function editProduct(productId) {
+            alert(`Editing product: ${productId}`);
+        }
+
+        function addVendor() {
+            alert('Opening vendor registration form...');
+        }
+
+        function exportData() {
+            alert('Exporting marketplace data...');
+        }
+
+        function settings() {
+            alert('Opening marketplace settings...');
+        }
+
+        // Simulate real-time updates
+        setInterval(() => {
+            // Update commission progress
+            const progressBar = document.querySelector('.commission-bar');
+            const currentWidth = parseInt(progressBar.style.width) || 75;
+            const newWidth = Math.min(100, currentWidth + Math.random() * 5);
+            progressBar.style.width = newWidth + '%';
+        }, 5000);
+    </script>
+</body>
+</html> 
