@@ -95,29 +95,48 @@
         }
 
         .lang-btn.active {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            border-color: transparent;
-            box-shadow: 0 5px 15px rgba(255,107,107,0.3);
-            color: white;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4) !important;
+            border-color: transparent !important;
+            box-shadow: 0 5px 15px rgba(255,107,107,0.3) !important;
+            transform: translateY(-2px) !important;
+            font-weight: bold !important;
+            color: white !important;
+        }
+
+        .lang-btn.active::after {
+            content: '✓';
+            margin-left: 8px;
             font-weight: bold;
+            color: white;
+        }
+
+        .lang-btn.active:hover {
+            background: linear-gradient(45deg, #ff5252, #26a69a) !important;
+            transform: translateY(-3px) !important;
+            box-shadow: 0 8px 20px rgba(255,107,107,0.4) !important;
         }
 
         .input-area {
             width: 100%;
             min-height: 200px;
-            background: rgba(0,0,0,0.3);
+            background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 10px;
+            border-radius: 15px;
             padding: 20px;
             color: white;
             font-size: 16px;
-            line-height: 1.6;
             resize: vertical;
-            outline: none;
+            font-family: inherit;
         }
 
         .input-area::placeholder {
-            color: rgba(255,255,255,0.6);
+            color: rgba(255,255,255,0.7);
+        }
+
+        .input-area:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 20px rgba(78,205,196,0.3);
         }
 
         .generate-btn {
@@ -125,9 +144,9 @@
             padding: 15px;
             background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
             border: none;
-            border-radius: 25px;
+            border-radius: 15px;
             color: white;
-            font-size: 1.1rem;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -136,7 +155,7 @@
 
         .generate-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 25px rgba(255,107,107,0.4);
         }
 
         .generate-btn:disabled {
@@ -146,51 +165,52 @@
         }
 
         .code-output {
-            background: rgba(0,0,0,0.6);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            padding: 15px;
-            min-height: 200px;
-            max-height: 400px;
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 13px;
-            line-height: 1.4;
-            color: #d4d4d4;
-            white-space: pre-wrap;
-            overflow-y: auto;
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
         }
 
         .code-header {
+            background: rgba(255,255,255,0.1);
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
         .code-language {
-            font-size: 12px;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-weight: bold;
+            color: #4ecdc4;
+        }
+
+        #codeText {
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+            background: rgba(0,0,0,0.2);
         }
 
         .output-actions {
             display: flex;
             gap: 10px;
-            margin-top: 20px;
+            flex-wrap: wrap;
         }
 
         .action-btn {
             padding: 10px 20px;
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 20px;
+            border-radius: 10px;
             color: white;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-weight: 500;
+            font-size: 14px;
         }
 
         .action-btn:hover {
@@ -389,6 +409,12 @@ Examples:
                     // Clear existing code
                     generatedCode = '';
                     document.getElementById('codeText').textContent = 'Your generated code will appear here...';
+                    
+                    // Add visual feedback
+                    this.style.transform = 'scale(1.05)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
                 });
             });
             
@@ -423,37 +449,30 @@ Examples:
             document.getElementById('codeOutput').style.display = 'none';
             document.getElementById('generateBtn').disabled = true;
 
-            // Call the real AI service
-            fetch('/api/ai/generate-code', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    prompt: input,
-                    language: currentLanguage,
-                    context: 'Generate ' + currentLanguage + ' code for: ' + input
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    generatedCode = data.code;
-                    document.getElementById('codeText').textContent = data.code;
-                } else {
-                    document.getElementById('codeText').textContent = 'Error: ' + (data.error || 'Failed to generate code');
+            // Simulate AI processing delay
+            setTimeout(() => {
+                try {
+                    // Generate code using the local template system
+                    generatedCode = generateCodeForLanguage(input, currentLanguage);
+                    document.getElementById('codeText').textContent = generatedCode;
+                    
+                    // Track analytics
+                    if (window.FrontendAnalytics) {
+                        window.FrontendAnalytics.trackEvent('code_generated', {
+                            language: currentLanguage,
+                            inputLength: input.length
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error generating code:', error);
+                    document.getElementById('codeText').textContent = 'Error: Failed to generate code. Please try again.';
+                } finally {
+                    // Hide loading
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('codeOutput').style.display = 'block';
+                    document.getElementById('generateBtn').disabled = false;
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('codeText').textContent = 'Error: Failed to connect to AI service. Please try again.';
-            })
-            .finally(() => {
-                // Hide loading
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('codeOutput').style.display = 'block';
-                document.getElementById('generateBtn').disabled = false;
-            });
+            }, 1500); // 1.5 second delay to simulate AI processing
         }
 
         function generateCodeForLanguage(description, language) {
