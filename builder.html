@@ -395,70 +395,78 @@
                 gap: 10px;
                 margin: 15px 20px;
                 width: calc(100% - 40px);
-                padding: 0 5px;
+                padding: 15px;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 15px;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                backdrop-blur: 10px;
             }
 
             /* Mobile preview button */
             .mobile-preview-btn {
                 display: block !important;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
                 color: white;
-                border: none;
-                padding: 14px 12px;
+                border: 3px solid #ff4757;
+                padding: 16px 14px;
                 border-radius: 15px;
-                font-size: 0.85rem;
-                font-weight: 600;
+                font-size: 0.9rem;
+                font-weight: bold;
                 cursor: pointer;
                 flex: 1;
                 transition: all 0.3s ease;
                 text-align: center;
-                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+                box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
                 position: relative;
                 z-index: 100;
-                letter-spacing: 0.3px;
+                letter-spacing: 0.5px;
+                margin: 5px;
             }
 
             /* Mobile export button */
             .mobile-export-btn {
                 display: block !important;
-                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                background: linear-gradient(135deg, #4ecdc4 0%, #ff6b6b 100%);
                 color: white;
-                border: none;
-                padding: 14px 12px;
+                border: 3px solid #26a69a;
+                padding: 16px 14px;
                 border-radius: 15px;
-                font-size: 0.85rem;
-                font-weight: 600;
+                font-size: 0.9rem;
+                font-weight: bold;
                 cursor: pointer;
                 flex: 1;
                 transition: all 0.3s ease;
                 text-align: center;
-                box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3);
+                box-shadow: 0 6px 20px rgba(78, 205, 196, 0.5);
                 position: relative;
                 z-index: 100;
-                letter-spacing: 0.3px;
+                letter-spacing: 0.5px;
+                margin: 5px;
             }
 
             .mobile-preview-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-                background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+                transform: translateY(-3px);
+                box-shadow: 0 8px 25px rgba(255, 107, 107, 0.6);
+                background: linear-gradient(135deg, #ff5252 0%, #26a69a 100%);
+                border-color: #ff3742;
             }
 
             .mobile-preview-btn:active {
-                transform: translateY(0);
-                box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
                 transition: all 0.1s ease;
             }
 
             .mobile-export-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 20px rgba(240, 147, 251, 0.4);
-                background: linear-gradient(135deg, #e085e8 0%, #e54b5f 100%);
+                transform: translateY(-3px);
+                box-shadow: 0 8px 25px rgba(78, 205, 196, 0.6);
+                background: linear-gradient(135deg, #26a69a 0%, #ff5252 100%);
+                border-color: #00bcd4;
             }
 
             .mobile-export-btn:active {
-                transform: translateY(0);
-                box-shadow: 0 2px 10px rgba(240, 147, 251, 0.3);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 15px rgba(78, 205, 196, 0.4);
                 transition: all 0.1s ease;
             }
 
