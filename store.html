@@ -172,27 +172,7 @@
             font-size: 1.1rem;
         }
 
-        /* Mobile Back Arrow */
-        .back-arrow {
-            display: none;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-right: 15px;
-        }
 
-        .back-arrow:hover {
-            background: rgba(255,255,255,0.2);
-        }
-
-        .back-arrow i {
-            font-size: 1.2rem;
-        }
 
         /* Mobile Menu Toggle */
         .mobile-menu-toggle {
@@ -462,6 +442,9 @@
             .sidebar {
                 transform: translateX(-100%);
                 transition: transform 0.3s ease;
+                background: rgba(0,0,0,0.95);
+                backdrop-blur: 20px;
+                z-index: 1000;
             }
 
             .sidebar.open {
@@ -488,13 +471,9 @@
                 grid-template-columns: 1fr;
             }
 
-            /* Show mobile back arrow, hide desktop back button */
+            /* Hide desktop back button */
             .back-button {
                 display: none;
-            }
-
-            .back-arrow {
-                display: flex;
             }
 
             /* Show mobile menu toggle */
@@ -560,11 +539,6 @@
                 <a href="index.html" class="back-button">
                     <i>🏠</i> Back to Home
                 </a>
-                
-                <!-- Mobile Back Arrow -->
-                <div class="back-arrow" onclick="window.location.href='index.html'">
-                    <i>←</i>
-                </div>
                 
                 <!-- Mobile Menu Toggle -->
                 <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
