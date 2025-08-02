@@ -366,18 +366,14 @@
                 grid-template-columns: 1fr;
             }
 
-            /* Show collaboration panel on mobile */
+            /* Hide collaboration panel on mobile */
             .collaboration-panel {
-                display: block;
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: rgba(0,0,0,0.9);
-                backdrop-blur: 10px;
-                border-radius: 10px;
-                padding: 15px;
-                width: 200px;
-                z-index: 1000;
+                display: none;
+            }
+
+            /* Hide desktop preview button on mobile */
+            .btn-primary {
+                display: none;
             }
 
             /* Mobile preview section */
@@ -389,6 +385,26 @@
                 padding: 20px;
                 margin: 20px;
                 border: 1px solid rgba(255,255,255,0.2);
+            }
+
+            /* Mobile preview button */
+            .mobile-preview-btn {
+                display: block;
+                background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 25px;
+                font-size: 1rem;
+                cursor: pointer;
+                margin: 20px auto;
+                width: fit-content;
+                transition: all 0.3s ease;
+            }
+
+            .mobile-preview-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             }
 
             .mobile-preview-title {
@@ -411,6 +427,11 @@
 
         /* Hide mobile preview on desktop */
         .mobile-preview {
+            display: none;
+        }
+
+        /* Hide mobile preview button on desktop */
+        .mobile-preview-btn {
             display: none;
         }
 
@@ -624,6 +645,10 @@
                         <div class="drop-zone-text">🎨 Drag & Drop Components Here</div>
                         <div class="drop-zone-subtext">Start building your page by dragging components from the sidebar</div>
                     </div>
+                    <!-- Mobile Preview Button -->
+                    <button class="mobile-preview-btn" onclick="previewPage()">
+                        👁️ Preview Page
+                    </button>
                 </div>
             </div>
 
