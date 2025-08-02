@@ -1167,22 +1167,26 @@
 
             /* Fix chart display on mobile */
             .chart-bar {
-                width: 12% !important;
-                min-width: 35px;
-                margin: 0 2px;
+                width: 10% !important; /* Reduced width further */
+                min-width: 25px; /* Reduced min-width */
+                margin: 0 1px; /* Reduced margin */
             }
 
             .chart-bar-label {
-                font-size: 0.7rem;
-                right: 2px;
+                font-size: 0.5rem; /* Significantly reduced font size */
+                right: -5px; /* Moved labels more to the right */
                 white-space: nowrap;
                 transform: translateY(-50%) rotate(-45deg);
                 transform-origin: center;
+                max-width: 20px; /* Added max-width constraint */
+                overflow: hidden;
+                text-overflow: ellipsis;
+                position: absolute; /* Ensure absolute positioning */
             }
 
             .chart-canvas {
                 display: flex;
-                gap: 2px;
+                gap: 1px; /* Further reduced gap */
                 overflow-x: auto;
                 padding: 10px 0;
                 min-height: 200px;
