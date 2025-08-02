@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Visual Builder - HopeNocode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .builder-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+            background: rgba(255,255,255,0.1);
+            backdrop-blur: 10px;
+            border-right: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .builder-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .ai-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: #4ecdc4;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .components-section {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .component-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .component-item {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 12px;
+            cursor: grab;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+
+        .component-item:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .component-item:active {
+            cursor: grabbing;
+        }
+
+        .component-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .ai-suggestions {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .suggestion-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .suggestion-item:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Main Builder Area */
+        .main-builder {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .builder-topbar {
+            padding: 20px 30px;
+            background: rgba(255,255,255,0.1);
+            backdrop-blur: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .builder-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .builder-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            backdrop-blur: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .canvas-container {
+            flex: 1;
+            background: white;
+            margin: 20px;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .canvas {
+            width: 100%;
+            height: 100%;
+            background: #f8f9fa;
+            position: relative;
+            overflow: auto;
+        }
+
+        .drop-zone {
+            min-height: 400px;
+            padding: 20px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: #666;
+            margin: 20px;
+        }
+
+        .drop-zone.drag-over {
+            border-color: #4ecdc4;
+            background: rgba(78, 205, 196, 0.1);
+        }
+
+        .drop-zone-text {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .drop-zone-subtext {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .builder-element {
+            position: relative;
+            margin: 10px 0;
+            padding: 15px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: move;
+            transition: all 0.3s ease;
+        }
+
+        .builder-element:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .element-controls {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .control-btn {
+            background: #f0f0f0;
+            border: none;
+            border-radius: 4px;
+            padding: 2px 6px;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+
+        .control-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .control-btn.delete {
+            background: #ff4757;
+            color: white;
+        }
+
+        .control-btn.delete:hover {
+            background: #ff3742;
+        }
+
+        /* Collaboration Panel */
+        .collaboration-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.9);
+            backdrop-blur: 10px;
+            border-radius: 10px;
+            padding: 15px;
+            width: 250px;
+            z-index: 1000;
+        }
+
+        .collaboration-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .user-list {
+            list-style: none;
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 0;
+            font-size: 0.85rem;
+        }
+
+        .user-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .builder-container {
+                flex-direction: row;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 280px;
+                height: 100vh;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 1000;
+                background: rgba(0,0,0,0.95);
+                backdrop-blur: 20px;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-builder {
+                width: 100%;
+                height: 100vh;
+                margin-left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                z-index: 1001;
+                background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+                border: none;
+                color: white;
+                padding: 10px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 1.2rem;
+            }
+
+            .builder-header {
+                padding-top: 60px;
+            }
+
+            .component-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .collaboration-panel {
+                display: none;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Templates Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: #333;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .template-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .template-preview {
+            height: 150px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .template-info {
+            padding: 15px;
+        }
+
+        .template-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .template-desc {
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="builder-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="builder-header">
+                <div class="logo">AI Visual Builder</div>
+                <div class="ai-status">
+                    <div class="status-indicator"></div>
+                    <span>AI Assistant Online</span>
+                </div>
+            </div>
+
+            <div class="components-section">
+                <div class="ai-suggestions">
+                    <div class="section-title">🤖 AI Suggestions</div>
+                    <div class="suggestion-item" onclick="addComponent('hero')">
+                        💡 Add a hero section for better engagement
+                    </div>
+                    <div class="suggestion-item" onclick="addComponent('cta')">
+                        🎯 Include a call-to-action button
+                    </div>
+                    <div class="suggestion-item" onclick="addComponent('testimonial')">
+                        ⭐ Add customer testimonials for trust
+                    </div>
+                </div>
+
+                <div class="section-title">📦 Components</div>
+                <div class="component-grid">
+                    <div class="component-item" draggable="true" data-component="hero">
+                        <span class="component-icon">🎯</span>
+                        Hero Section
+                    </div>
+                    <div class="component-item" draggable="true" data-component="text">
+                        <span class="component-icon">📝</span>
+                        Text Block
+                    </div>
+                    <div class="component-item" draggable="true" data-component="image">
+                        <span class="component-icon">🖼️</span>
+                        Image
+                    </div>
+                    <div class="component-item" draggable="true" data-component="button">
+                        <span class="component-icon">🔘</span>
+                        Button
+                    </div>
+                    <div class="component-item" draggable="true" data-component="form">
+                        <span class="component-icon">📋</span>
+                        Contact Form
+                    </div>
+                    <div class="component-item" draggable="true" data-component="gallery">
+                        <span class="component-icon">🖼️</span>
+                        Gallery
+                    </div>
+                    <div class="component-item" draggable="true" data-component="testimonial">
+                        <span class="component-icon">⭐</span>
+                        Testimonial
+                    </div>
+                    <div class="component-item" draggable="true" data-component="pricing">
+                        <span class="component-icon">💰</span>
+                        Pricing
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Builder Area -->
+        <main class="main-builder">
+            <div class="builder-topbar">
+                <div>
+                    <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+                    <span class="builder-title">AI Visual Builder</span>
+                </div>
+                <div class="builder-actions">
+                    <button class="btn btn-secondary" onclick="showTemplates()">
+                        <i>📋</i> Templates
+                    </button>
+                    <button class="btn btn-secondary" onclick="exportCode()">
+                        <i>📤</i> Export
+                    </button>
+                    <button class="btn btn-primary" onclick="previewPage()">
+                        <i>👁️</i> Preview
+                    </button>
+                    <button class="btn btn-secondary" onclick="window.location.href='index.html'">
+                        <i>🏠</i> Back Home
+                    </button>
+                </div>
+            </div>
+
+            <div class="canvas-container">
+                <div class="canvas" id="canvas">
+                    <div class="drop-zone" id="dropZone">
+                        <div class="drop-zone-text">🎨 Drag & Drop Components Here</div>
+                        <div class="drop-zone-subtext">Start building your page by dragging components from the sidebar</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Collaboration Panel -->
+    <div class="collaboration-panel">
+        <div class="collaboration-title">👥 Live Collaboration</div>
+        <ul class="user-list">
+            <li class="user-item">
+                <div class="user-avatar"></div>
+                <span>You (Owner)</span>
+            </li>
+            <li class="user-item">
+                <div class="user-avatar"></div>
+                <span>John Doe (Editor)</span>
+            </li>
+            <li class="user-item">
+                <div class="user-avatar"></div>
+                <span>Jane Smith (Viewer)</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Templates Modal -->
+    <div class="modal" id="templatesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">📋 Choose a Template</div>
+                <button class="close-btn" onclick="hideTemplates()">&times;</button>
+            </div>
+            <div class="template-grid">
+                <div class="template-card" onclick="loadTemplate('landing')">
+                    <div class="template-preview">Landing Page</div>
+                    <div class="template-info">
+                        <div class="template-name">Modern Landing</div>
+                        <div class="template-desc">Professional landing page with hero, features, and CTA</div>
+                    </div>
+                </div>
+                <div class="template-card" onclick="loadTemplate('business')">
+                    <div class="template-preview">Business Site</div>
+                    <div class="template-info">
+                        <div class="template-name">Business Website</div>
+                        <div class="template-desc">Complete business website with services and contact</div>
+                    </div>
+                </div>
+                <div class="template-card" onclick="loadTemplate('portfolio')">
+                    <div class="template-preview">Portfolio</div>
+                    <div class="template-info">
+                        <div class="template-name">Creative Portfolio</div>
+                        <div class="template-desc">Showcase your work with gallery and testimonials</div>
+                    </div>
+                </div>
+                <div class="template-card" onclick="loadTemplate('ecommerce')">
+                    <div class="template-preview">E-commerce</div>
+                    <div class="template-info">
+                        <div class="template-name">Online Store</div>
+                        <div class="template-desc">Product showcase with pricing and checkout</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        let currentElements = [];
+        let elementCounter = 0;
+
+        // Component templates
+        const components = {
+            'hero': {
+                html: `
+                    <section class="hero-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 80px 20px; text-align: center; color: white;">
+                        <h1 style="font-size: 3rem; margin-bottom: 20px;">Welcome to Our Platform</h1>
+                        <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9;">Transform your ideas into reality with our cutting-edge solutions</p>
+                        <button style="background: #4ecdc4; color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer;">Get Started</button>
+                    </section>
+                `,
+                name: 'Hero Section'
+            },
+            'text': {
+                html: `
+                    <div class="text-block" style="padding: 40px 20px; text-align: center;">
+                        <h2 style="color: #333; margin-bottom: 20px;">About Our Services</h2>
+                        <p style="color: #666; line-height: 1.6; max-width: 600px; margin: 0 auto;">We provide innovative solutions that help businesses grow and succeed in the digital age. Our team of experts is dedicated to delivering exceptional results.</p>
+                    </div>
+                `,
+                name: 'Text Block'
+            },
+            'image': {
+                html: `
+                    <div class="image-section" style="padding: 40px 20px; text-align: center;">
+                        <img src="https://via.placeholder.com/600x400" alt="Featured Image" style="max-width: 100%; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                    </div>
+                `,
+                name: 'Image'
+            },
+            'button': {
+                html: `
+                    <div class="button-section" style="padding: 40px 20px; text-align: center;">
+                        <button style="background: linear-gradient(45deg, #ff6b6b, #4ecdc4); color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; margin: 10px;">Primary Action</button>
+                        <button style="background: transparent; color: #333; border: 2px solid #333; padding: 15px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; margin: 10px;">Secondary Action</button>
+                    </div>
+                `,
+                name: 'Button'
+            },
+            'form': {
+                html: `
+                    <div class="contact-form" style="padding: 40px 20px; max-width: 500px; margin: 0 auto;">
+                        <h2 style="text-align: center; color: #333; margin-bottom: 30px;">Contact Us</h2>
+                        <form style="display: flex; flex-direction: column; gap: 15px;">
+                            <input type="text" placeholder="Your Name" style="padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+                            <input type="email" placeholder="Your Email" style="padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+                            <textarea placeholder="Your Message" rows="4" style="padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; resize: vertical;"></textarea>
+                            <button type="submit" style="background: linear-gradient(45deg, #ff6b6b, #4ecdc4); color: white; border: none; padding: 15px; border-radius: 5px; font-size: 1.1rem; cursor: pointer;">Send Message</button>
+                        </form>
+                    </div>
+                `,
+                name: 'Contact Form'
+            },
+            'gallery': {
+                html: `
+                    <div class="gallery-section" style="padding: 40px 20px;">
+                        <h2 style="text-align: center; color: #333; margin-bottom: 30px;">Our Gallery</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                            <img src="https://via.placeholder.com/300x200" alt="Gallery 1" style="width: 100%; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <img src="https://via.placeholder.com/300x200" alt="Gallery 2" style="width: 100%; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <img src="https://via.placeholder.com/300x200" alt="Gallery 3" style="width: 100%; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        </div>
+                    </div>
+                `,
+                name: 'Gallery'
+            },
+            'testimonial': {
+                html: `
+                    <div class="testimonial-section" style="padding: 40px 20px; background: #f8f9fa;">
+                        <h2 style="text-align: center; color: #333; margin-bottom: 30px;">What Our Clients Say</h2>
+                        <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+                            <p style="font-size: 1.2rem; color: #666; font-style: italic; margin-bottom: 20px;">"This platform has transformed our business completely. The results are incredible!"</p>
+                            <div style="font-weight: bold; color: #333;">- John Smith, CEO</div>
+                        </div>
+                    </div>
+                `,
+                name: 'Testimonial'
+            },
+            'pricing': {
+                html: `
+                    <div class="pricing-section" style="padding: 40px 20px;">
+                        <h2 style="text-align: center; color: #333; margin-bottom: 30px;">Choose Your Plan</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 900px; margin: 0 auto;">
+                            <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center;">
+                                <h3 style="color: #333; margin-bottom: 10px;">Basic</h3>
+                                <div style="font-size: 2rem; font-weight: bold; color: #4ecdc4; margin-bottom: 20px;">$29/mo</div>
+                                <ul style="list-style: none; padding: 0; margin-bottom: 20px;">
+                                    <li style="padding: 5px 0;">✓ Feature 1</li>
+                                    <li style="padding: 5px 0;">✓ Feature 2</li>
+                                    <li style="padding: 5px 0;">✓ Feature 3</li>
+                                </ul>
+                                <button style="background: linear-gradient(45deg, #ff6b6b, #4ecdc4); color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer;">Choose Plan</button>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                name: 'Pricing'
+            }
+        };
+
+        // Template data
+        const templates = {
+            'landing': [
+                'hero', 'text', 'image', 'testimonial', 'form'
+            ],
+            'business': [
+                'hero', 'text', 'gallery', 'testimonial', 'pricing', 'form'
+            ],
+            'portfolio': [
+                'hero', 'gallery', 'text', 'testimonial'
+            ],
+            'ecommerce': [
+                'hero', 'gallery', 'pricing', 'form'
+            ]
+        };
+
+        function addComponent(type) {
+            const component = components[type];
+            if (component) {
+                const element = createBuilderElement(component.html, component.name);
+                document.getElementById('dropZone').appendChild(element);
+                currentElements.push(element);
+                showNotification(`✅ Added ${component.name}`);
+                
+                // Close mobile sidebar
+                if (window.innerWidth <= 768) {
+                    document.getElementById('sidebar').classList.remove('open');
+                }
+            }
+        }
+
+        function createBuilderElement(html, name) {
+            elementCounter++;
+            const element = document.createElement('div');
+            element.className = 'builder-element';
+            element.innerHTML = `
+                <div class="element-controls">
+                    <button class="control-btn" onclick="editElement(this)">✏️</button>
+                    <button class="control-btn delete" onclick="deleteElement(this)">🗑️</button>
+                </div>
+                ${html}
+            `;
+            element.setAttribute('data-element-id', elementCounter);
+            return element;
+        }
+
+        function deleteElement(button) {
+            const element = button.closest('.builder-element');
+            element.remove();
+            showNotification('🗑️ Element deleted');
+        }
+
+        function editElement(button) {
+            const element = button.closest('.builder-element');
+            // In a real implementation, this would open an editor
+            showNotification('✏️ Edit functionality coming soon!');
+        }
+
+        function showTemplates() {
+            document.getElementById('templatesModal').classList.add('show');
+        }
+
+        function hideTemplates() {
+            document.getElementById('templatesModal').classList.remove('show');
+        }
+
+        function loadTemplate(templateName) {
+            // Clear existing elements
+            const dropZone = document.getElementById('dropZone');
+            dropZone.innerHTML = `
+                <div class="drop-zone-text">🎨 Drag & Drop Components Here</div>
+                <div class="drop-zone-subtext">Start building your page by dragging components from the sidebar</div>
+            `;
+            currentElements = [];
+
+            // Load template components
+            const templateComponents = templates[templateName];
+            if (templateComponents) {
+                templateComponents.forEach(type => {
+                    addComponent(type);
+                });
+                showNotification(`📋 Loaded ${templateName} template`);
+            }
+            
+            hideTemplates();
+        }
+
+        function exportCode() {
+            const elements = document.querySelectorAll('.builder-element');
+            let html = '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>Built with HopeNocode</title>\n</head>\n<body>\n';
+            
+            elements.forEach(element => {
+                const elementContent = element.innerHTML.replace(/<div class="element-controls">[\s\S]*?<\/div>/, '');
+                html += elementContent + '\n';
+            });
+            
+            html += '</body>\n</html>';
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(html).then(() => {
+                showNotification('📋 Code copied to clipboard!');
+            });
+        }
+
+        function previewPage() {
+            const elements = document.querySelectorAll('.builder-element');
+            let html = '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>Preview - Built with HopeNocode</title>\n<style>body{margin:0;font-family:Arial,sans-serif;}</style>\n</head>\n<body>\n';
+            
+            elements.forEach(element => {
+                const elementContent = element.innerHTML.replace(/<div class="element-controls">[\s\S]*?<\/div>/, '');
+                html += elementContent + '\n';
+            });
+            
+            html += '</body>\n</html>';
+            
+            // Open in new window
+            const newWindow = window.open('', '_blank');
+            newWindow.document.write(html);
+            newWindow.document.close();
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Drag and Drop functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            showNotification('🚀 AI Visual Builder loaded!');
+            
+            // Setup drag and drop
+            const componentItems = document.querySelectorAll('.component-item');
+            const dropZone = document.getElementById('dropZone');
+            
+            componentItems.forEach(item => {
+                item.addEventListener('dragstart', function(e) {
+                    e.dataTransfer.setData('text/plain', this.getAttribute('data-component'));
+                });
+            });
+            
+            dropZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('drag-over');
+            });
+            
+            dropZone.addEventListener('dragleave', function(e) {
+                this.classList.remove('drag-over');
+            });
+            
+            dropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+                
+                const componentType = e.dataTransfer.getData('text/plain');
+                addComponent(componentType);
+            });
+            
+            // Add tap-to-close functionality for mobile sidebar
+            const mainBuilder = document.querySelector('.main-builder');
+            mainBuilder.addEventListener('click', function(event) {
+                if (event.target.closest('.mobile-menu-btn')) {
+                    return;
+                }
+                
+                if (window.innerWidth <= 768) {
+                    const sidebar = document.getElementById('sidebar');
+                    if (sidebar.classList.contains('open')) {
+                        sidebar.classList.remove('open');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
