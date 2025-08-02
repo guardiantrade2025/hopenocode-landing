@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multi-Language AI Code Generator - HopeNocode</title>
+    <script src="analytics.js"></script>
     <style>
         * {
             margin: 0;
@@ -422,150 +423,56 @@ Examples:
             document.getElementById('codeOutput').style.display = 'none';
             document.getElementById('generateBtn').disabled = true;
 
-            // Simulate AI generation
-            setTimeout(() => {
-                const code = generateCodeForLanguage(input, currentLanguage);
-                generatedCode = code;
-                
-                // Display code
-                document.getElementById('codeText').textContent = code;
-                
+            // Call the real AI service
+            fetch('/api/ai/generate-code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    prompt: input,
+                    language: currentLanguage,
+                    context: 'Generate ' + currentLanguage + ' code for: ' + input
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    generatedCode = data.code;
+                    document.getElementById('codeText').textContent = data.code;
+                } else {
+                    document.getElementById('codeText').textContent = 'Error: ' + (data.error || 'Failed to generate code');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('codeText').textContent = 'Error: Failed to connect to AI service. Please try again.';
+            })
+            .finally(() => {
                 // Hide loading
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('codeOutput').style.display = 'block';
                 document.getElementById('generateBtn').disabled = false;
-            }, 2000);
+            });
         }
 
         function generateCodeForLanguage(description, language) {
             const codeTemplates = {
-                'javascript': `// ${description}
-function ${generateFunctionName(description)}() {
-    // Implementation
-    console.log("Hello from JavaScript!");
-    return "Generated code";
-}
+                'javascript': '// ' + description + '\nfunction ' + generateFunctionName(description) + '() {\n    // Implementation\n    console.log("Hello from JavaScript!");\n    return "Generated code";\n}\n\n// Usage\nconst result = ' + generateFunctionName(description) + '();\nconsole.log(result);',
 
-// Usage
-const result = ${generateFunctionName(description)}();
-console.log(result);`,
+                'python': '# ' + description + '\ndef ' + generateFunctionName(description) + '():\n    """\n    Generated Python function\n    """\n    print("Hello from Python!")\n    return "Generated code"\n\n# Usage\nif __name__ == "__main__":\n    result = ' + generateFunctionName(description) + '()\n    print(result)',
 
-                'python': `# ${description}
-def ${generateFunctionName(description)}():
-    """
-    Generated Python function
-    """
-    print("Hello from Python!")
-    return "Generated code"
+                'react': 'import React, { useState } from \'react\';\n\n// ' + description + '\nconst ' + generateComponentName(description) + ' = () => {\n    const [state, setState] = useState(null);\n\n    const handleClick = () => {\n        console.log("React component clicked!");\n    };\n\n    return (\n        <div className="' + generateComponentName(description).toLowerCase() + '">\n            <h2>Generated React Component</h2>\n            <button onClick={handleClick}>\n                Click me\n            </button>\n        </div>\n    );\n};\n\nexport default ' + generateComponentName(description) + ';',
 
-# Usage
-if __name__ == "__main__":
-    result = ${generateFunctionName(description)}()
-    print(result)`,
+                'vue': '<template>\n    <div class="' + generateComponentName(description).toLowerCase() + '">\n        <h2>Generated Vue Component</h2>\n        <button @click="handleClick">\n            Click me\n        </button>\n    </div>\n</template>\n\n<script>\n// ' + description + '\nexport default {\n    name: \'' + generateComponentName(description) + '\',\n    data() {\n        return {\n            message: \'Hello from Vue!\'\n        }\n    },\n    methods: {\n        handleClick() {\n            console.log(this.message);\n        }\n    }\n}\n</script>',
 
-                'react': `import React, { useState } from 'react';
+                'angular': 'import { Component } from \'@angular/core\';\n\n@Component({\n    selector: \'app-' + generateComponentName(description).toLowerCase() + '\',\n    template: \'<div class="' + generateComponentName(description).toLowerCase() + '"><h2>Generated Angular Component</h2><button (click)="handleClick()">Click me</button></div>\'\n})\nexport class ' + generateComponentName(description) + 'Component {\n    // ' + description + '\n    \n    handleClick() {\n        console.log(\'Hello from Angular!\');\n    }\n}',
 
-// ${description}
-const ${generateComponentName(description)} = () => {
-    const [state, setState] = useState(null);
+                'php': '<?php\n// ' + description + '\nfunction ' + generateFunctionName(description) + '() {\n    echo "Hello from PHP!";\n    return "Generated code";\n}\n\n// Usage\n$result = ' + generateFunctionName(description) + '();\necho $result;\n?>',
 
-    const handleClick = () => {
-        console.log("React component clicked!");
-    };
+                'java': 'public class ' + generateClassName(description) + ' {\n    // ' + description + '\n    \n    public static String ' + generateFunctionName(description) + '() {\n        System.out.println("Hello from Java!");\n        return "Generated code";\n    }\n    \n    public static void main(String[] args) {\n        String result = ' + generateFunctionName(description) + '();\n        System.out.println(result);\n    }\n}',
 
-    return (
-        <div className="${generateComponentName(description).toLowerCase()}">
-            <h2>Generated React Component</h2>
-            <button onClick={handleClick}>
-                Click me
-            </button>
-        </div>
-    );
-};
-
-export default ${generateComponentName(description)};`,
-
-                'vue': `<template>
-    <div class="${generateComponentName(description).toLowerCase()}">
-        <h2>Generated Vue Component</h2>
-        <button @click="handleClick">
-            Click me
-        </button>
-    </div>
-</template>
-
-<script>
-// ${description}
-export default {
-    name: '${generateComponentName(description)}',
-    data() {
-        return {
-            message: 'Hello from Vue!'
-        }
-    },
-    methods: {
-        handleClick() {
-            console.log(this.message);
-        }
-    }
-}
-</script>`,
-
-                'angular': `import { Component } from '@angular/core';
-
-@Component({
-    selector: 'app-${generateComponentName(description).toLowerCase()}',
-    template: '<div class="${generateComponentName(description).toLowerCase()}"><h2>Generated Angular Component</h2><button (click)="handleClick()">Click me</button></div>'
-})
-export class ${generateComponentName(description)}Component {
-    // ${description}
-    
-    handleClick() {
-        console.log('Hello from Angular!');
-    }
-}`,
-
-                'php': `<?php
-// ${description}
-function ${generateFunctionName(description)}() {
-    echo "Hello from PHP!";
-    return "Generated code";
-}
-
-// Usage
-$result = ${generateFunctionName(description)}();
-echo $result;
-?>`,
-
-                'java': `public class ${generateClassName(description)} {
-    // ${description}
-    
-    public static String ${generateFunctionName(description)}() {
-        System.out.println("Hello from Java!");
-        return "Generated code";
-    }
-    
-    public static void main(String[] args) {
-        String result = ${generateFunctionName(description)}();
-        System.out.println(result);
-    }
-}`,
-
-                'csharp': `using System;
-
-public class ${generateClassName(description)} {
-    // ${description}
-    
-    public static string ${generateFunctionName(description)}() {
-        Console.WriteLine("Hello from C#!");
-        return "Generated code";
-    }
-    
-    public static void Main(string[] args) {
-        string result = ${generateFunctionName(description)}();
-        Console.WriteLine(result);
-    }
-}`
+                'csharp': 'using System;\n\npublic class ' + generateClassName(description) + ' {\n    // ' + description + '\n    \n    public static string ' + generateFunctionName(description) + '() {\n        Console.WriteLine("Hello from C#!");\n        return "Generated code";\n    }\n    \n    public static void Main(string[] args) {\n        string result = ' + generateFunctionName(description) + '();\n        Console.WriteLine(result);\n    }\n}'
             };
 
             return codeTemplates[language] || codeTemplates['javascript'];
@@ -602,7 +509,7 @@ public class ${generateClassName(description)} {
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `generated-code.${getFileExtension()}`;
+                a.download = 'generated-code.' + getFileExtension();
                 a.click();
                 URL.revokeObjectURL(url);
             } else {
