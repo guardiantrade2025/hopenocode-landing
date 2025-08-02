@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Code Playground - HopeNocode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .playground-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: rgba(255,255,255,0.1);
+            backdrop-blur: 10px;
+            border-right: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .playground-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .ai-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: #4ecdc4;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .language-selector {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .language-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .language-tab {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .language-tab.active {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            transform: scale(1.05);
+        }
+
+        .templates-section {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .template-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .template-item:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+
+        .template-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .template-desc {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        /* Main Playground Area */
+        .main-playground {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .playground-topbar {
+            padding: 20px 30px;
+            background: rgba(255,255,255,0.1);
+            backdrop-blur: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .playground-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .playground-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            backdrop-blur: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .editor-container {
+            flex: 1;
+            display: flex;
+            background: #1e1e1e;
+        }
+
+        .code-editor {
+            flex: 1;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 20px;
+            border: none;
+            outline: none;
+            resize: none;
+        }
+
+        .preview-panel {
+            flex: 1;
+            background: white;
+            color: #333;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .preview-title {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .preview-btn {
+            padding: 5px 10px;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .preview-btn:hover {
+            background: #e0e0e0;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .playground-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: 40vh;
+                transform: translateY(-100%);
+                transition: transform 0.3s ease;
+                z-index: 1000;
+                background: rgba(0,0,0,0.95);
+                backdrop-blur: 20px;
+            }
+
+            .sidebar.open {
+                transform: translateY(0);
+            }
+
+            .main-playground {
+                height: 60vh;
+            }
+
+            .playground-topbar {
+                padding: 15px 20px;
+            }
+
+            .playground-actions {
+                gap: 10px;
+            }
+
+            .btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+
+            .editor-container {
+                flex-direction: column;
+            }
+
+            .code-editor {
+                height: 50%;
+            }
+
+            .preview-panel {
+                height: 50%;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="playground-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="playground-header">
+                <div class="logo">Code Playground</div>
+                <div class="ai-status">
+                    <div class="status-indicator"></div>
+                    <span>AI Assistant Online</span>
+                </div>
+            </div>
+
+            <div class="language-selector">
+                <h3 style="margin-bottom: 15px;">Language</h3>
+                <div class="language-tabs">
+                    <div class="language-tab active" onclick="switchLanguage('html')">HTML</div>
+                    <div class="language-tab" onclick="switchLanguage('css')">CSS</div>
+                    <div class="language-tab" onclick="switchLanguage('js')">JavaScript</div>
+                    <div class="language-tab" onclick="switchLanguage('python')">Python</div>
+                </div>
+            </div>
+
+            <div class="templates-section">
+                <h3 style="margin-bottom: 15px;">Templates</h3>
+                <div class="template-item" onclick="loadTemplate('hello-world')">
+                    <div class="template-title">Hello World</div>
+                    <div class="template-desc">Basic HTML structure</div>
+                </div>
+                <div class="template-item" onclick="loadTemplate('responsive-card')">
+                    <div class="template-title">Responsive Card</div>
+                    <div class="template-desc">Modern card design</div>
+                </div>
+                <div class="template-item" onclick="loadTemplate('calculator')">
+                    <div class="template-title">Calculator</div>
+                    <div class="template-desc">Interactive calculator</div>
+                </div>
+                <div class="template-item" onclick="loadTemplate('todo-app')">
+                    <div class="template-title">Todo App</div>
+                    <div class="template-desc">Simple todo list</div>
+                </div>
+                <div class="template-item" onclick="loadTemplate('animation')">
+                    <div class="template-title">CSS Animation</div>
+                    <div class="template-desc">Animated elements</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Playground Area -->
+        <main class="main-playground">
+            <div class="playground-topbar">
+                <div>
+                    <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+                    <span class="playground-title">Interactive Code Playground</span>
+                </div>
+                <div class="playground-actions">
+                    <button class="btn btn-secondary" onclick="clearCode()">
+                        <i>🗑️</i> Clear
+                    </button>
+                    <button class="btn btn-primary" onclick="shareCode()">
+                        <i>📤</i> Share
+                    </button>
+                    <button class="btn btn-secondary" onclick="window.location.href='index.html'">
+                        <i>🏠</i> Back Home
+                    </button>
+                </div>
+            </div>
+
+            <div class="editor-container">
+                <textarea 
+                    class="code-editor" 
+                    id="codeEditor" 
+                    placeholder="Start coding here..."
+                    oninput="updatePreview()"
+                ></textarea>
+                <div class="preview-panel">
+                    <div class="preview-header">
+                        <div class="preview-title">Live Preview</div>
+                        <div class="preview-actions">
+                            <button class="preview-btn" onclick="refreshPreview()">🔄 Refresh</button>
+                            <button class="preview-btn" onclick="fullscreenPreview()">⛶ Fullscreen</button>
+                        </div>
+                    </div>
+                    <div id="previewContent">
+                        <div style="text-align: center; padding: 50px; color: #666;">
+                            <h2>Welcome to the Code Playground!</h2>
+                            <p>Start coding in the editor to see your changes here in real-time.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        let currentLanguage = 'html';
+        let currentTemplate = null;
+
+        // Template code snippets
+        const templates = {
+            'hello-world': {
+                html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+        h1 {
+            font-size: 3rem;
+            text-align: center;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-30px); }
+            60% { transform: translateY(-15px); }
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello, World! 👋</h1>
+</body>
+</html>`,
+                css: '',
+                js: ''
+            },
+            'responsive-card': {
+                html: `<div class="card">
+    <div class="card-image">
+        <img src="https://via.placeholder.com/300x200" alt="Card Image">
+    </div>
+    <div class="card-content">
+        <h3>Beautiful Card</h3>
+        <p>This is a responsive card design with hover effects.</p>
+        <button class="card-btn">Learn More</button>
+    </div>
+</div>`,
+                css: `body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    overflow: hidden;
+    max-width: 350px;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card-content h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.card-content p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.card-btn {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.card-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}`,
+                js: ''
+            },
+            'calculator': {
+                html: `<div class="calculator">
+    <div class="display">
+        <div class="previous-operand"></div>
+        <div class="current-operand">0</div>
+    </div>
+    <div class="buttons">
+        <button class="btn clear">AC</button>
+        <button class="btn operator">±</button>
+        <button class="btn operator">%</button>
+        <button class="btn operator">÷</button>
+        <button class="btn number">7</button>
+        <button class="btn number">8</button>
+        <button class="btn number">9</button>
+        <button class="btn operator">×</button>
+        <button class="btn number">4</button>
+        <button class="btn number">5</button>
+        <button class="btn number">6</button>
+        <button class="btn operator">-</button>
+        <button class="btn number">1</button>
+        <button class="btn number">2</button>
+        <button class="btn number">3</button>
+        <button class="btn operator">+</button>
+        <button class="btn number zero">0</button>
+        <button class="btn number">.</button>
+        <button class="btn equals">=</button>
+    </div>
+</div>`,
+                css: `body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.calculator {
+    background: #1c1c1c;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.display {
+    background: #2d2d2d;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: right;
+    color: white;
+}
+
+.previous-operand {
+    font-size: 1.2rem;
+    opacity: 0.7;
+    min-height: 1.5rem;
+}
+
+.current-operand {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.btn {
+    padding: 20px;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: scale(1.1);
+}
+
+.number {
+    background: #505050;
+    color: white;
+}
+
+.operator {
+    background: #ff9500;
+    color: white;
+}
+
+.clear {
+    background: #d4d4d2;
+    color: black;
+}
+
+.equals {
+    background: #ff9500;
+    color: white;
+}
+
+.zero {
+    grid-column: span 2;
+    border-radius: 25px;
+    text-align: left;
+    padding-left: 25px;
+}`,
+                js: `class Calculator {
+    constructor() {
+        this.previousOperand = '';
+        this.currentOperand = '0';
+        this.operation = undefined;
+    }
+
+    clear() {
+        this.currentOperand = '0';
+        this.previousOperand = '';
+        this.operation = undefined;
+    }
+
+    appendNumber(number) {
+        if (number === '.' && this.currentOperand.includes('.')) return;
+        if (this.currentOperand === '0' && number !== '.') {
+            this.currentOperand = number;
+        } else {
+            this.currentOperand += number;
+        }
+    }
+
+    chooseOperation(operation) {
+        if (this.currentOperand === '') return;
+        if (this.previousOperand !== '') {
+            this.compute();
+        }
+        this.operation = operation;
+        this.previousOperand = this.currentOperand;
+        this.currentOperand = '';
+    }
+
+    compute() {
+        let computation;
+        const prev = parseFloat(this.previousOperand);
+        const current = parseFloat(this.currentOperand);
+        if (isNaN(prev) || isNaN(current)) return;
+        
+        switch (this.operation) {
+            case '+':
+                computation = prev + current;
+                break;
+            case '-':
+                computation = prev - current;
+                break;
+            case '×':
+                computation = prev * current;
+                break;
+            case '÷':
+                computation = prev / current;
+                break;
+            default:
+                return;
+        }
+        this.currentOperand = computation;
+        this.operation = undefined;
+        this.previousOperand = '';
+    }
+
+    updateDisplay() {
+        document.querySelector('.current-operand').textContent = this.currentOperand;
+        if (this.operation != null) {
+            document.querySelector('.previous-operand').textContent = this.previousOperand + this.operation;
+        } else {
+            document.querySelector('.previous-operand').textContent = '';
+        }
+    }
+}
+
+const calculator = new Calculator();
+
+document.querySelectorAll('.btn').forEach(button => {
+    button.addEventListener('click', () => {
+        if (button.classList.contains('number')) {
+            calculator.appendNumber(button.textContent);
+        } else if (button.classList.contains('operator')) {
+            calculator.chooseOperation(button.textContent);
+        } else if (button.classList.contains('equals')) {
+            calculator.compute();
+        } else if (button.classList.contains('clear')) {
+            calculator.clear();
+        }
+        calculator.updateDisplay();
+    });
+});`
+            },
+            'todo-app': {
+                html: `<div class="todo-app">
+    <h1>Todo List</h1>
+    <div class="todo-input">
+        <input type="text" id="todoInput" placeholder="Add a new task...">
+        <button id="addTodo">Add</button>
+    </div>
+    <ul id="todoList"></ul>
+</div>`,
+                css: `body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.todo-app {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    min-width: 400px;
+}
+
+.todo-app h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.todo-input {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.todo-input input {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #eee;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.todo-input input:focus {
+    border-color: #667eea;
+}
+
+.todo-input button {
+    padding: 12px 20px;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.todo-input button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+#todoList {
+    list-style: none;
+    padding: 0;
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+.todo-item:hover {
+    background: #e9ecef;
+}
+
+.todo-item.completed {
+    opacity: 0.6;
+    text-decoration: line-through;
+}
+
+.todo-item input[type="checkbox"] {
+    margin-right: 15px;
+    transform: scale(1.2);
+}
+
+.todo-item span {
+    flex: 1;
+    color: #333;
+}
+
+.todo-item button {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.todo-item button:hover {
+    background: #c82333;
+}`,
+                js: `document.addEventListener('DOMContentLoaded', function() {
+    const todoInput = document.getElementById('todoInput');
+    const addTodoBtn = document.getElementById('addTodo');
+    const todoList = document.getElementById('todoList');
+
+    function addTodo() {
+        const todoText = todoInput.value.trim();
+        if (todoText === '') return;
+
+        const li = document.createElement('li');
+        li.className = 'todo-item';
+        
+        li.innerHTML = \`
+            <input type="checkbox" onchange="toggleTodo(this)">
+            <span>\${todoText}</span>
+            <button onclick="deleteTodo(this)">Delete</button>
+        \`;
+        
+        todoList.appendChild(li);
+        todoInput.value = '';
+    }
+
+    addTodoBtn.addEventListener('click', addTodo);
+    todoInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            addTodo();
+        }
+    });
+});
+
+function toggleTodo(checkbox) {
+    const todoItem = checkbox.parentElement;
+    todoItem.classList.toggle('completed');
+}
+
+function deleteTodo(button) {
+    const todoItem = button.parentElement;
+    todoItem.remove();
+}`
+            },
+            'animation': {
+                html: `<div class="animation-container">
+    <div class="animated-box">Hover Me!</div>
+    <div class="pulse-circle"></div>
+    <div class="sliding-text">Welcome to HopeNocode</div>
+</div>`,
+                css: `body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    overflow: hidden;
+}
+
+.animation-container {
+    text-align: center;
+    color: white;
+}
+
+.animated-box {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 20px auto;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: float 3s ease-in-out infinite;
+}
+
+.animated-box:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+.pulse-circle {
+    width: 100px;
+    height: 100px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    margin: 30px auto;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+.sliding-text {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-top: 30px;
+    animation: slideIn 2s ease-out;
+    overflow: hidden;
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}`,
+                js: ''
+            }
+        };
+
+        function switchLanguage(language) {
+            currentLanguage = language;
+            document.querySelectorAll('.language-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update editor placeholder
+            const editor = document.getElementById('codeEditor');
+            const placeholders = {
+                'html': 'Start coding HTML here...',
+                'css': 'Start coding CSS here...',
+                'js': 'Start coding JavaScript here...',
+                'python': 'Start coding Python here...'
+            };
+            editor.placeholder = placeholders[language];
+            
+            showNotification(`🔄 Switched to ${language.toUpperCase()}`);
+        }
+
+        function loadTemplate(templateName) {
+            currentTemplate = templateName;
+            const template = templates[templateName];
+            if (template) {
+                document.getElementById('codeEditor').value = template.html;
+                updatePreview();
+                showNotification(`📋 Loaded ${templateName} template`);
+                
+                // Close mobile sidebar
+                if (window.innerWidth <= 768) {
+                    document.getElementById('sidebar').classList.remove('open');
+                }
+            }
+        }
+
+        function updatePreview() {
+            const code = document.getElementById('codeEditor').value;
+            const preview = document.getElementById('previewContent');
+            
+            if (code.trim() === '') {
+                preview.innerHTML = `
+                    <div style="text-align: center; padding: 50px; color: #666;">
+                        <h2>Welcome to the Code Playground!</h2>
+                        <p>Start coding in the editor to see your changes here in real-time.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Create a safe preview environment
+            const iframe = document.createElement('iframe');
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+            
+            preview.innerHTML = '';
+            preview.appendChild(iframe);
+            
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            iframeDoc.open();
+            iframeDoc.write(code);
+            iframeDoc.close();
+        }
+
+        function clearCode() {
+            document.getElementById('codeEditor').value = '';
+            updatePreview();
+            showNotification('🗑️ Code cleared');
+        }
+
+        function shareCode() {
+            const code = document.getElementById('codeEditor').value;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Check out this code!',
+                    text: 'I created this in the HopeNocode Code Playground',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(code).then(() => {
+                    showNotification('📋 Code copied to clipboard!');
+                });
+            }
+        }
+
+        function refreshPreview() {
+            updatePreview();
+            showNotification('🔄 Preview refreshed');
+        }
+
+        function fullscreenPreview() {
+            const preview = document.getElementById('previewContent');
+            if (preview.requestFullscreen) {
+                preview.requestFullscreen();
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize playground
+        document.addEventListener('DOMContentLoaded', function() {
+            showNotification('🚀 Interactive Code Playground loaded!');
+            
+            // Add tap-to-close functionality for mobile sidebar
+            const mainPlayground = document.querySelector('.main-playground');
+            mainPlayground.addEventListener('click', function(event) {
+                if (event.target.closest('.mobile-menu-btn')) {
+                    return;
+                }
+                
+                if (window.innerWidth <= 768) {
+                    const sidebar = document.getElementById('sidebar');
+                    if (sidebar.classList.contains('open')) {
+                        sidebar.classList.remove('open');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
