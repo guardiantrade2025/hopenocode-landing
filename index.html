@@ -27,31 +27,27 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            width: 40px;
-            height: 40px;
             background: rgba(255,255,255,0.1);
             border: 2px solid rgba(255,255,255,0.3);
             color: white;
-            border-radius: 50%;
+            padding: 10px 20px;
+            border-radius: 25px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
             transition: all 0.3s ease;
             backdrop-blur: 10px;
             z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         .theme-toggle:hover {
             background: rgba(255,255,255,0.2);
-            transform: scale(1.1);
+            transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
 
         .theme-toggle:active {
-            transform: scale(0.95);
+            transform: translateY(0);
         }
 
         /* Hero Section */
@@ -1111,7 +1107,7 @@
     </style>
 </head>
 <body>
-            <button class="theme-toggle" onclick="toggleTheme()">☀️</button>
+            <button class="theme-toggle" onclick="toggleTheme()">☀️ Light Mode</button>
     
     <!-- Hero Section -->
     <section class="hero">
@@ -1995,11 +1991,11 @@
             
             if (body.classList.contains('dark-mode')) {
                 body.classList.remove('dark-mode');
-                toggleBtn.textContent = '🌙';
+                toggleBtn.textContent = '🌙 Dark Mode';
                 showNotification('☀️ Switched to Light Mode');
             } else {
                 body.classList.add('dark-mode');
-                toggleBtn.textContent = '☀️';
+                toggleBtn.textContent = '☀️ Light Mode';
                 showNotification('🌙 Switched to Dark Mode');
             }
         }
@@ -2009,7 +2005,7 @@
             // Initialize dark mode
             document.body.classList.add('dark-mode');
             const toggleBtn = document.querySelector('.theme-toggle');
-            toggleBtn.textContent = '☀️';
+            toggleBtn.textContent = '☀️ Light Mode';
             
             const heroContent = document.querySelector('.hero-content');
             heroContent.style.opacity = '0';
