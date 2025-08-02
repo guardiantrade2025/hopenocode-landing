@@ -85,16 +85,46 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lang-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .lang-btn:hover::before {
+            left: 100%;
         }
 
         .lang-btn:hover {
             background: rgba(255,255,255,0.2);
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .lang-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
         .lang-btn.active {
             background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
             border-color: transparent;
+            box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+        }
+
+        .lang-btn.active:hover {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,107,107,0.4);
         }
 
         .input-area {
@@ -687,7 +717,12 @@ Examples:
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            event.target.classList.add('active');
+            
+            // Find and activate the clicked button
+            const clickedButton = document.querySelector(`[onclick="selectLanguage('${lang}')"]`);
+            if (clickedButton) {
+                clickedButton.classList.add('active');
+            }
             
             // Update code language display
             document.getElementById('codeLanguage').textContent = lang.charAt(0).toUpperCase() + lang.slice(1);
@@ -1002,9 +1037,15 @@ public class ${generateClassName(description)} {
             buttons.forEach(btn => {
                 btn.addEventListener('touchstart', function() {
                     this.style.transform = 'scale(0.95)';
+                    this.style.transition = 'transform 0.1s ease';
                 });
                 btn.addEventListener('touchend', function() {
                     this.style.transform = '';
+                    this.style.transition = 'all 0.3s ease';
+                });
+                btn.addEventListener('touchcancel', function() {
+                    this.style.transform = '';
+                    this.style.transition = 'all 0.3s ease';
                 });
             });
 
@@ -1021,6 +1062,21 @@ public class ${generateClassName(description)} {
                 languageSelector.style.webkitOverflowScrolling = 'touch';
                 languageSelector.style.paddingBottom = '10px';
             }
+
+            // Add click event listeners for language buttons to ensure they work
+            const langButtons = document.querySelectorAll('.lang-btn');
+            langButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    // Prevent default to avoid double triggering
+                    e.preventDefault();
+                    
+                    // Add visual feedback
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
         }
 
         function copyCode() {
