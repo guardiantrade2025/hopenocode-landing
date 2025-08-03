@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Code Generator</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            padding: 20px; 
+            background: #f0f0f0; 
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h1 { 
+            text-align: center; 
+            color: #333; 
+            margin-bottom: 30px;
+        }
+        .lang-buttons {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        button { 
+            padding: 10px 20px; 
+            margin: 5px; 
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+            border-radius: 5px;
+        }
+        button.active { 
+            background: #28a745; 
+            font-weight: bold;
+        }
+        textarea { 
+            width: 100%; 
+            height: 100px; 
+            margin: 10px 0; 
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: Arial;
+        }
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        .generate-btn:hover {
+            background: #c82333;
+        }
+        #output { 
+            background: #f8f9fa; 
+            padding: 15px; 
+            border: 1px solid #ccc; 
+            min-height: 100px; 
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+        .status {
+            text-align: center;
+            padding: 10px;
+            margin: 10px 0;
+            background: #e9ecef;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Simple Code Generator</h1>
+        
+        <div class="status" id="status">Ready to generate code</div>
+        
+        <div class="lang-buttons">
+            <button onclick="setLang('javascript', this)" class="active">JavaScript</button>
+            <button onclick="setLang('python', this)">Python</button>
+            <button onclick="setLang('react', this)">React</button>
+            <button onclick="setLang('vue', this)">Vue</button>
+        </div>
+        
+        <textarea id="input" placeholder="Type your request here... (e.g., Create a function that calculates the sum of an array)"></textarea>
+        
+        <button class="generate-btn" onclick="generate()">Generate Code</button>
+        
+        <div id="output">Your code will appear here...</div>
+    </div>
+
+    <script>
+        var currentLang = 'javascript';
+        
+        function setLang(lang, btn) {
+            currentLang = lang;
+            
+            // Remove active from all buttons
+            var buttons = document.querySelectorAll('button');
+            for(var i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove('active');
+            }
+            
+            // Add active to clicked button
+            btn.classList.add('active');
+            
+            document.getElementById('status').textContent = 'Language selected: ' + currentLang;
+            document.getElementById('output').textContent = 'Your code will appear here...';
+        }
+        
+        function generate() {
+            var input = document.getElementById('input').value;
+            if(!input) {
+                alert('Please type something first!');
+                return;
+            }
+            
+            document.getElementById('status').textContent = 'Generating ' + currentLang + ' code...';
+            
+            // Simple delay to show loading
+            setTimeout(function() {
+                var code = '';
+                
+                if(currentLang === 'javascript') {
+                    code = '// ' + input + '\nfunction ' + getName(input) + '() {\n    console.log("Hello from JavaScript!");\n    return "Generated code";\n}\n\n// Usage\nvar result = ' + getName(input) + '();\nconsole.log(result);';
+                } else if(currentLang === 'python') {
+                    code = '# ' + input + '\nimport csv\n\ndef ' + getName(input) + '():\n    try:\n        with open("data.csv", "r") as file:\n            reader = csv.reader(file)\n            for row in reader:\n                print("Processing:", row)\n        return "Data processed successfully"\n    except Exception as e:\n        print("Error:", e)\n        return None\n\n# Usage\nresult = ' + getName(input) + '()\nprint(result)';
+                } else if(currentLang === 'react') {
+                    code = 'import React from "react";\n\n// ' + input + '\nvar ' + getCompName(input) + ' = function() {\n    return (\n        <div>\n            <h2>Generated React Component</h2>\n            <p>Hello from React!</p>\n        </div>\n    );\n};\n\nexport default ' + getCompName(input) + ';';
+                } else if(currentLang === 'vue') {
+                    code = '<template>\n    <div>\n        <h2>Generated Vue Component</h2>\n        <p>Hello from Vue!</p>\n    </div>\n</template>\n\n<script>\n// ' + input + '\nexport default {\n    name: "' + getCompName(input) + '"\n}\n</script>';
+                }
+                
+                document.getElementById('output').textContent = code;
+                document.getElementById('status').textContent = 'Code generated successfully for ' + currentLang;
+            }, 1000);
+        }
+        
+        function getName(text) {
+            var words = text.toLowerCase().split(' ').slice(0, 3);
+            var result = '';
+            for(var i = 0; i < words.length; i++) {
+                result += words[i].charAt(0).toUpperCase() + words[i].slice(1);
+            }
+            return result + 'Function';
+        }
+        
+        function getCompName(text) {
+            var words = text.toLowerCase().split(' ').slice(0, 3);
+            var result = '';
+            for(var i = 0; i < words.length; i++) {
+                result += words[i].charAt(0).toUpperCase() + words[i].slice(1);
+            }
+            return result + 'Component';
+        }
+    </script>
+</body>
+</html> 
