@@ -266,12 +266,12 @@
         <div class="status" id="status">Ready to generate code</div>
         
         <div class="language-selector">
-            <button class="lang-btn active" onclick="selectLanguage('javascript', this)">JavaScript</button>
-            <button class="lang-btn" onclick="selectLanguage('python', this)">Python</button>
-            <button class="lang-btn" onclick="selectLanguage('react', this)">React</button>
-            <button class="lang-btn" onclick="selectLanguage('vue', this)">Vue</button>
-            <button class="lang-btn" onclick="selectLanguage('nodejs', this)">Node.js</button>
-            <button class="lang-btn" onclick="selectLanguage('php', this)">PHP</button>
+            <button class="lang-btn active" data-lang="javascript">JavaScript</button>
+            <button class="lang-btn" data-lang="python">Python</button>
+            <button class="lang-btn" data-lang="react">React</button>
+            <button class="lang-btn" data-lang="vue">Vue</button>
+            <button class="lang-btn" data-lang="nodejs">Node.js</button>
+            <button class="lang-btn" data-lang="php">PHP</button>
         </div>
         
         <div class="input-section">
@@ -281,7 +281,7 @@
                 placeholder="Describe what you want to build... (e.g., Create a function that calculates the sum of an array, Build a React component that displays user data, etc.)"
             ></textarea>
             
-            <button class="generate-btn" id="generateBtn" onclick="generateCode()">Generate Code</button>
+            <button class="generate-btn" id="generateBtn">Generate Code</button>
             
             <div class="loading" id="loading">
                 <div class="spinner"></div>
@@ -292,15 +292,53 @@
         <div class="output-section">
             <div class="output-header">
                 <div class="output-title">Generated Code</div>
-                <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+                <button class="copy-btn" id="copyBtn">Copy Code</button>
             </div>
             <div class="code-output" id="codeOutput">Your generated code will appear here...</div>
         </div>
     </div>
 
     <script>
+        console.log('🔧 Fixed: Script loaded successfully');
+        
         var currentLanguage = 'javascript';
         var generatedCode = '';
+        
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔧 Fixed: DOM loaded, setting up event listeners');
+            
+            // Set up language selection buttons
+            var langButtons = document.querySelectorAll('.lang-btn');
+            langButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var lang = this.getAttribute('data-lang');
+                    selectLanguage(lang, this);
+                });
+            });
+            
+            // Set up generate button
+            var generateBtn = document.getElementById('generateBtn');
+            generateBtn.addEventListener('click', function() {
+                generateCode();
+            });
+            
+            // Set up copy button
+            var copyBtn = document.getElementById('copyBtn');
+            copyBtn.addEventListener('click', function() {
+                copyCode();
+            });
+            
+            // Set up keyboard shortcut
+            var codeInput = document.getElementById('codeInput');
+            codeInput.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    generateCode();
+                }
+            });
+            
+            console.log('🔧 Fixed: All event listeners set up successfully');
+        });
 
         function selectLanguage(lang, button) {
             var allButtons = document.querySelectorAll('.lang-btn');
@@ -399,11 +437,7 @@
             }
         }
 
-        document.getElementById('codeInput').addEventListener('keydown', function(e) {
-            if (e.ctrlKey && e.key === 'Enter') {
-                generateCode();
-            }
-        });
+
     </script>
 </body>
 </html> 
