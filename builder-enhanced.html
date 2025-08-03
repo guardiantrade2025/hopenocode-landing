@@ -23,7 +23,6 @@
             height: 100vh;
         }
 
-        /* Enhanced Sidebar */
         .sidebar {
             width: 350px;
             background: rgba(255,255,255,0.1);
@@ -48,28 +47,6 @@
             margin-bottom: 10px;
         }
 
-        .ai-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        .status-indicator {
-            width: 8px;
-            height: 8px;
-            background: #4ecdc4;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
         .sidebar-tabs {
             display: flex;
             border-bottom: 1px solid rgba(255,255,255,0.2);
@@ -87,10 +64,6 @@
         .sidebar-tab.active {
             background: rgba(255,255,255,0.1);
             border-bottom-color: #4ecdc4;
-        }
-
-        .sidebar-tab:hover {
-            background: rgba(255,255,255,0.05);
         }
 
         .components-section {
@@ -122,24 +95,12 @@
             transition: all 0.3s ease;
             text-align: center;
             font-size: 0.8rem;
-            position: relative;
             user-select: none;
         }
 
         .component-item:hover {
             background: rgba(255,255,255,0.2);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .component-item:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-
-        .component-item.dragging {
-            opacity: 0.5;
-            transform: rotate(5deg);
         }
 
         .component-icon {
@@ -148,61 +109,6 @@
             display: block;
         }
 
-        .component-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #ff6b6b;
-            color: white;
-            border-radius: 10px;
-            padding: 2px 6px;
-            font-size: 0.7rem;
-        }
-
-        /* Marketplace Section */
-        .marketplace-section {
-            display: none;
-        }
-
-        .marketplace-item {
-            background: rgba(255,255,255,0.1);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .marketplace-item:hover {
-            background: rgba(255,255,255,0.2);
-        }
-
-        .marketplace-header {
-            display: flex;
-            justify-content: between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .marketplace-title {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .marketplace-price {
-            background: #4ecdc4;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-        }
-
-        .marketplace-desc {
-            font-size: 0.8rem;
-            opacity: 0.8;
-        }
-
-        /* Main Builder Area */
         .main-builder {
             flex: 1;
             display: flex;
@@ -236,10 +142,6 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 500;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
             font-size: 0.9rem;
         }
 
@@ -265,25 +167,12 @@
             margin: 20px;
             border-radius: 10px;
             overflow: hidden;
-            position: relative;
-        }
-
-        .canvas {
-            width: 100%;
-            height: 100%;
-            overflow-y: auto;
-            position: relative;
         }
 
         .drop-zone {
             min-height: 100%;
             padding: 20px;
-            position: relative;
-        }
-
-        .drop-zone.drag-over {
-            background: rgba(78, 205, 196, 0.1);
-            border: 2px dashed #4ecdc4;
+            color: #666;
         }
 
         .element {
@@ -295,126 +184,6 @@
 
         .element:hover {
             border-color: #4ecdc4;
-        }
-
-        .element.selected {
-            border-color: #ff6b6b;
-            box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
-        }
-
-        .element-controls {
-            position: absolute;
-            top: -30px;
-            right: 0;
-            background: rgba(0,0,0,0.8);
-            border-radius: 5px;
-            padding: 5px;
-            display: none;
-            gap: 5px;
-        }
-
-        .element:hover .element-controls {
-            display: flex;
-        }
-
-        .control-btn {
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            padding: 2px 5px;
-            border-radius: 3px;
-            font-size: 0.8rem;
-        }
-
-        .control-btn:hover {
-            background: rgba(255,255,255,0.2);
-        }
-
-        /* Export Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-        }
-
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            color: #333;
-            padding: 30px;
-            border-radius: 10px;
-            min-width: 400px;
-            max-width: 600px;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #666;
-        }
-
-        .export-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .export-option {
-            padding: 15px;
-            border: 2px solid #eee;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .export-option:hover {
-            border-color: #4ecdc4;
-            background: rgba(78, 205, 196, 0.1);
-        }
-
-        .export-option.selected {
-            border-color: #4ecdc4;
-            background: rgba(78, 205, 196, 0.2);
-        }
-
-        .export-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .export-name {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .export-desc {
-            font-size: 0.9rem;
-            color: #666;
         }
 
         .notification {
@@ -429,7 +198,6 @@
             display: none;
         }
 
-        /* Back Button */
         .back-btn {
             position: fixed;
             top: 20px;
@@ -441,405 +209,62 @@
             text-decoration: none;
             backdrop-blur: 10px;
             z-index: 100;
-            transition: all 0.3s ease;
-        }
-
-        .back-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-2px);
         }
     </style>
-</head>
-<body>
-    <a href="index.html" class="back-btn">← Back to Home</a>
-    
-    <div class="builder-container">
-        <!-- Enhanced Sidebar -->
-        <div class="sidebar">
-            <div class="builder-header">
-                <div class="logo">🎨 Visual Builder Pro</div>
-                <div class="ai-status">
-                    <div class="status-indicator"></div>
-                    <span>AI Assistant Active</span>
-                </div>
-            </div>
-            
-            <div class="sidebar-tabs">
-                <div class="sidebar-tab active" onclick="switchTab('components', event)">🧩 Components</div>
-                <div class="sidebar-tab" onclick="switchTab('marketplace', event)">🛒 Marketplace</div>
-            </div>
-            
-            <!-- Components Section -->
-            <div class="components-section" id="componentsSection">
-                <div class="section-title">📦 Basic Components</div>
-                <div class="component-grid">
-                    <div class="component-item" draggable="true" data-component="hero" onclick="addComponent('hero')">
-                        <div class="component-icon">🎯</div>
-                        <div>Hero Section</div>
-                    </div>
-                    <div class="component-item" draggable="true" data-component="text" onclick="addComponent('text')">
-                        <div class="component-icon">📝</div>
-                        <div>Text Block</div>
-                    </div>
-                    <div class="component-item" draggable="true" data-component="image" onclick="addComponent('image')">
-                        <div class="component-icon">🖼️</div>
-                        <div>Image</div>
-                    </div>
-                    <div class="component-item" draggable="true" data-component="button" onclick="addComponent('button')">
-                        <div class="component-icon">🔘</div>
-                        <div>Button</div>
-                    </div>
-                    <div class="component-item" draggable="true" data-component="form" onclick="addComponent('form')">
-                        <div class="component-icon">📋</div>
-                        <div>Contact Form</div>
-                    </div>
-                    <div class="component-item" draggable="true" data-component="gallery" onclick="addComponent('gallery')">
-                        <div class="component-icon">🖼️</div>
-                        <div>Gallery</div>
-                    </div>
-                </div>
-                
-                <div class="section-title">🎨 Advanced Components</div>
-                <div class="component-grid">
-                    <div class="component-item" draggable="true" data-component="pricing" onclick="addComponent('pricing')">
-                        <div class="component-icon">💰</div>
-                        <div>Pricing Table</div>
-                        <div class="component-badge">PRO</div>
-                    </div>
-                    <div class="component-item" draggable="true" data-component="testimonials" onclick="addComponent('testimonials')">
-                        <div class="component-icon">💬</div>
-                        <div>Testimonials</div>
-                        <div class="component-badge">PRO</div>
-                    </div>
-                    <div class="component-item" draggable="true" data-component="stats" onclick="addComponent('stats')">
-                        <div class="component-icon">📊</div>
-                        <div>Statistics</div>
-                        <div class="component-badge">PRO</div>
-                    </div>
-                    <div class="component-item" draggable="true" data-component="timeline" onclick="addComponent('timeline')">
-                        <div class="component-icon">📅</div>
-                        <div>Timeline</div>
-                        <div class="component-badge">PRO</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Marketplace Section -->
-            <div class="marketplace-section" id="marketplaceSection">
-                <div class="section-title">🛒 Premium Components</div>
-                <div class="marketplace-item" onclick="purchaseComponent('ecommerce')">
-                    <div class="marketplace-header">
-                        <div class="marketplace-title">E-commerce Section</div>
-                        <div class="marketplace-price">$9.99</div>
-                    </div>
-                    <div class="marketplace-desc">Complete product showcase with cart functionality</div>
-                </div>
-                <div class="marketplace-item" onclick="purchaseComponent('blog')">
-                    <div class="marketplace-header">
-                        <div class="marketplace-title">Blog Layout</div>
-                        <div class="marketplace-price">$7.99</div>
-                    </div>
-                    <div class="marketplace-desc">Professional blog with sidebar and comments</div>
-                </div>
-                <div class="marketplace-item" onclick="purchaseComponent('dashboard')">
-                    <div class="marketplace-header">
-                        <div class="marketplace-title">Dashboard Widget</div>
-                        <div class="marketplace-price">$12.99</div>
-                    </div>
-                    <div class="marketplace-desc">Interactive charts and data visualization</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main Builder Area -->
-        <div class="main-builder">
-            <div class="builder-topbar">
-                <div class="builder-title">🎨 Visual Builder Pro</div>
-                <div class="builder-actions">
-                    <button class="btn btn-secondary" onclick="previewPage()">👁️ Preview</button>
-                    <button class="btn btn-primary" onclick="showExportModal()">📤 Export</button>
-                    <button class="btn btn-secondary" onclick="saveProject()">💾 Save</button>
-                    <button class="btn btn-secondary" onclick="testFunction()" style="background: #ff6b6b;">🧪 Test JS</button>
-                </div>
-            </div>
-            
-            <div class="canvas-container">
-                <div class="canvas">
-                    <div class="drop-zone" id="dropZone">
-                        <div style="text-align: center; color: #666; padding: 40px 20px;">
-                            <div style="font-size: 2rem; margin-bottom: 10px;">🎨</div>
-                            <div style="font-size: 1.2rem; margin-bottom: 10px;">Drag components here</div>
-                            <div style="font-size: 0.9rem; opacity: 0.7;">Start building your page by dragging components from the sidebar</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Export Modal -->
-    <div class="modal" id="exportModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">📤 Export Your Project</div>
-                <button class="close-btn" onclick="hideExportModal()">&times;</button>
-            </div>
-            <div class="export-options">
-                <div class="export-option" onclick="selectExport('html')">
-                    <div class="export-icon">🌐</div>
-                    <div class="export-name">HTML/CSS</div>
-                    <div class="export-desc">Static website files</div>
-                </div>
-                <div class="export-option" onclick="selectExport('react')">
-                    <div class="export-icon">⚛️</div>
-                    <div class="export-name">React</div>
-                    <div class="export-desc">React components</div>
-                </div>
-                <div class="export-option" onclick="selectExport('vue')">
-                    <div class="export-icon">💚</div>
-                    <div class="export-name">Vue.js</div>
-                    <div class="export-desc">Vue components</div>
-                </div>
-                <div class="export-option" onclick="selectExport('angular')">
-                    <div class="export-icon">🅰️</div>
-                    <div class="export-name">Angular</div>
-                    <div class="export-desc">Angular components</div>
-                </div>
-            </div>
-            <button class="btn btn-primary" onclick="exportProject()" style="width: 100%;">Export Project</button>
-        </div>
-    </div>
-
-    <div id="notification" class="notification"></div>
 
     <script>
         // Global variables
         let currentElements = [];
         let elementCounter = 0;
-        let selectedExport = 'html';
 
         // Component templates
         const components = {
             'hero': {
-                html: `
-                    <section class="hero-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 80px 20px; text-align: center; color: white;">
-                        <h1 style="font-size: 3rem; margin-bottom: 20px;">Welcome to Our Platform</h1>
-                        <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9;">Transform your ideas into reality with our cutting-edge solutions</p>
-                        <button style="background: #4ecdc4; color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer;">Get Started</button>
-                    </section>
-                `,
+                html: '<section style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 80px 20px; text-align: center; color: white;"><h1 style="font-size: 3rem; margin-bottom: 20px;">Welcome to Our Platform</h1><p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9;">Transform your ideas into reality</p><button style="background: #4ecdc4; color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer;">Get Started</button></section>',
                 name: 'Hero Section'
             },
             'text': {
-                html: `
-                    <div style="padding: 40px 20px; max-width: 800px; margin: 0 auto;">
-                        <h2 style="font-size: 2.5rem; margin-bottom: 20px; color: #333;">Amazing Content</h2>
-                        <p style="font-size: 1.1rem; line-height: 1.6; color: #666;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
-                    </div>
-                `,
+                html: '<div style="padding: 40px 20px; max-width: 800px; margin: 0 auto;"><h2 style="font-size: 2.5rem; margin-bottom: 20px; color: #333;">Amazing Content</h2><p style="font-size: 1.1rem; line-height: 1.6; color: #666;">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></div>',
                 name: 'Text Block'
             },
             'image': {
-                html: `
-                    <div style="text-align: center; padding: 40px 20px;">
-                        <img src="https://via.placeholder.com/600x400/4ecdc4/ffffff?text=Your+Image" alt="Placeholder" style="max-width: 100%; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-                    </div>
-                `,
+                html: '<div style="text-align: center; padding: 40px 20px;"><img src="https://via.placeholder.com/600x400/4ecdc4/ffffff?text=Your+Image" alt="Placeholder" style="max-width: 100%; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);"></div>',
                 name: 'Image'
             },
             'button': {
-                html: `
-                    <div style="text-align: center; padding: 40px 20px;">
-                        <button style="background: linear-gradient(45deg, #ff6b6b, #4ecdc4); color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; margin: 0 10px;">Primary Button</button>
-                        <button style="background: transparent; color: #333; border: 2px solid #333; padding: 15px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; margin: 0 10px;">Secondary Button</button>
-                    </div>
-                `,
+                html: '<div style="text-align: center; padding: 40px 20px;"><button style="background: linear-gradient(45deg, #ff6b6b, #4ecdc4); color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer;">Primary Button</button></div>',
                 name: 'Button'
             },
             'form': {
-                html: `
-                    <div style="background: #f8f9fa; padding: 40px 20px;">
-                        <div style="max-width: 600px; margin: 0 auto;">
-                            <h2 style="text-align: center; margin-bottom: 30px; color: #333;">Contact Us</h2>
-                            <form style="display: grid; gap: 20px;">
-                                <input type="text" placeholder="Your Name" style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem;">
-                                <input type="email" placeholder="Your Email" style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem;">
-                                <textarea placeholder="Your Message" rows="5" style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; resize: vertical;"></textarea>
-                                <button type="submit" style="background: #4ecdc4; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 1rem; cursor: pointer;">Send Message</button>
-                            </form>
-                        </div>
-                    </div>
-                `,
+                html: '<div style="background: #f8f9fa; padding: 40px 20px;"><div style="max-width: 600px; margin: 0 auto;"><h2 style="text-align: center; margin-bottom: 30px; color: #333;">Contact Us</h2><form style="display: grid; gap: 20px;"><input type="text" placeholder="Your Name" style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem;"><input type="email" placeholder="Your Email" style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem;"><button type="submit" style="background: #4ecdc4; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 1rem; cursor: pointer;">Send Message</button></form></div></div>',
                 name: 'Contact Form'
-            },
-            'gallery': {
-                html: `
-                    <div style="padding: 40px 20px;">
-                        <h2 style="text-align: center; margin-bottom: 30px; color: #333;">Photo Gallery</h2>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                            <img src="https://via.placeholder.com/300x200/ff6b6b/ffffff?text=Image+1" alt="Gallery 1" style="width: 100%; border-radius: 8px;">
-                            <img src="https://via.placeholder.com/300x200/4ecdc4/ffffff?text=Image+2" alt="Gallery 2" style="width: 100%; border-radius: 8px;">
-                            <img src="https://via.placeholder.com/300x200/45b7d1/ffffff?text=Image+3" alt="Gallery 3" style="width: 100%; border-radius: 8px;">
-                            <img src="https://via.placeholder.com/300x200/96ceb4/ffffff?text=Image+4" alt="Gallery 4" style="width: 100%; border-radius: 8px;">
-                        </div>
-                    </div>
-                `,
-                name: 'Gallery'
-            },
-            'pricing': {
-                html: `
-                    <div style="background: #f8f9fa; padding: 40px 20px;">
-                        <h2 style="text-align: center; margin-bottom: 30px; color: #333;">Pricing Plans</h2>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto;">
-                            <div style="background: white; padding: 30px; border-radius: 10px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                                <h3 style="color: #333; margin-bottom: 10px;">Basic</h3>
-                                <div style="font-size: 2.5rem; font-weight: bold; color: #4ecdc4; margin-bottom: 20px;">$9.99</div>
-                                <ul style="list-style: none; padding: 0; margin-bottom: 30px;">
-                                    <li style="padding: 5px 0;">✅ Feature 1</li>
-                                    <li style="padding: 5px 0;">✅ Feature 2</li>
-                                    <li style="padding: 5px 0;">✅ Feature 3</li>
-                                </ul>
-                                <button style="background: #4ecdc4; color: white; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer;">Choose Plan</button>
-                            </div>
-                            <div style="background: white; padding: 30px; border-radius: 10px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 2px solid #4ecdc4;">
-                                <h3 style="color: #333; margin-bottom: 10px;">Pro</h3>
-                                <div style="font-size: 2.5rem; font-weight: bold; color: #4ecdc4; margin-bottom: 20px;">$29.99</div>
-                                <ul style="list-style: none; padding: 0; margin-bottom: 30px;">
-                                    <li style="padding: 5px 0;">✅ All Basic Features</li>
-                                    <li style="padding: 5px 0;">✅ Pro Feature 1</li>
-                                    <li style="padding: 5px 0;">✅ Pro Feature 2</li>
-                                </ul>
-                                <button style="background: #4ecdc4; color: white; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer;">Choose Plan</button>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                name: 'Pricing Table'
-            },
-            'testimonials': {
-                html: `
-                    <div style="background: #f8f9fa; padding: 40px 20px;">
-                        <h2 style="text-align: center; margin-bottom: 30px; color: #333;">What Our Customers Say</h2>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto;">
-                            <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                                <div style="font-size: 1.2rem; margin-bottom: 20px; color: #666;">"Amazing platform! It transformed our workflow completely."</div>
-                                <div style="display: flex; align-items: center;">
-                                    <div style="width: 50px; height: 50px; background: #4ecdc4; border-radius: 50%; margin-right: 15px;"></div>
-                                    <div>
-                                        <div style="font-weight: bold; color: #333;">John Doe</div>
-                                        <div style="color: #666;">CEO, TechCorp</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                                <div style="font-size: 1.2rem; margin-bottom: 20px; color: #666;">"The best solution we've found for our development needs."</div>
-                                <div style="display: flex; align-items: center;">
-                                    <div style="width: 50px; height: 50px; background: #ff6b6b; border-radius: 50%; margin-right: 15px;"></div>
-                                    <div>
-                                        <div style="font-weight: bold; color: #333;">Jane Smith</div>
-                                        <div style="color: #666;">CTO, StartupXYZ</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                name: 'Testimonials'
-            },
-            'stats': {
-                html: `
-                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 60px 20px; color: white;">
-                        <h2 style="text-align: center; margin-bottom: 40px;">Our Impact</h2>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto;">
-                            <div style="text-align: center;">
-                                <div style="font-size: 3rem; font-weight: bold; margin-bottom: 10px;">10K+</div>
-                                <div style="font-size: 1.1rem;">Happy Customers</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 3rem; font-weight: bold; margin-bottom: 10px;">50M+</div>
-                                <div style="font-size: 1.1rem;">Lines of Code</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 3rem; font-weight: bold; margin-bottom: 10px;">99.9%</div>
-                                <div style="font-size: 1.1rem;">Uptime</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 3rem; font-weight: bold; margin-bottom: 10px;">24/7</div>
-                                <div style="font-size: 1.1rem;">Support</div>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                name: 'Statistics'
-            },
-            'timeline': {
-                html: `
-                    <div style="padding: 40px 20px;">
-                        <h2 style="text-align: center; margin-bottom: 40px; color: #333;">Our Journey</h2>
-                        <div style="max-width: 800px; margin: 0 auto;">
-                            <div style="position: relative; padding-left: 30px;">
-                                <div style="position: absolute; left: 0; top: 0; width: 20px; height: 20px; background: #4ecdc4; border-radius: 50%;"></div>
-                                <div style="margin-bottom: 30px;">
-                                    <h3 style="color: #333; margin-bottom: 5px;">2020 - Founded</h3>
-                                    <p style="color: #666;">Started with a vision to revolutionize web development</p>
-                                </div>
-                            </div>
-                            <div style="position: relative; padding-left: 30px;">
-                                <div style="position: absolute; left: 0; top: 0; width: 20px; height: 20px; background: #ff6b6b; border-radius: 50%;"></div>
-                                <div style="margin-bottom: 30px;">
-                                    <h3 style="color: #333; margin-bottom: 5px;">2022 - Growth</h3>
-                                    <p style="color: #666;">Reached 10,000+ users and launched premium features</p>
-                                </div>
-                            </div>
-                            <div style="position: relative; padding-left: 30px;">
-                                <div style="position: absolute; left: 0; top: 0; width: 20px; height: 20px; background: #45b7d1; border-radius: 50%;"></div>
-                                <div>
-                                    <h3 style="color: #333; margin-bottom: 5px;">2024 - Innovation</h3>
-                                    <p style="color: #666;">Leading the industry with AI-powered development tools</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                name: 'Timeline'
             }
         };
 
-        // Make all functions globally accessible
-        window.addComponent = function(type) {
+        // Global functions
+        function addComponent(type) {
             console.log('addComponent called with:', type);
             const dropZone = document.getElementById('dropZone');
             const component = components[type];
             
             if (component) {
-                const elementId = `element-${elementCounter++}`;
                 const elementDiv = document.createElement('div');
                 elementDiv.className = 'element';
-                elementDiv.id = elementId;
-                elementDiv.innerHTML = `
-                    <div class="element-controls">
-                        <button class="control-btn" onclick="editElement('${elementId}')">✏️</button>
-                        <button class="control-btn" onclick="duplicateElement('${elementId}')">📋</button>
-                        <button class="control-btn" onclick="deleteElement('${elementId}')">🗑️</button>
-                    </div>
-                    ${component.html}
-                `;
+                elementDiv.innerHTML = component.html;
                 
                 dropZone.appendChild(elementDiv);
                 currentElements.push({
-                    id: elementId,
+                    id: `element-${elementCounter++}`,
                     type: type,
                     name: component.name
                 });
                 
                 showNotification(`Added ${component.name} to your page`);
                 console.log('Component added successfully');
-            } else {
-                console.log('Component not found:', type);
             }
-        };
+        }
 
-        window.switchTab = function(tab, event) {
+        function switchTab(tab, event) {
             console.log('switchTab called with:', tab, event);
             const tabs = document.querySelectorAll('.sidebar-tab');
             const componentsSection = document.getElementById('componentsSection');
@@ -856,37 +281,18 @@
                 marketplaceSection.style.display = 'block';
             }
             console.log('Tab switched successfully');
-        };
+        }
 
-        window.previewPage = function() {
+        function previewPage() {
             console.log('previewPage called');
             const dropZone = document.getElementById('dropZone');
             const previewWindow = window.open('', '_blank');
-            previewWindow.document.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Page Preview</title>
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <style>
-                        body { margin: 0; font-family: Arial, sans-serif; }
-                    </style>
-                </head>
-                <body>
-                    ${dropZone.innerHTML.replace(/class="element-controls"[^>]*>.*?<\/div>/gs, '')}
-                </body>
-                </html>
-            `);
+            previewWindow.document.write('<html><head><title>Page Preview</title><style>body { margin: 0; font-family: Arial, sans-serif; }</style></head><body>' + dropZone.innerHTML + '</body></html>');
             previewWindow.document.close();
             console.log('Preview window opened');
-        };
+        }
 
-        window.showExportModal = function() {
-            console.log('showExportModal called');
-            document.getElementById('exportModal').style.display = 'block';
-        };
-
-        window.saveProject = function() {
+        function saveProject() {
             console.log('saveProject called');
             const projectData = {
                 elements: currentElements,
@@ -896,116 +302,12 @@
             localStorage.setItem('builderProject', JSON.stringify(projectData));
             showNotification('Project saved successfully!');
             console.log('Project saved');
-        };
+        }
 
-        window.exportProject = function() {
-            console.log('exportProject called');
-            const dropZone = document.getElementById('dropZone');
-            const content = dropZone.innerHTML.replace(/class="element-controls"[^>]*>.*?<\/div>/gs, '');
-            
-            let exportContent = '';
-            
-            switch(selectedExport) {
-                case 'html':
-                    exportContent = `<!DOCTYPE html>
-<html>
-<head>
-    <title>Your Website</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body { margin: 0; font-family: Arial, sans-serif; }
-    </style>
-</head>
-<body>
-    ${content}
-</body>
-</html>`;
-                    break;
-                case 'react':
-                    exportContent = `import React from 'react';
-
-function App() {
-    return (
-        <div>
-            ${content.replace(/class=/g, 'className=').replace(/style="([^"]*)"/g, 'style={{$1}}')}
-        </div>
-    );
-}
-
-export default App;`;
-                    break;
-                case 'vue':
-                    exportContent = `<template>
-    <div>
-        ${content}
-    </div>
-</template>
-
-<script>
-export default {
-    name: 'App'
-}
-</script>`;
-                    break;
-                case 'angular':
-                    exportContent = `<div>
-    ${content}
-</div>`;
-                    break;
-            }
-            
-            const blob = new Blob([exportContent], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `website-${selectedExport}.${selectedExport === 'html' ? 'html' : 'js'}`;
-            a.click();
-            
-            hideExportModal();
-            showNotification(`Project exported as ${selectedExport.toUpperCase()}!`);
-            console.log('Project exported successfully');
-        };
-
-        window.hideExportModal = function() {
-            console.log('hideExportModal called');
-            document.getElementById('exportModal').style.display = 'none';
-        };
-
-        window.selectExport = function(type) {
-            console.log('selectExport called with:', type);
-            selectedExport = type;
-            document.querySelectorAll('.export-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-            event.target.closest('.export-option').classList.add('selected');
-        };
-
-        window.editElement = function(elementId) {
-            showNotification('Edit functionality coming soon!');
-        };
-
-        window.duplicateElement = function(elementId) {
-            const element = document.getElementById(elementId);
-            if (element) {
-                const clone = element.cloneNode(true);
-                clone.id = `element-${elementCounter++}`;
-                element.parentNode.appendChild(clone);
-                showNotification('Element duplicated successfully!');
-            }
-        };
-
-        window.deleteElement = function(elementId) {
-            const element = document.getElementById(elementId);
-            if (element) {
-                element.remove();
-                currentElements = currentElements.filter(el => el.id !== elementId);
-                showNotification('Element deleted successfully!');
-            }
-        };
-
-        window.purchaseComponent = function(componentType) {
-            showNotification('Purchase functionality coming soon! This would integrate with your payment system.');
-        };
+        function testFunction() {
+            console.log('Test function called successfully!');
+            alert('JavaScript is working!');
+        }
 
         function showNotification(message) {
             const notification = document.getElementById('notification');
@@ -1017,86 +319,83 @@ export default {
             }, 3000);
         }
 
-        // Initialize drag and drop
-        function initializeDragAndDrop() {
-            const componentItems = document.querySelectorAll('.component-item');
-            const dropZone = document.getElementById('dropZone');
-
-            componentItems.forEach(item => {
-                item.addEventListener('dragstart', handleDragStart);
-                item.addEventListener('dragend', handleDragEnd);
-                // Prevent click event during drag
-                item.addEventListener('mousedown', function(e) {
-                    this.dragStartX = e.clientX;
-                    this.dragStartY = e.clientY;
-                });
-                item.addEventListener('mouseup', function(e) {
-                    const dragDistance = Math.sqrt(
-                        Math.pow(e.clientX - this.dragStartX, 2) + 
-                        Math.pow(e.clientY - this.dragStartY, 2)
-                    );
-                    // Only trigger click if it's not a drag
-                    if (dragDistance < 5) {
-                        const componentType = this.getAttribute('data-component');
-                        addComponent(componentType);
-                    }
-                });
-            });
-
-            dropZone.addEventListener('dragover', handleDragOver);
-            dropZone.addEventListener('drop', handleDrop);
-            dropZone.addEventListener('dragenter', handleDragEnter);
-            dropZone.addEventListener('dragleave', handleDragLeave);
-        }
-
-        function handleDragStart(e) {
-            e.target.classList.add('dragging');
-            e.dataTransfer.setData('text/plain', e.target.dataset.component);
-        }
-
-        function handleDragEnd(e) {
-            e.target.classList.remove('dragging');
-        }
-
-        function handleDragOver(e) {
-            e.preventDefault();
-        }
-
-        function handleDragEnter(e) {
-            e.preventDefault();
-            e.target.closest('.drop-zone').classList.add('drag-over');
-        }
-
-        function handleDragLeave(e) {
-            if (!e.target.closest('.drop-zone').contains(e.relatedTarget)) {
-                e.target.closest('.drop-zone').classList.remove('drag-over');
-            }
-        }
-
-        function handleDrop(e) {
-            e.preventDefault();
-            const componentType = e.dataTransfer.getData('text/plain');
-            const dropZone = e.target.closest('.drop-zone');
-            
-            dropZone.classList.remove('drag-over');
-            
-            if (componentType && components[componentType]) {
-                addComponent(componentType);
-            }
-        }
-
-        // Test function to verify JavaScript is working
-        window.testFunction = function() {
-            console.log('Test function called successfully!');
-            alert('JavaScript is working!');
-        };
-
         // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, initializing builder...');
-            initializeDragAndDrop();
-            showNotification('Enhanced Visual Builder Pro loaded! Drag components to start building.');
-        });
+        window.onload = function() {
+            console.log('Page loaded, initializing builder...');
+            showNotification('Enhanced Visual Builder Pro loaded! Click components to add them.');
+        };
     </script>
+</head>
+<body>
+    <a href="index.html" class="back-btn">← Back to Home</a>
+    
+    <div class="builder-container">
+        <div class="sidebar">
+            <div class="builder-header">
+                <div class="logo">🎨 Visual Builder Pro</div>
+            </div>
+            
+            <div class="sidebar-tabs">
+                <div class="sidebar-tab active" onclick="switchTab('components', event)">🧩 Components</div>
+                <div class="sidebar-tab" onclick="switchTab('marketplace', event)">🛒 Marketplace</div>
+            </div>
+            
+            <div class="components-section" id="componentsSection">
+                <div class="section-title">📦 Basic Components</div>
+                <div class="component-grid">
+                    <div class="component-item" onclick="addComponent('hero')">
+                        <div class="component-icon">🎯</div>
+                        <div>Hero Section</div>
+                    </div>
+                    <div class="component-item" onclick="addComponent('text')">
+                        <div class="component-icon">📝</div>
+                        <div>Text Block</div>
+                    </div>
+                    <div class="component-item" onclick="addComponent('image')">
+                        <div class="component-icon">🖼️</div>
+                        <div>Image</div>
+                    </div>
+                    <div class="component-item" onclick="addComponent('button')">
+                        <div class="component-icon">🔘</div>
+                        <div>Button</div>
+                    </div>
+                    <div class="component-item" onclick="addComponent('form')">
+                        <div class="component-icon">📋</div>
+                        <div>Contact Form</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="components-section" id="marketplaceSection" style="display: none;">
+                <div class="section-title">🛒 Premium Components</div>
+                <div style="color: #fff; text-align: center; padding: 20px;">
+                    Premium components coming soon!
+                </div>
+            </div>
+        </div>
+
+        <div class="main-builder">
+            <div class="builder-topbar">
+                <div class="builder-title">🎨 Visual Builder Pro</div>
+                <div class="builder-actions">
+                    <button class="btn btn-secondary" onclick="previewPage()">👁️ Preview</button>
+                    <button class="btn btn-primary" onclick="saveProject()">💾 Save</button>
+                    <button class="btn btn-secondary" onclick="testFunction()" style="background: #ff6b6b;">🧪 Test JS</button>
+                </div>
+            </div>
+            
+            <div class="canvas-container">
+                <div class="drop-zone" id="dropZone">
+                    <div style="text-align: center; padding: 40px 20px;">
+                        <div style="font-size: 2rem; margin-bottom: 10px;">🎨</div>
+                        <div style="font-size: 1.2rem; margin-bottom: 10px;">Click components to add them</div>
+                        <div style="font-size: 0.9rem; opacity: 0.7;">Start building your page by clicking components from the sidebar</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
 </body>
 </html> 
