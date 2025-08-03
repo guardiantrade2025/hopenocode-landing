@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Static Code Generator</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            padding: 20px; 
+            background: #f0f0f0; 
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h1 { 
+            text-align: center; 
+            color: #333; 
+            margin-bottom: 30px;
+        }
+        .code-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+        }
+        .code-title {
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .description {
+            text-align: center;
+            color: #6c757d;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Static Code Generator</h1>
+        <div class="description">
+            Here are some example code snippets for different programming languages
+        </div>
+        
+        <div class="code-section">
+            <div class="code-title">JavaScript Example</div>
+            <div class="code-block">// Create a function that calculates the sum of an array
+function CalculateSumArray() {
+    console.log("Hello from JavaScript!");
+    return "Generated code";
+}
+
+// Usage
+var result = CalculateSumArray();
+console.log(result);</div>
+        </div>
+        
+        <div class="code-section">
+            <div class="code-title">Python Example</div>
+            <div class="code-block"># Create a function that calculates the sum of an array
+import csv
+
+def CalculateSumArray():
+    try:
+        with open("data.csv", "r") as file:
+            reader = csv.reader(file)
+            for row in reader:
+                print("Processing:", row)
+        return "Data processed successfully"
+    except Exception as e:
+        print("Error:", e)
+        return None
+
+# Usage
+result = CalculateSumArray()
+print(result)</div>
+        </div>
+        
+        <div class="code-section">
+            <div class="code-title">React Example</div>
+            <div class="code-block">import React from "react";
+
+// Create a function that calculates the sum of an array
+var CalculateSumArray = function() {
+    return (
+        <div>
+            <h2>Generated React Component</h2>
+            <p>Hello from React!</p>
+        </div>
+    );
+};
+
+export default CalculateSumArray;</div>
+        </div>
+        
+        <div class="code-section">
+            <div class="code-title">Vue Example</div>
+            <div class="code-block"><template>
+    <div>
+        <h2>Generated Vue Component</h2>
+        <p>Hello from Vue!</p>
+    </div>
+</template>
+
+<script>
+// Create a function that calculates the sum of an array
+export default {
+    name: "CalculateSumArray"
+}
+</script></div>
+        </div>
+    </div>
+</body>
+</html> 
