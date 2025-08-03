@@ -161,30 +161,36 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        .canvas-container {
-            flex: 1;
-            background: white;
-            margin: 20px;
-            border-radius: 10px;
-            overflow: hidden;
-        }
+                 .canvas-container {
+             flex: 1;
+             background: white;
+             margin: 20px;
+             border-radius: 10px;
+             overflow: auto;
+             max-height: calc(100vh - 120px);
+         }
 
-        .drop-zone {
-            min-height: 100%;
-            padding: 20px;
-            color: #666;
-        }
+         .drop-zone {
+             min-height: 100%;
+             padding: 20px;
+             color: #666;
+             width: 100%;
+             box-sizing: border-box;
+         }
 
-        .element {
-            position: relative;
-            margin-bottom: 10px;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
+                 .element {
+             position: relative;
+             margin-bottom: 20px;
+             border: 2px solid transparent;
+             transition: all 0.3s ease;
+             width: 100%;
+             box-sizing: border-box;
+         }
 
-        .element:hover {
-            border-color: #4ecdc4;
-        }
+         .element:hover {
+             border-color: #4ecdc4;
+             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+         }
 
         .notification {
             position: fixed;
@@ -198,18 +204,43 @@
             display: none;
         }
 
-        .back-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 20px;
-            text-decoration: none;
-            backdrop-blur: 10px;
-            z-index: 100;
-        }
+                 .back-btn {
+             position: fixed;
+             top: 20px;
+             left: 20px;
+             background: rgba(255,255,255,0.2);
+             color: white;
+             padding: 10px 15px;
+             border-radius: 20px;
+             text-decoration: none;
+             backdrop-blur: 10px;
+             z-index: 100;
+         }
+
+         /* Ensure content is fully visible */
+         .element > * {
+             max-width: 100%;
+             box-sizing: border-box;
+         }
+
+         /* Improve scrolling */
+         .canvas-container::-webkit-scrollbar {
+             width: 8px;
+         }
+
+         .canvas-container::-webkit-scrollbar-track {
+             background: #f1f1f1;
+             border-radius: 4px;
+         }
+
+         .canvas-container::-webkit-scrollbar-thumb {
+             background: #c1c1c1;
+             border-radius: 4px;
+         }
+
+         .canvas-container::-webkit-scrollbar-thumb:hover {
+             background: #a8a8a8;
+         }
     </style>
 
     <script>
