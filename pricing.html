@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing Strategy - HopeNocode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+        }
+
+        .pricing-toggle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 3rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem;
+            border-radius: 10px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem 1rem;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn.active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .pricing-card.featured {
+            border: 3px solid #667eea;
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: "MOST POPULAR";
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #667eea;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .plan-price {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-period {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .plan-features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+            color: #555;
+        }
+
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+
+        .plan-features li::before {
+            content: "✓";
+            color: #4CAF50;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .plan-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .plan-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .enterprise-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .enterprise-card .plan-name,
+        .enterprise-card .plan-price {
+            color: white;
+        }
+
+        .enterprise-card .plan-features li {
+            color: rgba(255, 255, 255, 0.9);
+            border-bottom-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .enterprise-card .plan-btn {
+            background: white;
+            color: #667eea;
+        }
+
+        .enterprise-card .plan-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .comparison-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .comparison-section h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .comparison-table td:first-child {
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .feature-yes {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .feature-no {
+            color: #f44336;
+        }
+
+        .feature-limited {
+            color: #ff9800;
+        }
+
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .testimonial {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .testimonial-content {
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: #555;
+        }
+
+        .testimonial-author {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .faq-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .faq-section h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .faq-item {
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+        }
+
+        .faq-question {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+
+        .faq-answer {
+            color: #666;
+            display: none;
+        }
+
+        .faq-answer.show {
+            display: block;
+        }
+
+        .cta-section {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 3rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-section h2 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .cta-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 0.5rem;
+        }
+
+        .cta-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .cta-btn.secondary {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .cta-btn.secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .pricing-card.featured {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="nav">
+            <div class="logo">HopeNocode</div>
+            <button class="back-btn" onclick="window.location.href='index.html'">← Back to Home</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Choose Your Perfect Plan</h1>
+            <p>Start free, scale as you grow. No hidden fees, cancel anytime.</p>
+            
+            <div class="pricing-toggle">
+                <button class="toggle-btn active" onclick="togglePricing('monthly')">Monthly</button>
+                <button class="toggle-btn" onclick="togglePricing('yearly')">Yearly (Save 20%)</button>
+            </div>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Starter Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">Starter</div>
+                <div class="plan-price" id="starter-price">$29</div>
+                <div class="plan-period" id="starter-period">/month</div>
+                <ul class="plan-features">
+                    <li>5 AI Code Generations per day</li>
+                    <li>Basic Code Review</li>
+                    <li>10 Templates</li>
+                    <li>Email Support</li>
+                    <li>Community Access</li>
+                </ul>
+                <button class="plan-btn" onclick="selectPlan('starter')">Start Free Trial</button>
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="pricing-card featured">
+                <div class="plan-name">Pro</div>
+                <div class="plan-price" id="pro-price">$99</div>
+                <div class="plan-period" id="pro-period">/month</div>
+                <ul class="plan-features">
+                    <li>Unlimited AI Code Generations</li>
+                    <li>Advanced Code Review & Security</li>
+                    <li>100+ Premium Templates</li>
+                    <li>Priority Support</li>
+                    <li>Analytics Dashboard</li>
+                    <li>Custom Branding</li>
+                    <li>API Access</li>
+                </ul>
+                <button class="plan-btn" onclick="selectPlan('pro')">Start Free Trial</button>
+            </div>
+
+            <!-- Enterprise Plan -->
+            <div class="pricing-card enterprise-card">
+                <div class="plan-name">Enterprise</div>
+                <div class="plan-price" id="enterprise-price">$299</div>
+                <div class="plan-period" id="enterprise-period">/month</div>
+                <ul class="plan-features">
+                    <li>Everything in Pro</li>
+                    <li>White-label Solutions</li>
+                    <li>Custom AI Models</li>
+                    <li>Dedicated Support</li>
+                    <li>Advanced Analytics</li>
+                    <li>Team Collaboration</li>
+                    <li>Custom Integrations</li>
+                    <li>SLA Guarantee</li>
+                </ul>
+                <button class="plan-btn" onclick="selectPlan('enterprise')">Contact Sales</button>
+            </div>
+        </div>
+
+        <!-- Feature Comparison -->
+        <div class="comparison-section">
+            <h2>Feature Comparison</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Starter</th>
+                        <th>Pro</th>
+                        <th>Enterprise</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AI Code Generation</td>
+                        <td class="feature-limited">5/day</td>
+                        <td class="feature-yes">Unlimited</td>
+                        <td class="feature-yes">Custom Models</td>
+                    </tr>
+                    <tr>
+                        <td>Code Review</td>
+                        <td class="feature-yes">Basic</td>
+                        <td class="feature-yes">Advanced</td>
+                        <td class="feature-yes">Enterprise</td>
+                    </tr>
+                    <tr>
+                        <td>Templates</td>
+                        <td class="feature-limited">10</td>
+                        <td class="feature-yes">100+</td>
+                        <td class="feature-yes">Unlimited</td>
+                    </tr>
+                    <tr>
+                        <td>Analytics</td>
+                        <td class="feature-no">-</td>
+                        <td class="feature-yes">Basic</td>
+                        <td class="feature-yes">Advanced</td>
+                    </tr>
+                    <tr>
+                        <td>Support</td>
+                        <td class="feature-limited">Email</td>
+                        <td class="feature-yes">Priority</td>
+                        <td class="feature-yes">Dedicated</td>
+                    </tr>
+                    <tr>
+                        <td>API Access</td>
+                        <td class="feature-no">-</td>
+                        <td class="feature-yes">Basic</td>
+                        <td class="feature-yes">Full</td>
+                    </tr>
+                    <tr>
+                        <td>White-label</td>
+                        <td class="feature-no">-</td>
+                        <td class="feature-no">-</td>
+                        <td class="feature-yes">✓</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Testimonials -->
+        <div class="testimonials">
+            <div class="testimonial">
+                <div class="testimonial-content">
+                    "HopeNocode has transformed our development workflow. The AI code generation saves us hours every day."
+                </div>
+                <div class="testimonial-author">- Sarah Chen, CTO at TechFlow</div>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-content">
+                    "The Pro plan is perfect for our startup. We get enterprise features at a fraction of the cost."
+                </div>
+                <div class="testimonial-author">- Mike Rodriguez, Founder of DevStart</div>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-content">
+                    "Enterprise support is incredible. They helped us integrate custom AI models in just 2 weeks."
+                </div>
+                <div class="testimonial-author">- Lisa Thompson, VP Engineering at ScaleCorp</div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">Can I change plans anytime?</div>
+                <div class="faq-answer">Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">Is there a free trial?</div>
+                <div class="faq-answer">Absolutely! All plans come with a 14-day free trial. No credit card required to start.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">What payment methods do you accept?</div>
+                <div class="faq-answer">We accept all major credit cards, PayPal, and bank transfers for Enterprise plans.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">Can I cancel anytime?</div>
+                <div class="faq-answer">Yes, you can cancel your subscription at any time. No long-term contracts or hidden fees.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">Do you offer refunds?</div>
+                <div class="faq-answer">We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your payment.</div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="cta-section">
+            <h2>Ready to Transform Your Development?</h2>
+            <p>Join thousands of developers who are already building faster with AI-powered tools.</p>
+            <button class="cta-btn" onclick="selectPlan('pro')">Start Free Trial</button>
+            <button class="cta-btn secondary" onclick="window.location.href='auth.html'">Sign Up Free</button>
+        </div>
+    </div>
+
+    <script>
+        let currentPricing = 'monthly';
+
+        function togglePricing(period) {
+            currentPricing = period;
+            
+            // Update toggle buttons
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update prices
+            if (period === 'monthly') {
+                document.getElementById('starter-price').textContent = '$29';
+                document.getElementById('pro-price').textContent = '$99';
+                document.getElementById('enterprise-price').textContent = '$299';
+                document.getElementById('starter-period').textContent = '/month';
+                document.getElementById('pro-period').textContent = '/month';
+                document.getElementById('enterprise-period').textContent = '/month';
+            } else {
+                document.getElementById('starter-price').textContent = '$23';
+                document.getElementById('pro-price').textContent = '$79';
+                document.getElementById('enterprise-price').textContent = '$239';
+                document.getElementById('starter-period').textContent = '/month';
+                document.getElementById('pro-period').textContent = '/month';
+                document.getElementById('enterprise-period').textContent = '/month';
+            }
+        }
+
+        function selectPlan(plan) {
+            // Simulate plan selection
+            const plans = {
+                starter: { name: 'Starter', price: currentPricing === 'monthly' ? '$29' : '$23' },
+                pro: { name: 'Pro', price: currentPricing === 'monthly' ? '$99' : '$79' },
+                enterprise: { name: 'Enterprise', price: currentPricing === 'monthly' ? '$299' : '$239' }
+            };
+            
+            const selectedPlan = plans[plan];
+            
+            // Show confirmation
+            if (confirm(`You've selected the ${selectedPlan.name} plan at ${selectedPlan.price}/month. Would you like to proceed to checkout?`)) {
+                // Redirect to checkout or auth page
+                window.location.href = 'auth.html';
+            }
+        }
+
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            answer.classList.toggle('show');
+        }
+
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate pricing cards on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            document.querySelectorAll('.pricing-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html> 
