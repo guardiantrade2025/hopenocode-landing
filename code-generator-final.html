@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Code Generator - HopeNocode</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .back-arrow {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .back-arrow:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+        
+        .status {
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        
+        .language-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .lang-btn {
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .lang-btn.active {
+            background: #4ecdc4;
+            border-color: #4ecdc4;
+        }
+        
+        .input-section {
+            margin-bottom: 30px;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 15px;
+            color: white;
+            font-size: 16px;
+            resize: vertical;
+        }
+        
+        textarea::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: #4ecdc4;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        
+        .generate-btn:hover {
+            background: #45b7aa;
+        }
+        
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .output-section {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .copy-btn {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .code-output {
+            background: rgba(0,0,0,0.5);
+            border-radius: 5px;
+            padding: 15px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 14px;
+            min-height: 150px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid #4ecdc4;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-arrow">←</a>
+    
+    <div class="container">
+        <h1>Final Code Generator</h1>
+        
+        <div class="status" id="status">Ready to generate code</div>
+        
+        <div class="language-buttons">
+            <button class="lang-btn active" onclick="setLang('javascript', this)">JavaScript</button>
+            <button class="lang-btn" onclick="setLang('python', this)">Python</button>
+            <button class="lang-btn" onclick="setLang('react', this)">React</button>
+            <button class="lang-btn" onclick="setLang('vue', this)">Vue</button>
+            <button class="lang-btn" onclick="setLang('nodejs', this)">Node.js</button>
+            <button class="lang-btn" onclick="setLang('php', this)">PHP</button>
+        </div>
+        
+        <div class="input-section">
+            <textarea id="codeInput" placeholder="Describe what you want to build..."></textarea>
+            <button class="generate-btn" onclick="generate()">Generate Code</button>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <div>Generating code...</div>
+            </div>
+        </div>
+        
+        <div class="output-section">
+            <div class="output-header">
+                <div><strong>Generated Code</strong></div>
+                <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+            </div>
+            <div class="code-output" id="codeOutput">Your generated code will appear here...</div>
+        </div>
+    </div>
+
+    <script>
+        var currentLang = 'javascript';
+        var generatedCode = '';
+        
+        function setLang(lang, btn) {
+            console.log('Language selected:', lang);
+            
+            var buttons = document.querySelectorAll('.lang-btn');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove('active');
+            }
+            
+            btn.classList.add('active');
+            currentLang = lang;
+            
+            document.getElementById('status').textContent = 'Language selected: ' + currentLang;
+            generatedCode = '';
+            document.getElementById('codeOutput').textContent = 'Your generated code will appear here...';
+        }
+        
+        function generate() {
+            console.log('Generate button clicked');
+            
+            var input = document.getElementById('codeInput').value.trim();
+            console.log('Input:', input);
+            
+            if (!input) {
+                alert('Please describe what you want to build');
+                return;
+            }
+            
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('status').textContent = 'Generating ' + currentLang + ' code...';
+            
+            setTimeout(function() {
+                try {
+                    var code = '';
+                    
+                    if (currentLang === 'javascript') {
+                        code = '// ' + input + '\nfunction ' + getName(input) + '() {\n    console.log("Hello from JavaScript!");\n    return "Generated code";\n}\n\n// Usage\nvar result = ' + getName(input) + '();\nconsole.log(result);';
+                    } else if (currentLang === 'python') {
+                        code = '# ' + input + '\nimport csv\n\ndef ' + getName(input) + '():\n    try:\n        with open("data.csv", "r") as file:\n            reader = csv.reader(file)\n            for row in reader:\n                print("Processing:", row)\n        return "Data processed successfully"\n    except Exception as e:\n        print("Error:", e)\n        return None\n\n# Usage\nresult = ' + getName(input) + '()\nprint(result)';
+                    } else if (currentLang === 'react') {
+                        code = 'import React from "react";\n\n// ' + input + '\nvar ' + getCompName(input) + ' = function() {\n    return (\n        <div>\n            <h2>Generated React Component</h2>\n            <p>Hello from React!</p>\n        </div>\n    );\n};\n\nexport default ' + getCompName(input) + ';';
+                    } else if (currentLang === 'vue') {
+                        code = '<template>\n    <div>\n        <h2>Generated Vue Component</h2>\n        <p>Hello from Vue!</p>\n    </div>\n</template>\n\n<script>\n// ' + input + '\nexport default {\n    name: "' + getCompName(input) + '"\n}\n</script>';
+                    } else if (currentLang === 'nodejs') {
+                        code = '// ' + input + '\nvar express = require("express");\nvar app = express();\n\nfunction ' + getName(input) + '() {\n    console.log("Hello from Node.js!");\n    return "Generated code";\n}\n\napp.get("/", function(req, res) {\n    res.send("Hello World!");\n});\n\nvar PORT = process.env.PORT || 3000;\napp.listen(PORT, function() {\n    console.log("Server running on port " + PORT);\n});';
+                    } else if (currentLang === 'php') {
+                        code = '<?php\n// ' + input + '\n\nfunction ' + getName(input) + '() {\n    echo "Hello from PHP!";\n    return "Generated code";\n}\n\n// Usage\n$result = ' + getName(input) + '();\necho $result;\n?>';
+                    }
+                    
+                    generatedCode = code;
+                    document.getElementById('codeOutput').textContent = code;
+                    document.getElementById('status').textContent = 'Code generated successfully for ' + currentLang;
+                } catch (error) {
+                    console.error('Error generating code:', error);
+                    document.getElementById('codeOutput').textContent = 'Error: Failed to generate code. Please try again.';
+                    document.getElementById('status').textContent = 'Error occurred during generation';
+                } finally {
+                    document.getElementById('loading').style.display = 'none';
+                }
+            }, 1500);
+        }
+        
+        function getName(text) {
+            var words = text.toLowerCase().split(' ').slice(0, 3);
+            var result = '';
+            for (var i = 0; i < words.length; i++) {
+                result += words[i].charAt(0).toUpperCase() + words[i].slice(1);
+            }
+            return result + 'Function';
+        }
+        
+        function getCompName(text) {
+            var words = text.toLowerCase().split(' ').slice(0, 3);
+            var result = '';
+            for (var i = 0; i < words.length; i++) {
+                result += words[i].charAt(0).toUpperCase() + words[i].slice(1);
+            }
+            return result + 'Component';
+        }
+        
+        function copyCode() {
+            if (generatedCode) {
+                navigator.clipboard.writeText(generatedCode).then(function() {
+                    var copyBtn = document.querySelector('.copy-btn');
+                    var originalText = copyBtn.textContent;
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(function() {
+                        copyBtn.textContent = originalText;
+                    }, 2000);
+                }).catch(function(err) {
+                    console.error('Failed to copy code:', err);
+                    alert('Failed to copy code. Please select and copy manually.');
+                });
+            }
+        }
+        
+        console.log('Final code generator loaded successfully');
+    </script>
+</body>
+</html> 
