@@ -265,7 +265,115 @@
         }
     </style>
 
+    <script>
+        // Global variables
+        var currentLanguage = 'javascript';
+        var generatedCode = '';
 
+        // Language selection function
+        function selectLanguage(lang, button) {
+            console.log('selectLanguage called with:', lang);
+            var allButtons = document.querySelectorAll('.lang-btn');
+            for (var i = 0; i < allButtons.length; i++) {
+                allButtons[i].classList.remove('active');
+            }
+            
+            button.classList.add('active');
+            currentLanguage = lang;
+            
+            document.getElementById('status').textContent = 'Language selected: ' + currentLanguage;
+            generatedCode = '';
+        }
+
+        // Code generation function
+        function generateCode() {
+            console.log('generateCode called');
+            var input = document.getElementById('codeInput').value.trim();
+            
+            if (!input) {
+                alert('Please describe what you want to build');
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('generateBtn').disabled = true;
+            document.getElementById('status').textContent = 'Generating ' + currentLanguage + ' code...';
+
+            setTimeout(function() {
+                try {
+                    generatedCode = generateCodeForLanguage(input, currentLanguage);
+                    document.getElementById('status').textContent = 'Code generated successfully for ' + currentLanguage + '! Check your clipboard.';
+                    // Copy to clipboard automatically
+                    navigator.clipboard.writeText(generatedCode).then(function() {
+                        alert('Code generated and copied to clipboard!');
+                    }).catch(function(err) {
+                        console.error('Failed to copy code:', err);
+                        alert('Code generated! Please check the console for the code.');
+                    });
+                } catch (error) {
+                    console.error('Error generating code:', error);
+                    document.getElementById('status').textContent = 'Error occurred during generation';
+                } finally {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('generateBtn').disabled = false;
+                }
+            }, 1500);
+        }
+
+        // Code generation for specific language
+        function generateCodeForLanguage(description, language) {
+            var functionName = generateFunctionName(description);
+            var componentName = generateComponentName(description);
+            
+            var templates = {
+                javascript: '// ' + description + '\nfunction ' + functionName + '() {\n    console.log("Hello from JavaScript!");\n    return "Generated code";\n}\n\n// Usage\nvar result = ' + functionName + '();\nconsole.log(result);',
+                
+                python: '# ' + description + '\nimport csv\n\ndef ' + functionName + '():\n    try:\n        with open("data.csv", "r") as file:\n            reader = csv.reader(file)\n            for row in reader:\n                print("Processing:", row)\n        return "Data processed successfully"\n    except Exception as e:\n        print("Error:", e)\n        return None\n\n# Usage\nresult = ' + functionName + '()\nprint(result)',
+                
+                react: 'import React from "react";\n\n// ' + description + '\nvar ' + componentName + ' = function() {\n    return (\n        <div>\n            <h2>Generated React Component</h2>\n            <p>Hello from React!</p>\n        </div>\n    );\n};\n\nexport default ' + componentName + ';',
+                
+                vue: '<template>\n    <div>\n        <h2>Generated Vue Component</h2>\n        <p>Hello from Vue!</p>\n    </div>\n</template>\n\n<script>\n// ' + description + '\nexport default {\n    name: "' + componentName + '"\n}\n</script>',
+                
+                nodejs: '// ' + description + '\nvar express = require("express");\nvar app = express();\n\nfunction ' + functionName + '() {\n    console.log("Hello from Node.js!");\n    return "Generated code";\n}\n\napp.get("/", function(req, res) {\n    res.send("Hello World!");\n});\n\nvar PORT = process.env.PORT || 3000;\napp.listen(PORT, function() {\n    console.log("Server running on port " + PORT);\n});',
+                
+                php: '<?php\n// ' + description + '\n\nfunction ' + functionName + '() {\n    echo "Hello from PHP!";\n    return "Generated code";\n}\n\n// Usage\n$result = ' + functionName + '();\necho $result;\n?>'
+            };
+
+            return templates[language] || templates.javascript;
+        }
+
+        // Generate function name from description
+        function generateFunctionName(description) {
+            var words = description.toLowerCase().split(' ').slice(0, 3);
+            var result = '';
+            for (var i = 0; i < words.length; i++) {
+                result += words[i].charAt(0).toUpperCase() + words[i].slice(1);
+            }
+            return result + 'Function';
+        }
+
+        // Generate component name from description
+        function generateComponentName(description) {
+            var words = description.toLowerCase().split(' ').slice(0, 3);
+            var result = '';
+            for (var i = 0; i < words.length; i++) {
+                result += words[i].charAt(0).toUpperCase() + words[i].slice(1);
+            }
+            return result + 'Component';
+        }
+
+        // Test function
+        function testFunction() {
+            console.log('Test function called successfully!');
+            alert('JavaScript is working!');
+        }
+
+        // Initialize when page loads
+        window.onload = function() {
+            console.log('Page loaded, initializing code generator...');
+            document.getElementById('status').textContent = 'Ready to generate code';
+        };
+    </script>
 </head>
 <body>
     <a href="index.html" class="back-arrow">←</a>
@@ -277,12 +385,12 @@
         </div>
         
         <div class="language-selector">
-            <button class="lang-btn active">JavaScript</button>
-            <button class="lang-btn">Python</button>
-            <button class="lang-btn">React</button>
-            <button class="lang-btn">Vue.js</button>
-            <button class="lang-btn">Node.js</button>
-            <button class="lang-btn">PHP</button>
+            <button class="lang-btn active" onclick="selectLanguage('javascript', this)">JavaScript</button>
+            <button class="lang-btn" onclick="selectLanguage('python', this)">Python</button>
+            <button class="lang-btn" onclick="selectLanguage('react', this)">React</button>
+            <button class="lang-btn" onclick="selectLanguage('vue', this)">Vue.js</button>
+            <button class="lang-btn" onclick="selectLanguage('nodejs', this)">Node.js</button>
+            <button class="lang-btn" onclick="selectLanguage('php', this)">PHP</button>
         </div>
         
         <div class="status-bar" id="status">
@@ -306,8 +414,8 @@
         </div>
         
         <div class="controls">
-            <button id="generateBtn" class="btn btn-primary">🚀 Generate Code</button>
-            <button class="btn btn-secondary" style="background: #ff6b6b;">🧪 Test JS</button>
+            <button id="generateBtn" class="btn btn-primary" onclick="generateCode()">🚀 Generate Code</button>
+            <button class="btn btn-secondary" onclick="testFunction()" style="background: #ff6b6b;">🧪 Test JS</button>
         </div>
         
         <div class="features">
