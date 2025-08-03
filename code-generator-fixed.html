@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Language AI Code Generator (Fixed) - HopeNocode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .back-arrow {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-blur: 10px;
+            z-index: 1000;
+        }
+        
+        .back-arrow:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .language-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .lang-btn {
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 1rem;
+            backdrop-blur: 10px;
+        }
+        
+        .lang-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .lang-btn.active {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-color: transparent;
+            box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+            transform: translateY(-2px);
+            font-weight: bold;
+        }
+        
+        .input-section {
+            margin-bottom: 30px;
+        }
+        
+        .input-field {
+            width: 100%;
+            min-height: 120px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            font-size: 16px;
+            resize: vertical;
+            backdrop-blur: 10px;
+        }
+        
+        .input-field::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,107,107,0.4);
+        }
+        
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .output-section {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-blur: 10px;
+        }
+        
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .output-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .copy-btn {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .code-output {
+            background: rgba(0,0,0,0.5);
+            border-radius: 10px;
+            padding: 20px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 200px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .status {
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            font-weight: bold;
+            backdrop-blur: 10px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid #4ecdc4;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .back-arrow {
+                top: 15px;
+                left: 15px;
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .language-selector {
+                gap: 10px;
+            }
+            
+            .lang-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-arrow" title="Go back to homepage">←</a>
+        
+        <div class="header">
+            <h1>Multi-Language AI Code Generator (Fixed)</h1>
+            <p>Fixed version using addEventListener instead of onclick</p>
+        </div>
+        
+        <div class="status" id="status">Ready to generate code</div>
+        
+        <div class="language-selector">
+            <button class="lang-btn active" data-lang="javascript">JavaScript</button>
+            <button class="lang-btn" data-lang="python">Python</button>
+            <button class="lang-btn" data-lang="react">React</button>
+            <button class="lang-btn" data-lang="vue">Vue</button>
+            <button class="lang-btn" data-lang="nodejs">Node.js</button>
+            <button class="lang-btn" data-lang="php">PHP</button>
+        </div>
+        
+        <div class="input-section">
+            <textarea 
+                class="input-field" 
+                id="codeInput" 
+                placeholder="Describe what you want to build... (e.g., Create a function that calculates the sum of an array, Build a React component that displays user data, etc.)"
+            ></textarea>
+            
+            <button class="generate-btn" id="generateBtn">Generate Code</button>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <div>Generating code...</div>
+            </div>
+        </div>
+        
+        <div class="output-section">
+            <div class="output-header">
+                <div class="output-title">Generated Code</div>
+                <button class="copy-btn" id="copyBtn">Copy Code</button>
+            </div>
+            <div class="code-output" id="codeOutput">Your generated code will appear here...</div>
+        </div>
+    </div>
+
+    <script>
+        console.log('🔧 Fixed: Script loaded successfully');
+        
+        var currentLanguage = 'javascript';
+        var generatedCode = '';
+        
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔧 Fixed: DOM loaded, setting up event listeners');
+            
+            // Set up language selection buttons
+            var langButtons = document.querySelectorAll('.lang-btn');
+            langButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var lang = this.getAttribute('data-lang');
+                    selectLanguage(lang, this);
+                });
+            });
+            
+            // Set up generate button
+            var generateBtn = document.getElementById('generateBtn');
+            generateBtn.addEventListener('click', function() {
+                generateCode();
+            });
+            
+            // Set up copy button
+            var copyBtn = document.getElementById('copyBtn');
+            copyBtn.addEventListener('click', function() {
+                copyCode();
+            });
+            
+            // Set up keyboard shortcut
+            var codeInput = document.getElementById('codeInput');
+            codeInput.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    generateCode();
+                }
+            });
+            
+            console.log('🔧 Fixed: All event listeners set up successfully');
+        });
+        
+        function selectLanguage(lang, button) {
+            console.log('🔧 Fixed: Language selection clicked:', lang);
+            
+            var allButtons = document.querySelectorAll('.lang-btn');
+            for (var i = 0; i < allButtons.length; i++) {
+                allButtons[i].classList.remove('active');
+            }
+            
+            button.classList.add('active');
+            currentLanguage = lang;
+            
+            console.log('🔧 Fixed: Language changed to:', currentLanguage);
+            document.getElementById('status').textContent = 'Language selected: ' + currentLanguage;
+            generatedCode = '';
+            document.getElementById('codeOutput').textContent = 'Your generated code will appear here...';
+        }
+        
+        function generateCode() {
+            console.log('🔧 Fixed: Generate button clicked');
+            
+            var input = document.getElementById('codeInput').value.trim();
+            console.log('🔧 Fixed: Input value:', input);
+            
+            if (!input) {
+                console.log('🔧 Fixed: Error - No input provided');
+                alert('Please describe what you want to build');
+                return;
+            }
+            
+            console.log('🔧 Fixed: Starting code generation for language:', currentLanguage);
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('generateBtn').disabled = true;
+            document.getElementById('status').textContent = 'Generating ' + currentLanguage + ' code...';
+            
+            setTimeout(function() {
+                try {
+                    console.log('🔧 Fixed: Generating code...');
+                    generatedCode = generateCodeForLanguage(input, currentLanguage);
+                    console.log('🔧 Fixed: Code generated successfully');
+                    document.getElementById('codeOutput').textContent = generatedCode;
+                    document.getElementById('status').textContent = 'Code generated successfully for ' + currentLanguage;
+                } catch (error) {
+                    console.log('🔧 Fixed: Error generating code:', error.message);
+                    console.error('Error generating code:', error);
+                    document.getElementById('codeOutput').textContent = 'Error: Failed to generate code. Please try again.';
+                    document.getElementById('status').textContent = 'Error occurred during generation';
+                } finally {
+                    console.log('🔧 Fixed: Generation process completed');
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('generateBtn').disabled = false;
+                }
+            }, 1500);
+        }
+        
+        function generateCodeForLanguage(description, language) {
+            console.log('🔧 Fixed: Generating code for:', description, 'in', language);
+            
+            var functionName = generateFunctionName(description);
+            var componentName = generateComponentName(description);
+            
+            var templates = {
+                javascript: '// ' + description + '\nfunction ' + functionName + '() {\n    console.log("Hello from JavaScript!");\n    return "Generated code";\n}\n\n// Usage\nvar result = ' + functionName + '();\nconsole.log(result);',
+                
+                python: '# ' + description + '\nimport csv\n\ndef ' + functionName + '():\n    try:\n        with open("data.csv", "r") as file:\n            reader = csv.reader(file)\n            for row in reader:\n                print("Processing:", row)\n        return "Data processed successfully"\n    except Exception as e:\n        print("Error:", e)\n        return None\n\n# Usage\nresult = ' + functionName + '()\nprint(result)',
+                
+                react: 'import React from "react";\n\n// ' + description + '\nvar ' + componentName + ' = function() {\n    return (\n        <div>\n            <h2>Generated React Component</h2>\n            <p>Hello from React!</p>\n        </div>\n    );\n};\n\nexport default ' + componentName + ';',
+                
+                vue: '<template>\n    <div>\n        <h2>Generated Vue Component</h2>\n        <p>Hello from Vue!</p>\n    </div>\n</template>\n\n<script>\n// ' + description + '\nexport default {\n    name: "' + componentName + '"\n}\n</script>',
+                
+                nodejs: '// ' + description + '\nvar express = require("express");\nvar app = express();\n\nfunction ' + functionName + '() {\n    console.log("Hello from Node.js!");\n    return "Generated code";\n}\n\napp.get("/", function(req, res) {\n    res.send("Hello World!");\n});\n\nvar PORT = process.env.PORT || 3000;\napp.listen(PORT, function() {\n    console.log("Server running on port " + PORT);\n});',
+                
+                php: '<?php\n// ' + description + '\n\nfunction ' + functionName + '() {\n    echo "Hello from PHP!";\n    return "Generated code";\n}\n\n// Usage\n$result = ' + functionName + '();\necho $result;\n?>'
+            };
+            
+            console.log('🔧 Fixed: Template selected for language:', language);
+            return templates[language] || templates.javascript;
+        }
+        
+        function generateFunctionName(description) {
+            var words = description.toLowerCase().split(' ').slice(0, 3);
+            var result = '';
+            for (var i = 0; i < words.length; i++) {
+                result += words[i].charAt(0).toUpperCase() + words[i].slice(1);
+            }
+            return result + 'Function';
+        }
+        
+        function generateComponentName(description) {
+            var words = description.toLowerCase().split(' ').slice(0, 3);
+            var result = '';
+            for (var i = 0; i < words.length; i++) {
+                result += words[i].charAt(0).toUpperCase() + words[i].slice(1);
+            }
+            return result + 'Component';
+        }
+        
+        function copyCode() {
+            if (generatedCode) {
+                console.log('🔧 Fixed: Copying code to clipboard');
+                navigator.clipboard.writeText(generatedCode).then(function() {
+                    var copyBtn = document.getElementById('copyBtn');
+                    var originalText = copyBtn.textContent;
+                    copyBtn.textContent = 'Copied!';
+                    console.log('🔧 Fixed: Code copied successfully');
+                    setTimeout(function() {
+                        copyBtn.textContent = originalText;
+                    }, 2000);
+                }).catch(function(err) {
+                    console.log('🔧 Fixed: Failed to copy code:', err.message);
+                    console.error('Failed to copy code:', err);
+                    alert('Failed to copy code. Please select and copy manually.');
+                });
+            } else {
+                console.log('🔧 Fixed: No code to copy');
+            }
+        }
+    </script>
+</body>
+</html> 
