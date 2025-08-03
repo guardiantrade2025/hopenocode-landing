@@ -613,6 +613,7 @@
     <div id="notification" class="notification"></div>
 
     <script>
+        // Global variables
         let currentElements = [];
         let elementCounter = 0;
         let selectedExport = 'html';
@@ -684,123 +685,6 @@
                     </div>
                 `,
                 name: 'Gallery'
-            },
-            'pricing': {
-                html: `
-                    <div style="background: #f8f9fa; padding: 40px 20px;">
-                        <h2 style="text-align: center; margin-bottom: 30px; color: #333;">Pricing Plans</h2>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto;">
-                            <div style="background: white; padding: 30px; border-radius: 10px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                                <h3 style="color: #333; margin-bottom: 10px;">Basic</h3>
-                                <div style="font-size: 2.5rem; font-weight: bold; color: #4ecdc4; margin-bottom: 20px;">$9.99</div>
-                                <ul style="list-style: none; padding: 0; margin-bottom: 30px;">
-                                    <li style="padding: 5px 0;">✅ Feature 1</li>
-                                    <li style="padding: 5px 0;">✅ Feature 2</li>
-                                    <li style="padding: 5px 0;">✅ Feature 3</li>
-                                </ul>
-                                <button style="background: #4ecdc4; color: white; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer;">Choose Plan</button>
-                            </div>
-                            <div style="background: white; padding: 30px; border-radius: 10px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 2px solid #4ecdc4;">
-                                <h3 style="color: #333; margin-bottom: 10px;">Pro</h3>
-                                <div style="font-size: 2.5rem; font-weight: bold; color: #4ecdc4; margin-bottom: 20px;">$19.99</div>
-                                <ul style="list-style: none; padding: 0; margin-bottom: 30px;">
-                                    <li style="padding: 5px 0;">✅ All Basic Features</li>
-                                    <li style="padding: 5px 0;">✅ Advanced Features</li>
-                                    <li style="padding: 5px 0;">✅ Priority Support</li>
-                                </ul>
-                                <button style="background: #4ecdc4; color: white; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer;">Choose Plan</button>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                name: 'Pricing Table'
-            },
-            'testimonials': {
-                html: `
-                    <div style="background: #f8f9fa; padding: 40px 20px;">
-                        <h2 style="text-align: center; margin-bottom: 30px; color: #333;">What Our Customers Say</h2>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto;">
-                            <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                                <div style="font-size: 1.1rem; margin-bottom: 20px; color: #666;">"Amazing platform! It has transformed how we build websites."</div>
-                                <div style="display: flex; align-items: center;">
-                                    <div style="width: 50px; height: 50px; background: #4ecdc4; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; margin-right: 15px;">JS</div>
-                                    <div>
-                                        <div style="font-weight: bold; color: #333;">John Smith</div>
-                                        <div style="color: #666; font-size: 0.9rem;">CEO, TechCorp</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                                <div style="font-size: 1.1rem; margin-bottom: 20px; color: #666;">"The best visual builder I've ever used. Highly recommended!"</div>
-                                <div style="display: flex; align-items: center;">
-                                    <div style="width: 50px; height: 50px; background: #ff6b6b; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; margin-right: 15px;">MJ</div>
-                                    <div>
-                                        <div style="font-weight: bold; color: #333;">Mary Johnson</div>
-                                        <div style="color: #666; font-size: 0.9rem;">Designer, CreativeStudio</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                name: 'Testimonials'
-            },
-            'stats': {
-                html: `
-                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; color: white;">
-                        <h2 style="text-align: center; margin-bottom: 30px;">Our Impact</h2>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto;">
-                            <div style="text-align: center;">
-                                <div style="font-size: 3rem; font-weight: bold; margin-bottom: 10px;">10K+</div>
-                                <div style="font-size: 1.1rem; opacity: 0.9;">Happy Customers</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 3rem; font-weight: bold; margin-bottom: 10px;">50K+</div>
-                                <div style="font-size: 1.1rem; opacity: 0.9;">Projects Created</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 3rem; font-weight: bold; margin-bottom: 10px;">99%</div>
-                                <div style="font-size: 1.1rem; opacity: 0.9;">Satisfaction Rate</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 3rem; font-weight: bold; margin-bottom: 10px;">24/7</div>
-                                <div style="font-size: 1.1rem; opacity: 0.9;">Support Available</div>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                name: 'Statistics'
-            },
-            'timeline': {
-                html: `
-                    <div style="padding: 40px 20px;">
-                        <h2 style="text-align: center; margin-bottom: 30px; color: #333;">Our Journey</h2>
-                        <div style="max-width: 800px; margin: 0 auto;">
-                            <div style="position: relative; padding-left: 30px; margin-bottom: 30px;">
-                                <div style="position: absolute; left: 0; top: 0; width: 20px; height: 20px; background: #4ecdc4; border-radius: 50%;"></div>
-                                <div style="border-left: 2px solid #4ecdc4; padding-left: 30px; padding-bottom: 20px;">
-                                    <h3 style="color: #333; margin-bottom: 10px;">2020 - Founded</h3>
-                                    <p style="color: #666;">Started with a vision to make web development accessible to everyone.</p>
-                                </div>
-                            </div>
-                            <div style="position: relative; padding-left: 30px; margin-bottom: 30px;">
-                                <div style="position: absolute; left: 0; top: 0; width: 20px; height: 20px; background: #4ecdc4; border-radius: 50%;"></div>
-                                <div style="border-left: 2px solid #4ecdc4; padding-left: 30px; padding-bottom: 20px;">
-                                    <h3 style="color: #333; margin-bottom: 10px;">2022 - Growth</h3>
-                                    <p style="color: #666;">Reached 10,000 users and launched advanced features.</p>
-                                </div>
-                            </div>
-                            <div style="position: relative; padding-left: 30px;">
-                                <div style="position: absolute; left: 0; top: 0; width: 20px; height: 20px; background: #4ecdc4; border-radius: 50%;"></div>
-                                <div style="border-left: 2px solid #4ecdc4; padding-left: 30px;">
-                                    <h3 style="color: #333; margin-bottom: 10px;">2024 - Innovation</h3>
-                                    <p style="color: #666;">Leading the industry with AI-powered development tools.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                name: 'Timeline'
             },
             'pricing': {
                 html: `
@@ -921,6 +805,218 @@
             }
         };
 
+        // Make all functions globally accessible
+        window.addComponent = function(type) {
+            console.log('addComponent called with:', type);
+            const dropZone = document.getElementById('dropZone');
+            const component = components[type];
+            
+            if (component) {
+                const elementId = `element-${elementCounter++}`;
+                const elementDiv = document.createElement('div');
+                elementDiv.className = 'element';
+                elementDiv.id = elementId;
+                elementDiv.innerHTML = `
+                    <div class="element-controls">
+                        <button class="control-btn" onclick="editElement('${elementId}')">✏️</button>
+                        <button class="control-btn" onclick="duplicateElement('${elementId}')">📋</button>
+                        <button class="control-btn" onclick="deleteElement('${elementId}')">🗑️</button>
+                    </div>
+                    ${component.html}
+                `;
+                
+                dropZone.appendChild(elementDiv);
+                currentElements.push({
+                    id: elementId,
+                    type: type,
+                    name: component.name
+                });
+                
+                showNotification(`Added ${component.name} to your page`);
+                console.log('Component added successfully');
+            } else {
+                console.log('Component not found:', type);
+            }
+        };
+
+        window.switchTab = function(tab, event) {
+            console.log('switchTab called with:', tab, event);
+            const tabs = document.querySelectorAll('.sidebar-tab');
+            const componentsSection = document.getElementById('componentsSection');
+            const marketplaceSection = document.getElementById('marketplaceSection');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (tab === 'components') {
+                componentsSection.style.display = 'block';
+                marketplaceSection.style.display = 'none';
+            } else {
+                componentsSection.style.display = 'none';
+                marketplaceSection.style.display = 'block';
+            }
+            console.log('Tab switched successfully');
+        };
+
+        window.previewPage = function() {
+            console.log('previewPage called');
+            const dropZone = document.getElementById('dropZone');
+            const previewWindow = window.open('', '_blank');
+            previewWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Page Preview</title>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <style>
+                        body { margin: 0; font-family: Arial, sans-serif; }
+                    </style>
+                </head>
+                <body>
+                    ${dropZone.innerHTML.replace(/class="element-controls"[^>]*>.*?<\/div>/gs, '')}
+                </body>
+                </html>
+            `);
+            previewWindow.document.close();
+            console.log('Preview window opened');
+        };
+
+        window.showExportModal = function() {
+            console.log('showExportModal called');
+            document.getElementById('exportModal').style.display = 'block';
+        };
+
+        window.saveProject = function() {
+            console.log('saveProject called');
+            const projectData = {
+                elements: currentElements,
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('builderProject', JSON.stringify(projectData));
+            showNotification('Project saved successfully!');
+            console.log('Project saved');
+        };
+
+        window.exportProject = function() {
+            console.log('exportProject called');
+            const dropZone = document.getElementById('dropZone');
+            const content = dropZone.innerHTML.replace(/class="element-controls"[^>]*>.*?<\/div>/gs, '');
+            
+            let exportContent = '';
+            
+            switch(selectedExport) {
+                case 'html':
+                    exportContent = `<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Website</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; }
+    </style>
+</head>
+<body>
+    ${content}
+</body>
+</html>`;
+                    break;
+                case 'react':
+                    exportContent = `import React from 'react';
+
+function App() {
+    return (
+        <div>
+            ${content.replace(/class=/g, 'className=').replace(/style="([^"]*)"/g, 'style={{$1}}')}
+        </div>
+    );
+}
+
+export default App;`;
+                    break;
+                case 'vue':
+                    exportContent = `<template>
+    <div>
+        ${content}
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'App'
+}
+</script>`;
+                    break;
+                case 'angular':
+                    exportContent = `<div>
+    ${content}
+</div>`;
+                    break;
+            }
+            
+            const blob = new Blob([exportContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `website-${selectedExport}.${selectedExport === 'html' ? 'html' : 'js'}`;
+            a.click();
+            
+            hideExportModal();
+            showNotification(`Project exported as ${selectedExport.toUpperCase()}!`);
+            console.log('Project exported successfully');
+        };
+
+        window.hideExportModal = function() {
+            console.log('hideExportModal called');
+            document.getElementById('exportModal').style.display = 'none';
+        };
+
+        window.selectExport = function(type) {
+            console.log('selectExport called with:', type);
+            selectedExport = type;
+            document.querySelectorAll('.export-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.target.closest('.export-option').classList.add('selected');
+        };
+
+        window.editElement = function(elementId) {
+            showNotification('Edit functionality coming soon!');
+        };
+
+        window.duplicateElement = function(elementId) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                const clone = element.cloneNode(true);
+                clone.id = `element-${elementCounter++}`;
+                element.parentNode.appendChild(clone);
+                showNotification('Element duplicated successfully!');
+            }
+        };
+
+        window.deleteElement = function(elementId) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.remove();
+                currentElements = currentElements.filter(el => el.id !== elementId);
+                showNotification('Element deleted successfully!');
+            }
+        };
+
+        window.purchaseComponent = function(componentType) {
+            showNotification('Purchase functionality coming soon! This would integrate with your payment system.');
+        };
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
         // Initialize drag and drop
         function initializeDragAndDrop() {
             const componentItems = document.querySelectorAll('.component-item');
@@ -989,240 +1085,17 @@
             }
         }
 
-        function addComponent(type) {
-            console.log('addComponent called with:', type);
-            const dropZone = document.getElementById('dropZone');
-            const component = components[type];
-            
-            if (component) {
-                const elementId = `element-${elementCounter++}`;
-                const elementDiv = document.createElement('div');
-                elementDiv.className = 'element';
-                elementDiv.id = elementId;
-                elementDiv.innerHTML = `
-                    <div class="element-controls">
-                        <button class="control-btn" onclick="editElement('${elementId}')">✏️</button>
-                        <button class="control-btn" onclick="duplicateElement('${elementId}')">📋</button>
-                        <button class="control-btn" onclick="deleteElement('${elementId}')">🗑️</button>
-                    </div>
-                    ${component.html}
-                `;
-                
-                dropZone.appendChild(elementDiv);
-                currentElements.push({
-                    id: elementId,
-                    type: type,
-                    name: component.name
-                });
-                
-                showNotification(`Added ${component.name} to your page`);
-                console.log('Component added successfully');
-            } else {
-                console.log('Component not found:', type);
-            }
-        }
-
-        function editElement(elementId) {
-            showNotification('Edit functionality coming soon!');
-        }
-
-        function duplicateElement(elementId) {
-            const element = document.getElementById(elementId);
-            if (element) {
-                const clone = element.cloneNode(true);
-                clone.id = `element-${elementCounter++}`;
-                element.parentNode.appendChild(clone);
-                showNotification('Element duplicated successfully!');
-            }
-        }
-
-        function deleteElement(elementId) {
-            const element = document.getElementById(elementId);
-            if (element) {
-                element.remove();
-                currentElements = currentElements.filter(el => el.id !== elementId);
-                showNotification('Element deleted successfully!');
-            }
-        }
-
-        function switchTab(tab, event) {
-            console.log('switchTab called with:', tab, event);
-            const tabs = document.querySelectorAll('.sidebar-tab');
-            const componentsSection = document.getElementById('componentsSection');
-            const marketplaceSection = document.getElementById('marketplaceSection');
-            
-            tabs.forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            if (tab === 'components') {
-                componentsSection.style.display = 'block';
-                marketplaceSection.style.display = 'none';
-            } else {
-                componentsSection.style.display = 'none';
-                marketplaceSection.style.display = 'block';
-            }
-            console.log('Tab switched successfully');
-        }
-
-        function purchaseComponent(componentType) {
-            showNotification('Purchase functionality coming soon! This would integrate with your payment system.');
-        }
-
-        function previewPage() {
-            console.log('previewPage called');
-            const dropZone = document.getElementById('dropZone');
-            const previewWindow = window.open('', '_blank');
-            previewWindow.document.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Page Preview</title>
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <style>
-                        body { margin: 0; font-family: Arial, sans-serif; }
-                    </style>
-                </head>
-                <body>
-                    ${dropZone.innerHTML.replace(/class="element-controls"[^>]*>.*?<\/div>/gs, '')}
-                </body>
-                </html>
-            `);
-            previewWindow.document.close();
-            console.log('Preview window opened');
-        }
-
-        function showExportModal() {
-            console.log('showExportModal called');
-            document.getElementById('exportModal').style.display = 'block';
-        }
-
-        function hideExportModal() {
-            document.getElementById('exportModal').style.display = 'none';
-        }
-
-        function selectExport(type) {
-            selectedExport = type;
-            document.querySelectorAll('.export-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-            event.target.closest('.export-option').classList.add('selected');
-        }
-
-        function exportProject() {
-            console.log('exportProject called');
-            const dropZone = document.getElementById('dropZone');
-            const content = dropZone.innerHTML.replace(/class="element-controls"[^>]*>.*?<\/div>/gs, '');
-            
-            let exportContent = '';
-            
-            switch(selectedExport) {
-                case 'html':
-                    exportContent = `<!DOCTYPE html>
-<html>
-<head>
-    <title>Your Website</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body { margin: 0; font-family: Arial, sans-serif; }
-    </style>
-</head>
-<body>
-    ${content}
-</body>
-</html>`;
-                    break;
-                case 'react':
-                    exportContent = `import React from 'react';
-
-function App() {
-    return (
-        <div>
-            ${content.replace(/class=/g, 'className=').replace(/style="([^"]*)"/g, 'style={{$1}}')}
-        </div>
-    );
-}
-
-export default App;`;
-                    break;
-                case 'vue':
-                    exportContent = `<template>
-    <div>
-        ${content}
-    </div>
-</template>
-
-<script>
-export default {
-    name: 'App'
-}
-</script>`;
-                    break;
-                case 'angular':
-                    exportContent = `<div>
-    ${content}
-</div>`;
-                    break;
-            }
-            
-            const blob = new Blob([exportContent], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `website-${selectedExport}.${selectedExport === 'html' ? 'html' : 'js'}`;
-            a.click();
-            
-            hideExportModal();
-            showNotification(`Project exported as ${selectedExport.toUpperCase()}!`);
-            console.log('Project exported successfully');
-        }
-
-        function saveProject() {
-            console.log('saveProject called');
-            const projectData = {
-                elements: currentElements,
-                timestamp: new Date().toISOString()
-            };
-            
-            localStorage.setItem('builderProject', JSON.stringify(projectData));
-            showNotification('Project saved successfully!');
-            console.log('Project saved');
-        }
-
-        function showNotification(message) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.style.display = 'block';
-            
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
-        }
-
-        function hideExportModal() {
-            console.log('hideExportModal called');
-            document.getElementById('exportModal').style.display = 'none';
-        }
-
-        function selectExport(type) {
-            console.log('selectExport called with:', type);
-            selectedExport = type;
-            document.querySelectorAll('.export-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-            event.target.closest('.export-option').classList.add('selected');
-        }
+        // Test function to verify JavaScript is working
+        window.testFunction = function() {
+            console.log('Test function called successfully!');
+            alert('JavaScript is working!');
+        };
 
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM loaded, initializing builder...');
             initializeDragAndDrop();
             showNotification('Enhanced Visual Builder Pro loaded! Drag components to start building.');
-            
-            // Test function to verify JavaScript is working
-            window.testFunction = function() {
-                console.log('Test function called successfully!');
-                alert('JavaScript is working!');
-            };
         });
     </script>
 </body>
