@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Analytics & Business Intelligence - HopeNocode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .analytics-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .analytics-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .metric-change {
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+
+        .metric-change.positive {
+            color: #28a745;
+        }
+
+        .metric-change.negative {
+            color: #dc3545;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            height: 300px;
+            position: relative;
+        }
+
+        .chart-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #666;
+        }
+
+        .chart-placeholder .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .chart-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .chart-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .chart-btn.active {
+            background: #5a6fd8;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-active {
+            background: #28a745;
+        }
+
+        .status-pending {
+            background: #ffc107;
+        }
+
+        .status-inactive {
+            background: #dc3545;
+        }
+
+        .filter-section {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-weight: bold;
+            color: #555;
+            min-width: 100px;
+        }
+
+        .filter-input {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            flex: 1;
+        }
+
+        .filter-select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            flex: 1;
+        }
+
+        .action-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .action-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .action-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .insight-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .insight-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .insight-description {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .insight-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 0.5rem;
+        }
+
+        .prediction-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .prediction-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .prediction-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .prediction-description {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .alert-card {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-title {
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-description {
+            color: #856404;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+            
+            .filter-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="nav">
+            <div class="logo">HopeNocode</div>
+            <button class="back-btn" onclick="window.location.href='index.html'">← Back to Home</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Advanced Analytics & Business Intelligence</h1>
+            <p>Real-time dashboards, predictive analytics, and comprehensive business insights</p>
+        </div>
+
+        <!-- Key Performance Indicators -->
+        <div class="analytics-card">
+            <div class="card-header">
+                <div class="card-icon">📊</div>
+                <div class="card-title">Key Performance Indicators</div>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric">
+                    <div class="metric-value" id="revenue">$124,567</div>
+                    <div class="metric-label">Monthly Revenue</div>
+                    <div class="metric-change positive">+12.5% vs last month</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="users">2,847</div>
+                    <div class="metric-label">Active Users</div>
+                    <div class="metric-change positive">+8.3% vs last month</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="conversion">3.2%</div>
+                    <div class="metric-label">Conversion Rate</div>
+                    <div class="metric-change positive">+0.5% vs last month</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="churn">1.8%</div>
+                    <div class="metric-label">Churn Rate</div>
+                    <div class="metric-change negative">+0.2% vs last month</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Revenue Analytics -->
+        <div class="analytics-card">
+            <div class="card-header">
+                <div class="card-icon">💰</div>
+                <div class="card-title">Revenue Analytics</div>
+            </div>
+
+            <div class="chart-controls">
+                <button class="chart-btn active" onclick="updateChart('revenue', 'daily')">Daily</button>
+                <button class="chart-btn" onclick="updateChart('revenue', 'weekly')">Weekly</button>
+                <button class="chart-btn" onclick="updateChart('revenue', 'monthly')">Monthly</button>
+                <button class="chart-btn" onclick="updateChart('revenue', 'yearly')">Yearly</button>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-placeholder">
+                    <div class="icon">📈</div>
+                    <div>Revenue Chart</div>
+                    <div style="font-size: 0.8rem;">Interactive chart showing revenue trends</div>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-row">
+                    <span class="filter-label">Date Range:</span>
+                    <input type="date" class="filter-input" id="startDate" value="2024-01-01">
+                    <span>to</span>
+                    <input type="date" class="filter-input" id="endDate" value="2024-12-31">
+                </div>
+                <div class="filter-row">
+                    <span class="filter-label">Product:</span>
+                    <select class="filter-select" id="productFilter">
+                        <option value="all">All Products</option>
+                        <option value="pro">Pro Plan</option>
+                        <option value="enterprise">Enterprise Plan</option>
+                        <option value="custom">Custom Solutions</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Behavior Analytics -->
+        <div class="analytics-card">
+            <div class="card-header">
+                <div class="card-icon">👥</div>
+                <div class="card-title">User Behavior Analytics</div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-placeholder">
+                    <div class="icon">📊</div>
+                    <div>User Engagement Chart</div>
+                    <div style="font-size: 0.8rem;">Session duration, page views, and user flow</div>
+                </div>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Page</th>
+                        <th>Views</th>
+                        <th>Bounce Rate</th>
+                        <th>Avg. Time</th>
+                        <th>Conversion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Homepage</td>
+                        <td>12,847</td>
+                        <td>23.4%</td>
+                        <td>2m 34s</td>
+                        <td>3.2%</td>
+                    </tr>
+                    <tr>
+                        <td>Pricing</td>
+                        <td>8,234</td>
+                        <td>18.7%</td>
+                        <td>1m 45s</td>
+                        <td>8.9%</td>
+                    </tr>
+                    <tr>
+                        <td>AI Code Generator</td>
+                        <td>15,623</td>
+                        <td>31.2%</td>
+                        <td>4m 12s</td>
+                        <td>5.1%</td>
+                    </tr>
+                    <tr>
+                        <td>Dashboard</td>
+                        <td>6,789</td>
+                        <td>12.3%</td>
+                        <td>8m 45s</td>
+                        <td>15.7%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Predictive Analytics -->
+        <div class="analytics-card">
+            <div class="card-header">
+                <div class="card-icon">🔮</div>
+                <div class="card-title">Predictive Analytics</div>
+            </div>
+
+            <div class="prediction-card">
+                <div class="prediction-title">Revenue Forecast</div>
+                <div class="prediction-value">$156,234</div>
+                <div class="prediction-description">Predicted revenue for next month based on current trends</div>
+            </div>
+
+            <div class="prediction-card">
+                <div class="prediction-title">User Growth</div>
+                <div class="prediction-value">3,245</div>
+                <div class="prediction-description">Expected active users by end of next month</div>
+            </div>
+
+            <div class="alert-card">
+                <div class="alert-title">⚠️ Churn Risk Alert</div>
+                <div class="alert-description">15 users showing signs of potential churn. Recommend proactive outreach.</div>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-title">Feature Adoption Prediction</div>
+                <div class="insight-description">Based on user behavior patterns, AI Code Generator feature is expected to reach 85% adoption rate within 3 months.</div>
+                <div class="insight-value">85% Adoption Rate</div>
+            </div>
+        </div>
+
+        <!-- Customer Analytics -->
+        <div class="analytics-card">
+            <div class="card-header">
+                <div class="card-icon">👤</div>
+                <div class="card-title">Customer Analytics</div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-placeholder">
+                    <div class="icon">👥</div>
+                    <div>Customer Segmentation</div>
+                    <div style="font-size: 0.8rem;">Customer distribution by plan and usage</div>
+                </div>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Customer Segment</th>
+                        <th>Count</th>
+                        <th>Avg. Revenue</th>
+                        <th>Lifetime Value</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Enterprise</td>
+                        <td>45</td>
+                        <td>$2,450</td>
+                        <td>$29,400</td>
+                        <td><span class="status-indicator status-active"></span>Active</td>
+                    </tr>
+                    <tr>
+                        <td>Pro</td>
+                        <td>234</td>
+                        <td>$99</td>
+                        <td>$1,188</td>
+                        <td><span class="status-indicator status-active"></span>Active</td>
+                    </tr>
+                    <tr>
+                        <td>Starter</td>
+                        <td>1,567</td>
+                        <td>$29</td>
+                        <td>$348</td>
+                        <td><span class="status-indicator status-active"></span>Active</td>
+                    </tr>
+                    <tr>
+                        <td>Trial</td>
+                        <td>1,001</td>
+                        <td>$0</td>
+                        <td>$0</td>
+                        <td><span class="status-indicator status-pending"></span>Trial</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Business Intelligence Insights -->
+        <div class="analytics-card">
+            <div class="card-header">
+                <div class="card-icon">💡</div>
+                <div class="card-title">Business Intelligence Insights</div>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-title">🚀 Growth Opportunity</div>
+                <div class="insight-description">Users who engage with AI Code Generator are 3.2x more likely to upgrade to Pro plan. Consider promoting this feature more prominently.</div>
+                <div class="insight-value">3.2x Conversion Rate</div>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-title">📈 Revenue Optimization</div>
+                <div class="insight-description">Enterprise customers show highest satisfaction with white-label solutions. Consider expanding this feature set.</div>
+                <div class="insight-value">94% Satisfaction Rate</div>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-title">🎯 Customer Retention</div>
+                <div class="insight-description">Customers who use collaboration features have 40% lower churn rate. Focus on promoting team features.</div>
+                <div class="insight-value">40% Lower Churn</div>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-title">⚡ Performance Insight</div>
+                <div class="insight-description">Peak usage occurs between 2-4 PM EST. Consider scheduling maintenance during off-peak hours.</div>
+                <div class="insight-value">Peak: 2-4 PM EST</div>
+            </div>
+        </div>
+
+        <!-- Export & Reporting -->
+        <div class="analytics-card">
+            <div class="card-header">
+                <div class="card-icon">📋</div>
+                <div class="card-title">Export & Reporting</div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-row">
+                    <span class="filter-label">Report Type:</span>
+                    <select class="filter-select" id="reportType">
+                        <option value="revenue">Revenue Report</option>
+                        <option value="users">User Analytics</option>
+                        <option value="behavior">Behavior Analysis</option>
+                        <option value="predictions">Predictive Analytics</option>
+                    </select>
+                </div>
+                <div class="filter-row">
+                    <span class="filter-label">Format:</span>
+                    <select class="filter-select" id="reportFormat">
+                        <option value="pdf">PDF</option>
+                        <option value="excel">Excel</option>
+                        <option value="csv">CSV</option>
+                        <option value="json">JSON</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="action-btn" onclick="generateReport()">Generate Report</button>
+        </div>
+    </div>
+
+    <script>
+        let currentChart = 'revenue';
+        let currentPeriod = 'daily';
+
+        function updateChart(chartType, period) {
+            currentChart = chartType;
+            currentPeriod = period;
+            
+            // Update active button
+            document.querySelectorAll('.chart-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Simulate chart update
+            console.log(`Updating ${chartType} chart for ${period} period`);
+        }
+
+        function generateReport() {
+            const reportType = document.getElementById('reportType').value;
+            const reportFormat = document.getElementById('reportFormat').value;
+            
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = 'Generating...';
+            
+            setTimeout(() => {
+                alert(`Report generated successfully!\nType: ${reportType}\nFormat: ${reportFormat}`);
+                btn.disabled = false;
+                btn.textContent = 'Generate Report';
+            }, 2000);
+        }
+
+        // Simulate real-time data updates
+        function updateMetrics() {
+            const revenue = document.getElementById('revenue');
+            const users = document.getElementById('users');
+            const conversion = document.getElementById('conversion');
+            const churn = document.getElementById('churn');
+            
+            // Simulate small fluctuations
+            const currentRevenue = parseInt(revenue.textContent.replace(/[^0-9]/g, ''));
+            const newRevenue = currentRevenue + Math.floor(Math.random() * 1000 - 500);
+            revenue.textContent = '$' + newRevenue.toLocaleString();
+            
+            const currentUsers = parseInt(users.textContent.replace(/[^0-9]/g, ''));
+            const newUsers = currentUsers + Math.floor(Math.random() * 10 - 5);
+            users.textContent = newUsers.toLocaleString();
+            
+            const currentConversion = parseFloat(conversion.textContent);
+            const newConversion = (currentConversion + (Math.random() * 0.2 - 0.1)).toFixed(1);
+            conversion.textContent = newConversion + '%';
+            
+            const currentChurn = parseFloat(churn.textContent);
+            const newChurn = (currentChurn + (Math.random() * 0.1 - 0.05)).toFixed(1);
+            churn.textContent = newChurn + '%';
+        }
+
+        // Update metrics every 30 seconds
+        setInterval(updateMetrics, 30000);
+
+        // Initialize with some random data
+        document.addEventListener('DOMContentLoaded', function() {
+            updateMetrics();
+        });
+    </script>
+</body>
+</html> 

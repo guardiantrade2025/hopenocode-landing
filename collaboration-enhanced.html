@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Collaboration & Communication - HopeNocode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+        }
+
+        .collaboration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .collab-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .collab-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .video-container {
+            background: #000;
+            border-radius: 10px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .video-placeholder {
+            color: white;
+            text-align: center;
+        }
+
+        .video-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .control-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .control-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .control-btn.danger {
+            background: #dc3545;
+        }
+
+        .control-btn.danger:hover {
+            background: #c82333;
+        }
+
+        .whiteboard {
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            height: 400px;
+            position: relative;
+            margin-bottom: 1rem;
+            cursor: crosshair;
+        }
+
+        .whiteboard-tools {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-btn {
+            background: white;
+            border: 2px solid #ddd;
+            padding: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tool-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .team-member {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .member-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            font-weight: bold;
+        }
+
+        .member-name {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .member-role {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .member-status {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-left: 0.5rem;
+        }
+
+        .status-online {
+            background: #28a745;
+        }
+
+        .status-away {
+            background: #ffc107;
+        }
+
+        .status-offline {
+            background: #dc3545;
+        }
+
+        .chat-container {
+            height: 300px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: #f8f9fa;
+        }
+
+        .chat-message {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+
+        .chat-message.sent {
+            background: #667eea;
+            color: white;
+            margin-left: auto;
+        }
+
+        .chat-message.received {
+            background: white;
+            border: 1px solid #ddd;
+        }
+
+        .chat-input-container {
+            display: flex;
+            padding: 1rem;
+            border-top: 1px solid #ddd;
+            background: white;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 0.5rem;
+        }
+
+        .chat-send {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .file-upload {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .upload-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .meeting-info {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .info-value {
+            color: #333;
+        }
+
+        .action-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .action-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .action-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @media (max-width: 768px) {
+            .collaboration-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .team-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="nav">
+            <div class="logo">HopeNocode</div>
+            <button class="back-btn" onclick="window.location.href='index.html'">← Back to Home</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Enhanced Collaboration & Communication</h1>
+            <p>Video conferencing, real-time whiteboarding, team management, and advanced communication features</p>
+        </div>
+
+        <!-- Video Conferencing -->
+        <div class="collab-card">
+            <div class="card-header">
+                <div class="card-icon">📹</div>
+                <div class="card-title">Video Conferencing</div>
+            </div>
+
+            <div class="video-container">
+                <div class="video-placeholder">
+                    <div>🎥</div>
+                    <div>Video Conference</div>
+                    <div style="font-size: 0.9rem; margin-top: 1rem;">Click "Start Meeting" to begin</div>
+                </div>
+            </div>
+
+            <div class="video-controls">
+                <button class="control-btn" onclick="startMeeting()">Start Meeting</button>
+                <button class="control-btn" onclick="joinMeeting()">Join Meeting</button>
+                <button class="control-btn" onclick="toggleMute()">Mute</button>
+                <button class="control-btn" onclick="toggleVideo()">Video</button>
+                <button class="control-btn danger" onclick="endMeeting()">End</button>
+            </div>
+
+            <div class="meeting-info">
+                <div class="info-row">
+                    <span class="info-label">Meeting ID:</span>
+                    <span class="info-value" id="meetingId">Not started</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Participants:</span>
+                    <span class="info-value" id="participantCount">0</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Duration:</span>
+                    <span class="info-value" id="meetingDuration">00:00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-time Whiteboarding -->
+        <div class="collab-card">
+            <div class="card-header">
+                <div class="card-icon">🖌️</div>
+                <div class="card-title">Real-time Whiteboarding</div>
+            </div>
+
+            <div class="whiteboard-tools">
+                <button class="tool-btn active" onclick="selectTool('pen')">✏️ Pen</button>
+                <button class="tool-btn" onclick="selectTool('eraser')">🧽 Eraser</button>
+                <button class="tool-btn" onclick="selectTool('text')">📝 Text</button>
+                <button class="tool-btn" onclick="selectTool('shape')">⬜ Shape</button>
+                <button class="tool-btn" onclick="clearWhiteboard()">🗑️ Clear</button>
+            </div>
+
+            <div class="whiteboard" id="whiteboard" onmousedown="startDrawing(event)" onmousemove="draw(event)" onmouseup="stopDrawing()">
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #999; text-align: center;">
+                    <div>🖌️</div>
+                    <div>Whiteboard</div>
+                    <div style="font-size: 0.8rem;">Click and drag to draw</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Management -->
+        <div class="collab-card">
+            <div class="card-header">
+                <div class="card-icon">👥</div>
+                <div class="card-title">Team Management</div>
+            </div>
+
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-avatar">JD</div>
+                    <div class="member-name">John Doe</div>
+                    <div class="member-role">Lead Developer</div>
+                    <span class="member-status status-online"></span>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">JS</div>
+                    <div class="member-name">Jane Smith</div>
+                    <div class="member-role">UI/UX Designer</div>
+                    <span class="member-status status-online"></span>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">MJ</div>
+                    <div class="member-name">Mike Johnson</div>
+                    <div class="member-role">Backend Developer</div>
+                    <span class="member-status status-away"></span>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">SL</div>
+                    <div class="member-name">Sarah Lee</div>
+                    <div class="member-role">Project Manager</div>
+                    <span class="member-status status-offline"></span>
+                </div>
+            </div>
+
+            <button class="action-btn" onclick="inviteTeamMember()">Invite Team Member</button>
+        </div>
+
+        <!-- Team Chat -->
+        <div class="collab-card">
+            <div class="card-header">
+                <div class="card-icon">💬</div>
+                <div class="card-title">Team Chat</div>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="chat-message received">
+                        <strong>John Doe:</strong> Hey team! How's the project going?
+                    </div>
+                    <div class="chat-message received">
+                        <strong>Jane Smith:</strong> Great! I just finished the new UI components.
+                    </div>
+                    <div class="chat-message sent">
+                        <strong>You:</strong> Awesome! Can you share the design files?
+                    </div>
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Type your message..." onkeypress="handleChatKeyPress(event)">
+                    <button class="chat-send" onclick="sendChatMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Sharing -->
+        <div class="collab-card">
+            <div class="card-header">
+                <div class="card-icon">📁</div>
+                <div class="card-title">File Sharing</div>
+            </div>
+
+            <div class="file-upload">
+                <div class="upload-icon">📤</div>
+                <div class="upload-text">Drag and drop files here or click to browse</div>
+                <button class="upload-btn" onclick="uploadFile()">Choose Files</button>
+            </div>
+
+            <div class="meeting-info">
+                <div class="info-row">
+                    <span class="info-label">Shared Files:</span>
+                    <span class="info-value">3 files</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Total Size:</span>
+                    <span class="info-value">15.2 MB</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meeting Scheduling -->
+        <div class="collab-card">
+            <div class="card-header">
+                <div class="card-icon">📅</div>
+                <div class="card-title">Meeting Scheduling</div>
+            </div>
+
+            <div class="meeting-info">
+                <div class="info-row">
+                    <span class="info-label">Next Meeting:</span>
+                    <span class="info-value">Daily Standup - Tomorrow 9:00 AM</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Duration:</span>
+                    <span class="info-value">30 minutes</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Participants:</span>
+                    <span class="info-value">5 team members</span>
+                </div>
+            </div>
+
+            <button class="action-btn" onclick="scheduleMeeting()">Schedule New Meeting</button>
+        </div>
+    </div>
+
+    <script>
+        let isDrawing = false;
+        let currentTool = 'pen';
+        let meetingActive = false;
+        let meetingTimer = null;
+        let startTime = null;
+
+        function startMeeting() {
+            meetingActive = true;
+            const meetingId = Math.random().toString(36).substr(2, 9).toUpperCase();
+            document.getElementById('meetingId').textContent = meetingId;
+            document.getElementById('participantCount').textContent = '1';
+            
+            startTime = Date.now();
+            meetingTimer = setInterval(updateMeetingDuration, 1000);
+            
+            // Simulate participants joining
+            setTimeout(() => {
+                document.getElementById('participantCount').textContent = '3';
+            }, 2000);
+            
+            alert(`Meeting started! Meeting ID: ${meetingId}`);
+        }
+
+        function joinMeeting() {
+            const meetingId = prompt('Enter meeting ID:');
+            if (meetingId) {
+                meetingActive = true;
+                document.getElementById('meetingId').textContent = meetingId;
+                document.getElementById('participantCount').textContent = '4';
+                
+                startTime = Date.now();
+                meetingTimer = setInterval(updateMeetingDuration, 1000);
+                
+                alert(`Joined meeting: ${meetingId}`);
+            }
+        }
+
+        function endMeeting() {
+            if (meetingActive) {
+                meetingActive = false;
+                clearInterval(meetingTimer);
+                document.getElementById('meetingId').textContent = 'Not started';
+                document.getElementById('participantCount').textContent = '0';
+                document.getElementById('meetingDuration').textContent = '00:00';
+                alert('Meeting ended');
+            }
+        }
+
+        function updateMeetingDuration() {
+            if (startTime) {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                const minutes = Math.floor(elapsed / 60);
+                const seconds = elapsed % 60;
+                document.getElementById('meetingDuration').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }
+
+        function toggleMute() {
+            alert('Microphone toggled');
+        }
+
+        function toggleVideo() {
+            alert('Video toggled');
+        }
+
+        function selectTool(tool) {
+            currentTool = tool;
+            document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function startDrawing(event) {
+            isDrawing = true;
+            const rect = event.target.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            
+            if (currentTool === 'pen') {
+                const canvas = document.createElement('canvas');
+                canvas.width = 2;
+                canvas.height = 2;
+                canvas.style.position = 'absolute';
+                canvas.style.left = x + 'px';
+                canvas.style.top = y + 'px';
+                canvas.style.pointerEvents = 'none';
+                event.target.appendChild(canvas);
+            }
+        }
+
+        function draw(event) {
+            if (!isDrawing) return;
+            
+            const rect = event.target.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            
+            if (currentTool === 'pen') {
+                const dot = document.createElement('div');
+                dot.style.position = 'absolute';
+                dot.style.left = x + 'px';
+                dot.style.top = y + 'px';
+                dot.style.width = '2px';
+                dot.style.height = '2px';
+                dot.style.backgroundColor = '#333';
+                dot.style.pointerEvents = 'none';
+                event.target.appendChild(dot);
+            }
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function clearWhiteboard() {
+            const whiteboard = document.getElementById('whiteboard');
+            const dots = whiteboard.querySelectorAll('div[style*="position: absolute"]');
+            dots.forEach(dot => dot.remove());
+        }
+
+        function inviteTeamMember() {
+            const email = prompt('Enter email address:');
+            if (email) {
+                alert(`Invitation sent to ${email}`);
+            }
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                const chatMessages = document.getElementById('chatMessages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'chat-message sent';
+                messageDiv.innerHTML = `<strong>You:</strong> ${message}`;
+                chatMessages.appendChild(messageDiv);
+                
+                input.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Simulate response
+                setTimeout(() => {
+                    const responseDiv = document.createElement('div');
+                    responseDiv.className = 'chat-message received';
+                    responseDiv.innerHTML = `<strong>John Doe:</strong> Thanks for the update!`;
+                    chatMessages.appendChild(responseDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1000);
+            }
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+
+        function uploadFile() {
+            alert('File upload simulation - in a real implementation, this would open a file picker');
+        }
+
+        function scheduleMeeting() {
+            const title = prompt('Meeting title:');
+            const date = prompt('Date (YYYY-MM-DD):');
+            const time = prompt('Time (HH:MM):');
+            
+            if (title && date && time) {
+                alert(`Meeting scheduled: ${title} on ${date} at ${time}`);
+            }
+        }
+    </script>
+</body>
+</html> 
