@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Test - HopeNocode</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+        .test-section {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            backdrop-blur: 10px;
+        }
+        button {
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background: #45b7aa;
+        }
+        .result {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 JavaScript Test Page</h1>
+    <p>This page tests if JavaScript works on Netlify</p>
+    
+    <div class="test-section">
+        <h2>Test 1: Basic JavaScript</h2>
+        <button onclick="testBasicJS()">Test Basic JavaScript</button>
+        <div id="result1" class="result">Click the button to test...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: DOM Manipulation</h2>
+        <button onclick="testDOM()">Test DOM Manipulation</button>
+        <div id="result2" class="result">Click the button to test...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 3: Event Listeners</h2>
+        <button id="eventTest">Test Event Listeners</button>
+        <div id="result3" class="result">Click the button to test...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 4: Local Storage</h2>
+        <button onclick="testLocalStorage()">Test Local Storage</button>
+        <div id="result4" class="result">Click the button to test...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 5: Simulated Code Generation</h2>
+        <input type="text" id="codeInput" placeholder="Enter description..." style="width: 300px; padding: 10px; margin: 10px;">
+        <button onclick="testCodeGeneration()">Generate Code</button>
+        <div id="result5" class="result">Enter description and click generate...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 6: Language Selection</h2>
+        <button onclick="selectLang('javascript')" class="lang-btn">JavaScript</button>
+        <button onclick="selectLang('python')" class="lang-btn">Python</button>
+        <button onclick="selectLang('react')" class="lang-btn">React</button>
+        <div id="result6" class="result">Click a language to test...</div>
+    </div>
+
+    <script>
+        // Test 1: Basic JavaScript
+        function testBasicJS() {
+            document.getElementById('result1').innerHTML = '✅ Basic JavaScript works! Current time: ' + new Date().toLocaleTimeString();
+        }
+        
+        // Test 2: DOM Manipulation
+        function testDOM() {
+            const element = document.getElementById('result2');
+            element.innerHTML = '✅ DOM manipulation works! Element found and updated.';
+            element.style.backgroundColor = 'rgba(76, 205, 196, 0.3)';
+        }
+        
+        // Test 3: Event Listeners
+        document.getElementById('eventTest').addEventListener('click', function() {
+            document.getElementById('result3').innerHTML = '✅ Event listeners work! Button clicked at: ' + new Date().toLocaleTimeString();
+        });
+        
+        // Test 4: Local Storage
+        function testLocalStorage() {
+            try {
+                localStorage.setItem('test', 'JavaScript works!');
+                const value = localStorage.getItem('test');
+                document.getElementById('result4').innerHTML = '✅ Local storage works! Stored value: ' + value;
+            } catch (error) {
+                document.getElementById('result4').innerHTML = '❌ Local storage failed: ' + error.message;
+            }
+        }
+        
+        // Test 5: Simulated Code Generation
+        function testCodeGeneration() {
+            const input = document.getElementById('codeInput').value.trim();
+            if (!input) {
+                document.getElementById('result5').innerHTML = '❌ Please enter a description first';
+                return;
+            }
+            
+            // Simulate code generation
+            setTimeout(function() {
+                const code = '// Generated code for: ' + input + '\nfunction ' + input.replace(/\s+/g, '') + '() {\n    console.log("Hello from generated code!");\n    return "Success";\n}';
+                document.getElementById('result5').innerHTML = '<pre>' + code + '</pre>';
+            }, 1000);
+        }
+        
+        // Test 6: Language Selection
+        var currentLang = 'javascript';
+        function selectLang(lang) {
+            currentLang = lang;
+            document.getElementById('result6').innerHTML = '✅ Language selected: ' + lang.toUpperCase();
+            
+            // Update button styles
+            const buttons = document.querySelectorAll('.lang-btn');
+            buttons.forEach(btn => btn.style.backgroundColor = '#666');
+            event.target.style.backgroundColor = '#4ecdc4';
+        }
+        
+        // Auto-test on page load
+        window.onload = function() {
+            console.log('✅ JavaScript is running on this page!');
+            document.body.innerHTML += '<div class="test-section"><h2>✅ Page Load Test</h2><p>JavaScript loaded successfully!</p></div>';
+        };
+    </script>
+</body>
+</html> 
