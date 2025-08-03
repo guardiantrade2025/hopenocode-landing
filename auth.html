@@ -27,7 +27,7 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             overflow: hidden;
             width: 100%;
-            max-width: 900px;
+            max-width: 1000px;
             display: flex;
             min-height: 600px;
         }
@@ -43,15 +43,15 @@
         }
 
         .auth-sidebar h2 {
-            font-size: 2.5em;
+            font-size: 2.5rem;
             margin-bottom: 20px;
-            font-weight: 300;
+            font-weight: 700;
         }
 
         .auth-sidebar p {
-            font-size: 1.1em;
-            opacity: 0.9;
+            font-size: 1.1rem;
             line-height: 1.6;
+            opacity: 0.9;
         }
 
         .auth-main {
@@ -69,14 +69,12 @@
         }
 
         .auth-tab {
-            flex: 1;
-            padding: 15px;
-            text-align: center;
+            padding: 15px 30px;
             cursor: pointer;
-            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
             color: #666;
             transition: all 0.3s ease;
-            border-bottom: 3px solid transparent;
         }
 
         .auth-tab.active {
@@ -93,13 +91,13 @@
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 500;
+            font-weight: 600;
             color: #333;
         }
 
@@ -117,26 +115,6 @@
             border-color: #667eea;
         }
 
-        .password-strength {
-            margin-top: 5px;
-            font-size: 12px;
-            color: #666;
-        }
-
-        .strength-bar {
-            height: 4px;
-            background: #e0e0e0;
-            border-radius: 2px;
-            margin-top: 5px;
-            overflow: hidden;
-        }
-
-        .strength-fill {
-            height: 100%;
-            transition: all 0.3s ease;
-            border-radius: 2px;
-        }
-
         .btn-primary {
             width: 100%;
             padding: 15px;
@@ -145,7 +123,7 @@
             border: none;
             border-radius: 10px;
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             transition: transform 0.3s ease;
         }
@@ -162,11 +140,30 @@
         .social-login p {
             color: #666;
             margin-bottom: 20px;
+            position: relative;
+        }
+
+        .social-login p::before,
+        .social-login p::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .social-login p::before {
+            left: 0;
+        }
+
+        .social-login p::after {
+            right: 0;
         }
 
         .social-buttons {
             display: flex;
-            gap: 10px;
+            gap: 15px;
         }
 
         .social-btn {
@@ -181,6 +178,7 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            font-weight: 600;
         }
 
         .social-btn:hover {
@@ -188,16 +186,79 @@
             transform: translateY(-2px);
         }
 
+        .password-strength {
+            margin-top: 10px;
+        }
+
+        .strength-bar {
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .strength-fill {
+            height: 100%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .strength-fill.weak {
+            background: #ff4757;
+            width: 25%;
+        }
+
+        .strength-fill.fair {
+            background: #ffa502;
+            width: 50%;
+        }
+
+        .strength-fill.good {
+            background: #2ed573;
+            width: 75%;
+        }
+
+        .strength-fill.strong {
+            background: #1e90ff;
+            width: 100%;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: #2ed573;
+        }
+
+        .notification.error {
+            background: #ff4757;
+        }
+
         .back-btn {
             position: absolute;
             top: 20px;
             left: 20px;
+            padding: 10px 20px;
             background: rgba(255,255,255,0.9);
-            border: none;
-            padding: 10px 15px;
+            color: #333;
+            text-decoration: none;
             border-radius: 25px;
-            cursor: pointer;
-            font-size: 14px;
+            font-weight: 600;
             transition: all 0.3s ease;
         }
 
@@ -206,45 +267,63 @@
             transform: translateY(-2px);
         }
 
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .forgot-password a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .two-factor {
+            background: #f8f9fa;
+            padding: 20px;
             border-radius: 10px;
-            color: white;
-            font-weight: 500;
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
+            margin-top: 20px;
+            border: 2px solid #e0e0e0;
         }
 
-        .notification.show {
-            transform: translateX(0);
+        .two-factor h4 {
+            margin-bottom: 15px;
+            color: #333;
         }
 
-        .notification.success {
-            background: #27ae60;
+        .verification-code {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
         }
 
-        .notification.error {
-            background: #e74c3c;
+        .verification-code input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
         }
 
         @media (max-width: 768px) {
             .auth-container {
                 flex-direction: column;
-                max-width: 100%;
+                min-height: auto;
+            }
+
+            .auth-sidebar,
+            .auth-main {
+                width: 100%;
             }
 
             .auth-sidebar {
-                width: 100%;
-                padding: 30px;
-                text-align: center;
+                padding: 30px 20px;
             }
 
             .auth-main {
-                width: 100%;
-                padding: 30px;
+                padding: 30px 20px;
             }
 
             .social-buttons {
@@ -255,31 +334,37 @@
 </head>
 <body>
     <a href="index.html" class="back-btn">← Back to Home</a>
-
+    
     <div class="auth-container">
         <div class="auth-sidebar">
             <h2>Welcome to HopeNocode</h2>
             <p>Join thousands of developers who trust our platform for their coding needs. Get access to premium features, AI tools, and exclusive content.</p>
         </div>
-
+        
         <div class="auth-main">
             <div class="auth-tabs">
                 <div class="auth-tab active" onclick="switchTab('login')">Sign In</div>
                 <div class="auth-tab" onclick="switchTab('register')">Sign Up</div>
             </div>
-
+            
             <!-- Login Form -->
             <form class="auth-form active" id="loginForm">
                 <div class="form-group">
                     <label for="loginEmail">Email Address</label>
                     <input type="email" id="loginEmail" required>
                 </div>
+                
                 <div class="form-group">
                     <label for="loginPassword">Password</label>
                     <input type="password" id="loginPassword" required>
                 </div>
+                
+                <div class="forgot-password">
+                    <a href="#" onclick="showForgotPassword()">Forgot Password?</a>
+                </div>
+                
                 <button type="submit" class="btn-primary">Sign In</button>
-
+                
                 <div class="social-login">
                     <p>Or continue with</p>
                     <div class="social-buttons">
@@ -292,17 +377,19 @@
                     </div>
                 </div>
             </form>
-
+            
             <!-- Register Form -->
             <form class="auth-form" id="registerForm">
                 <div class="form-group">
                     <label for="registerName">Full Name</label>
                     <input type="text" id="registerName" required>
                 </div>
+                
                 <div class="form-group">
                     <label for="registerEmail">Email Address</label>
                     <input type="email" id="registerEmail" required>
                 </div>
+                
                 <div class="form-group">
                     <label for="registerPassword">Password</label>
                     <input type="password" id="registerPassword" required onkeyup="checkPasswordStrength()">
@@ -313,12 +400,14 @@
                         <span id="strengthText">Enter a password</span>
                     </div>
                 </div>
+                
                 <div class="form-group">
                     <label for="confirmPassword">Confirm Password</label>
                     <input type="password" id="confirmPassword" required>
                 </div>
+                
                 <button type="submit" class="btn-primary">Create Account</button>
-
+                
                 <div class="social-login">
                     <p>Or sign up with</p>
                     <div class="social-buttons">
@@ -331,138 +420,166 @@
                     </div>
                 </div>
             </form>
+            
+            <!-- Two-Factor Authentication -->
+            <div class="auth-form" id="twoFactorForm">
+                <h3>Two-Factor Authentication</h3>
+                <p>We've sent a verification code to your email. Please enter it below.</p>
+                
+                <div class="verification-code">
+                    <input type="text" maxlength="1" onkeyup="moveToNext(this, 1)">
+                    <input type="text" maxlength="1" onkeyup="moveToNext(this, 2)">
+                    <input type="text" maxlength="1" onkeyup="moveToNext(this, 3)">
+                    <input type="text" maxlength="1" onkeyup="moveToNext(this, 4)">
+                    <input type="text" maxlength="1" onkeyup="moveToNext(this, 5)">
+                    <input type="text" maxlength="1" onkeyup="moveToNext(this, 6)">
+                </div>
+                
+                <button type="button" class="btn-primary" onclick="verifyCode()">Verify Code</button>
+                <button type="button" class="social-btn" onclick="resendCode()" style="margin-top: 15px;">Resend Code</button>
+            </form>
         </div>
     </div>
-
+    
     <div class="notification" id="notification"></div>
-
+    
     <script>
         function switchTab(tab) {
-            // Update tab buttons
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-
-            // Update forms
-            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            // Hide all forms
+            document.querySelectorAll('.auth-form').forEach(form => {
+                form.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.auth-tab').forEach(tabElement => {
+                tabElement.classList.remove('active');
+            });
+            
+            // Show selected form and activate tab
             if (tab === 'login') {
                 document.getElementById('loginForm').classList.add('active');
-            } else {
+                document.querySelectorAll('.auth-tab')[0].classList.add('active');
+            } else if (tab === 'register') {
                 document.getElementById('registerForm').classList.add('active');
+                document.querySelectorAll('.auth-tab')[1].classList.add('active');
             }
         }
-
+        
         function checkPasswordStrength() {
             const password = document.getElementById('registerPassword').value;
             const strengthFill = document.getElementById('strengthFill');
             const strengthText = document.getElementById('strengthText');
-
+            
             let strength = 0;
-            let text = '';
-
+            let feedback = '';
+            
             if (password.length >= 8) strength++;
             if (/[a-z]/.test(password)) strength++;
             if (/[A-Z]/.test(password)) strength++;
             if (/[0-9]/.test(password)) strength++;
             if (/[^A-Za-z0-9]/.test(password)) strength++;
-
-            switch (strength) {
-                case 0:
-                case 1:
-                    strengthFill.style.width = '20%';
-                    strengthFill.style.background = '#e74c3c';
-                    text = 'Very Weak';
-                    break;
-                case 2:
-                    strengthFill.style.width = '40%';
-                    strengthFill.style.background = '#f39c12';
-                    text = 'Weak';
-                    break;
-                case 3:
-                    strengthFill.style.width = '60%';
-                    strengthFill.style.background = '#f1c40f';
-                    text = 'Fair';
-                    break;
-                case 4:
-                    strengthFill.style.width = '80%';
-                    strengthFill.style.background = '#27ae60';
-                    text = 'Good';
-                    break;
-                case 5:
-                    strengthFill.style.width = '100%';
-                    strengthFill.style.background = '#2ecc71';
-                    text = 'Strong';
-                    break;
+            
+            strengthFill.className = 'strength-fill';
+            
+            if (strength < 2) {
+                strengthFill.classList.add('weak');
+                feedback = 'Weak password';
+            } else if (strength < 3) {
+                strengthFill.classList.add('fair');
+                feedback = 'Fair password';
+            } else if (strength < 4) {
+                strengthFill.classList.add('good');
+                feedback = 'Good password';
+            } else {
+                strengthFill.classList.add('strong');
+                feedback = 'Strong password';
             }
-
-            strengthText.textContent = text;
+            
+            strengthText.textContent = feedback;
         }
-
+        
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
             notification.textContent = message;
             notification.className = `notification ${type}`;
             notification.classList.add('show');
-
+            
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 3000);
         }
-
+        
         function socialLogin(provider) {
             showNotification(`Connecting to ${provider}...`, 'success');
             setTimeout(() => {
-                showNotification(`Successfully connected to ${provider}!`, 'success');
+                showNotification(`Successfully connected with ${provider}!`, 'success');
             }, 1500);
         }
-
-        // Handle form submissions
+        
+        function showForgotPassword() {
+            showNotification('Password reset link sent to your email!', 'success');
+        }
+        
+        function moveToNext(input, position) {
+            if (input.value.length === input.maxLength) {
+                const nextInput = input.parentNode.querySelector(`input:nth-child(${position + 1})`);
+                if (nextInput) {
+                    nextInput.focus();
+                }
+            }
+        }
+        
+        function verifyCode() {
+            showNotification('Verification successful! Redirecting...', 'success');
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 2000);
+        }
+        
+        function resendCode() {
+            showNotification('New verification code sent!', 'success');
+        }
+        
+        // Form submission handlers
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
-
-            if (email && password) {
-                showNotification('Signing in...', 'success');
-                setTimeout(() => {
-                    showNotification('Successfully signed in!', 'success');
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html';
-                    }, 1000);
-                }, 1500);
-            } else {
+            
+            if (!email || !password) {
                 showNotification('Please fill in all fields', 'error');
+                return;
             }
+            
+            showNotification('Signing in...', 'success');
+            setTimeout(() => {
+                // Simulate two-factor authentication
+                switchTab('twoFactor');
+                document.getElementById('twoFactorForm').classList.add('active');
+            }, 1500);
         });
-
+        
         document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('registerName').value;
             const email = document.getElementById('registerEmail').value;
             const password = document.getElementById('registerPassword').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
-
+            
             if (!name || !email || !password || !confirmPassword) {
                 showNotification('Please fill in all fields', 'error');
                 return;
             }
-
+            
             if (password !== confirmPassword) {
                 showNotification('Passwords do not match', 'error');
                 return;
             }
-
-            if (password.length < 8) {
-                showNotification('Password must be at least 8 characters', 'error');
-                return;
-            }
-
-            showNotification('Creating account...', 'success');
+            
+            showNotification('Creating your account...', 'success');
             setTimeout(() => {
-                showNotification('Account created successfully!', 'success');
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 1000);
-            }, 1500);
+                window.location.href = 'dashboard.html';
+            }, 2000);
         });
     </script>
 </body>
