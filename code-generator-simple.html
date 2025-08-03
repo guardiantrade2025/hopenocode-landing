@@ -16,11 +16,34 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .back-arrow {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+        .back-arrow:hover {
+            background: #0056b3;
         }
         h1 { 
             text-align: center; 
             color: #333; 
             margin-bottom: 30px;
+            margin-top: 20px;
         }
         .lang-buttons {
             text-align: center;
@@ -80,10 +103,24 @@
             border-radius: 5px;
             font-weight: bold;
         }
+        @media (max-width: 768px) {
+            .back-arrow {
+                top: 15px;
+                left: 15px;
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+            .container {
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <a href="index.html" class="back-arrow" title="Go back to homepage">←</a>
+        
         <h1>Simple Code Generator</h1>
         
         <div class="status" id="status">Ready to generate code</div>
@@ -108,13 +145,11 @@
         function setLang(lang, btn) {
             currentLang = lang;
             
-            // Remove active from all buttons
             var buttons = document.querySelectorAll('button');
             for(var i = 0; i < buttons.length; i++) {
                 buttons[i].classList.remove('active');
             }
             
-            // Add active to clicked button
             btn.classList.add('active');
             
             document.getElementById('status').textContent = 'Language selected: ' + currentLang;
@@ -130,7 +165,6 @@
             
             document.getElementById('status').textContent = 'Generating ' + currentLang + ' code...';
             
-            // Simple delay to show loading
             setTimeout(function() {
                 var code = '';
                 
