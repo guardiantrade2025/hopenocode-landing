@@ -107,18 +107,18 @@
         }
         
         .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            display: block;
             margin-bottom: 30px;
         }
         
-        .input-section, .output-section {
+        .input-section {
             background: rgba(255,255,255,0.1);
             backdrop-blur: 10px;
             border-radius: 20px;
             padding: 30px;
             border: 1px solid rgba(255,255,255,0.2);
+            max-width: 800px;
+            margin: 0 auto;
         }
         
         .section-title {
@@ -283,7 +283,6 @@
             
             document.getElementById('status').textContent = 'Language selected: ' + currentLanguage;
             generatedCode = '';
-            document.getElementById('codeOutput').textContent = '';
         }
 
         // Code generation function
@@ -303,11 +302,16 @@
             setTimeout(function() {
                 try {
                     generatedCode = generateCodeForLanguage(input, currentLanguage);
-                    document.getElementById('codeOutput').textContent = generatedCode;
-                    document.getElementById('status').textContent = 'Code generated successfully for ' + currentLanguage;
+                    document.getElementById('status').textContent = 'Code generated successfully for ' + currentLanguage + '! Check your clipboard.';
+                    // Copy to clipboard automatically
+                    navigator.clipboard.writeText(generatedCode).then(function() {
+                        alert('Code generated and copied to clipboard!');
+                    }).catch(function(err) {
+                        console.error('Failed to copy code:', err);
+                        alert('Code generated! Please check the console for the code.');
+                    });
                 } catch (error) {
                     console.error('Error generating code:', error);
-                    document.getElementById('codeOutput').textContent = 'Error: Failed to generate code. Please try again.';
                     document.getElementById('status').textContent = 'Error occurred during generation';
                 } finally {
                     document.getElementById('loading').style.display = 'none';
@@ -358,23 +362,7 @@
             return result + 'Component';
         }
 
-        // Copy code function
-        function copyCode() {
-            console.log('copyCode called');
-            if (generatedCode) {
-                navigator.clipboard.writeText(generatedCode).then(function() {
-                    var copyBtn = document.querySelector('.copy-btn');
-                    var originalText = copyBtn.textContent;
-                    copyBtn.textContent = 'Copied!';
-                    setTimeout(function() {
-                        copyBtn.textContent = originalText;
-                    }, 2000);
-                }).catch(function(err) {
-                    console.error('Failed to copy code:', err);
-                    alert('Failed to copy code. Please select and copy manually.');
-                });
-            }
-        }
+
 
         // Test function
         function testFunction() {
@@ -386,8 +374,6 @@
         window.onload = function() {
             console.log('Page loaded, initializing code generator...');
             document.getElementById('status').textContent = 'Ready to generate code';
-            // Clear any initial code display
-            document.getElementById('codeOutput').textContent = '';
         };
     </script>
 </head>
@@ -422,16 +408,6 @@
                     placeholder="Describe what you want to build... For example: 'Create a function to process CSV data' or 'Build a React component for user authentication'"
                 ></textarea>
             </div>
-            
-            <div class="output-section">
-                <h3 class="section-title">💻 Generated Code</h3>
-                <textarea 
-                    id="codeOutput" 
-                    class="output-area" 
-                    readonly
-                    placeholder="Your generated code will appear here..."
-                ></textarea>
-            </div>
         </div>
         
         <div class="loading" id="loading">
@@ -441,7 +417,6 @@
         
         <div class="controls">
             <button id="generateBtn" class="btn btn-primary" onclick="generateCode()">🚀 Generate Code</button>
-            <button class="btn btn-secondary copy-btn" onclick="copyCode()">📋 Copy Code</button>
             <button class="btn btn-secondary" onclick="testFunction()" style="background: #ff6b6b;">🧪 Test JS</button>
         </div>
         
