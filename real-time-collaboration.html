@@ -361,13 +361,124 @@
         }
 
         @media (max-width: 768px) {
-            .main-layout {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto 1fr auto;
+            .container {
+                padding: 10px;
             }
             
-            .sidebar, .chat-section {
-                max-height: 200px;
+            .header {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .header p {
+                font-size: 1em;
+            }
+            
+            .main-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto 1fr auto;
+                gap: 15px;
+                height: auto;
+            }
+            
+            .sidebar {
+                order: 1;
+                max-height: 250px;
+                overflow-y: auto;
+            }
+            
+            .main-content {
+                order: 2;
+                min-height: 400px;
+            }
+            
+            .chat-section {
+                order: 3;
+                max-height: 250px;
+            }
+            
+            .code-editor {
+                min-height: 300px;
+            }
+            
+            .code-area {
+                min-height: 250px;
+            }
+            
+            .editor-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: stretch;
+            }
+            
+            .file-tabs {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .file-tab {
+                font-size: 0.8em;
+                padding: 6px 12px;
+            }
+            
+            .editor-controls {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .control-btn {
+                font-size: 0.8em;
+                padding: 6px 12px;
+            }
+            
+            .chat-messages {
+                max-height: 150px;
+            }
+            
+            .team-member {
+                padding: 8px;
+            }
+            
+            .member-avatar {
+                width: 35px;
+                height: 35px;
+                font-size: 0.8em;
+            }
+            
+            .activity-feed {
+                max-height: 120px;
+            }
+            
+            .invite-section {
+                margin-top: 15px;
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+            
+            .header p {
+                font-size: 0.9em;
+            }
+            
+            .section-title {
+                font-size: 1.1em;
+            }
+            
+            .file-tab, .control-btn {
+                font-size: 0.7em;
+                padding: 5px 10px;
+            }
+            
+            .code-area {
+                font-size: 12px;
             }
         }
     </style>
@@ -508,6 +619,65 @@
             }
         }
 
+        // Switch file function
+        function switchFile(fileName, button) {
+            console.log('switchFile called with:', fileName);
+            
+            // Remove active class from all file tabs
+            const allTabs = document.querySelectorAll('.file-tab');
+            allTabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Add active class to clicked button
+            button.classList.add('active');
+            
+            // Update code area content based on file
+            const codeArea = document.querySelector('.code-area');
+            const fileContents = {
+                'main.js': '// Welcome to Real-time Code Collaboration\n// Start coding here and see your changes sync with your team\n\nfunction welcomeMessage() {\n    console.log("Hello from the collaborative editor!");\n    return "Team collaboration is now active";\n}\n\n// Your code will be automatically saved and shared\nwelcomeMessage();',
+                'index.html': '<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Collaborative Project</title>\n    <link rel="stylesheet" href="styles.css">\n</head>\n<body>\n    <div class="container">\n        <h1>Welcome to Collaborative Development</h1>\n        <p>This is a collaborative HTML file</p>\n        <script src="main.js"></script>\n    </div>\n</body>\n</html>',
+                'styles.css': '/* Collaborative CSS Styles */\n\nbody {\n    font-family: Arial, sans-serif;\n    margin: 0;\n    padding: 20px;\n    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n    color: white;\n}\n\n.container {\n    max-width: 800px;\n    margin: 0 auto;\n    text-align: center;\n}\n\nh1 {\n    font-size: 2.5em;\n    margin-bottom: 20px;\n    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);\n}'
+            };
+            
+            codeArea.value = fileContents[fileName] || fileContents['main.js'];
+            addActivity(`Switched to ${fileName}`);
+        }
+
+        // Toggle auto save function
+        function toggleAutoSave(button) {
+            console.log('toggleAutoSave called');
+            button.classList.toggle('active');
+            
+            if (button.classList.contains('active')) {
+                button.textContent = 'Auto Save';
+                addActivity('Auto-save enabled');
+                addChatMessage('System', 'Auto-save has been enabled', 'received');
+            } else {
+                button.textContent = 'Manual Save';
+                addActivity('Auto-save disabled');
+                addChatMessage('System', 'Auto-save has been disabled', 'received');
+            }
+        }
+
+        // Share project function
+        function shareProject() {
+            console.log('shareProject called');
+            
+            // Simulate sharing
+            addActivity('Project shared with team');
+            addChatMessage('System', 'Project has been shared with all team members', 'received');
+            
+            // Show share notification
+            const shareBtn = document.querySelector('.control-btn');
+            const originalText = shareBtn.textContent;
+            shareBtn.textContent = 'Shared!';
+            shareBtn.style.background = '#28a745';
+            
+            setTimeout(() => {
+                shareBtn.textContent = originalText;
+                shareBtn.style.background = '';
+            }, 2000);
+        }
+
         // Test function
         function testFunction() {
             console.log('Test function called successfully!');
@@ -571,13 +741,13 @@
             <div class="main-content">
                 <div class="editor-header">
                     <div class="file-tabs">
-                        <button class="file-tab active">main.js</button>
-                        <button class="file-tab">index.html</button>
-                        <button class="file-tab">styles.css</button>
+                        <button class="file-tab active" onclick="switchFile('main.js', this)">main.js</button>
+                        <button class="file-tab" onclick="switchFile('index.html', this)">index.html</button>
+                        <button class="file-tab" onclick="switchFile('styles.css', this)">styles.css</button>
                     </div>
                     <div class="editor-controls">
-                        <button class="control-btn active">Auto Save</button>
-                        <button class="control-btn">Share</button>
+                        <button class="control-btn active" onclick="toggleAutoSave(this)">Auto Save</button>
+                        <button class="control-btn" onclick="shareProject()">Share</button>
                         <button class="control-btn" onclick="testFunction()" style="background: #ff6b6b;">🧪 Test JS</button>
                     </div>
                 </div>
