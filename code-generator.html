@@ -264,87 +264,6 @@
             line-height: 1.5;
         }
     </style>
-</head>
-<body>
-    <a href="index.html" class="back-arrow">←</a>
-    
-    <div class="container">
-        <div class="header">
-            <h1>🤖 Multi-Language AI Code Generator</h1>
-            <p>Transform your ideas into working code across multiple programming languages</p>
-        </div>
-        
-        <div class="language-selector">
-            <button class="lang-btn active" onclick="selectLanguage('javascript', this)">JavaScript</button>
-            <button class="lang-btn" onclick="selectLanguage('python', this)">Python</button>
-            <button class="lang-btn" onclick="selectLanguage('react', this)">React</button>
-            <button class="lang-btn" onclick="selectLanguage('vue', this)">Vue.js</button>
-            <button class="lang-btn" onclick="selectLanguage('nodejs', this)">Node.js</button>
-            <button class="lang-btn" onclick="selectLanguage('php', this)">PHP</button>
-        </div>
-        
-        <div class="status-bar" id="status">
-            Ready to generate code
-        </div>
-        
-        <div class="main-content">
-            <div class="input-section">
-                <h3 class="section-title">📝 Describe Your Code</h3>
-                <textarea 
-                    id="codeInput" 
-                    class="input-area" 
-                    placeholder="Describe what you want to build... For example: 'Create a function to process CSV data' or 'Build a React component for user authentication'"
-                ></textarea>
-            </div>
-            
-            <div class="output-section">
-                <h3 class="section-title">💻 Generated Code</h3>
-                <textarea 
-                    id="codeOutput" 
-                    class="output-area" 
-                    readonly
-                    placeholder="Your generated code will appear here..."
-                ></textarea>
-            </div>
-        </div>
-        
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>Generating your code...</p>
-        </div>
-        
-        <div class="controls">
-            <button id="generateBtn" class="btn btn-primary" onclick="generateCode()">🚀 Generate Code</button>
-            <button class="btn btn-secondary copy-btn" onclick="copyCode()">📋 Copy Code</button>
-            <button class="btn btn-secondary" onclick="testFunction()" style="background: #ff6b6b;">🧪 Test JS</button>
-        </div>
-        
-        <div class="features">
-            <div class="feature-card">
-                <div class="feature-icon">🌍</div>
-                <h3 class="feature-title">Multi-Language Support</h3>
-                <p class="feature-desc">Generate code in JavaScript, Python, React, Vue.js, Node.js, and PHP</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">⚡</div>
-                <h3 class="feature-title">Instant Generation</h3>
-                <p class="feature-desc">Get working code snippets in seconds with AI-powered generation</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">📋</div>
-                <h3 class="feature-title">Easy Copy</h3>
-                <p class="feature-desc">One-click copy functionality for seamless code integration</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">🎯</div>
-                <h3 class="feature-title">Smart Templates</h3>
-                <p class="feature-desc">Intelligent code templates based on your description</p>
-            </div>
-        </div>
-    </div>
 
     <script>
         // Global variables
@@ -388,6 +307,7 @@
                     document.getElementById('status').textContent = 'Code generated successfully for ' + currentLanguage;
                 } catch (error) {
                     console.error('Error generating code:', error);
+                    document.getElementById('codeOutput').textContent = 'Error: Failed to generate code. Please try again.';
                     document.getElementById('status').textContent = 'Error occurred during generation';
                 } finally {
                     document.getElementById('loading').style.display = 'none';
@@ -470,5 +390,86 @@
             document.getElementById('codeOutput').textContent = '';
         };
     </script>
+</head>
+<body>
+    <a href="index.html" class="back-arrow">←</a>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Multi-Language AI Code Generator</h1>
+            <p>Transform your ideas into working code across multiple programming languages</p>
+        </div>
+        
+        <div class="language-selector">
+            <button class="lang-btn active" onclick="selectLanguage('javascript', this)">JavaScript</button>
+            <button class="lang-btn" onclick="selectLanguage('python', this)">Python</button>
+            <button class="lang-btn" onclick="selectLanguage('react', this)">React</button>
+            <button class="lang-btn" onclick="selectLanguage('vue', this)">Vue.js</button>
+            <button class="lang-btn" onclick="selectLanguage('nodejs', this)">Node.js</button>
+            <button class="lang-btn" onclick="selectLanguage('php', this)">PHP</button>
+        </div>
+        
+        <div class="status-bar" id="status">
+            Ready to generate code
+        </div>
+        
+        <div class="main-content">
+            <div class="input-section">
+                <h3 class="section-title">📝 Describe Your Code</h3>
+                <textarea 
+                    id="codeInput" 
+                    class="input-area" 
+                    placeholder="Describe what you want to build... For example: 'Create a function to process CSV data' or 'Build a React component for user authentication'"
+                ></textarea>
+            </div>
+            
+            <div class="output-section">
+                <h3 class="section-title">💻 Generated Code</h3>
+                <textarea 
+                    id="codeOutput" 
+                    class="output-area" 
+                    readonly
+                    placeholder="Your generated code will appear here..."
+                ></textarea>
+            </div>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Generating your code...</p>
+        </div>
+        
+        <div class="controls">
+            <button id="generateBtn" class="btn btn-primary" onclick="generateCode()">🚀 Generate Code</button>
+            <button class="btn btn-secondary copy-btn" onclick="copyCode()">📋 Copy Code</button>
+            <button class="btn btn-secondary" onclick="testFunction()" style="background: #ff6b6b;">🧪 Test JS</button>
+        </div>
+        
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🌍</div>
+                <h3 class="feature-title">Multi-Language Support</h3>
+                <p class="feature-desc">Generate code in JavaScript, Python, React, Vue.js, Node.js, and PHP</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">Instant Generation</h3>
+                <p class="feature-desc">Get working code snippets in seconds with AI-powered generation</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">📋</div>
+                <h3 class="feature-title">Easy Copy</h3>
+                <p class="feature-desc">One-click copy functionality for seamless code integration</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3 class="feature-title">Smart Templates</h3>
+                <p class="feature-desc">Intelligent code templates based on your description</p>
+            </div>
+        </div>
+    </div>
 </body>
 </html> 
