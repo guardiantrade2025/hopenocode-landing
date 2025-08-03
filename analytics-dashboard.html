@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - HopeNocode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3498db, #e74c3c, #f39c12, #27ae60);
+        }
+
+        .metric-title {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .metric-change {
+            font-size: 0.9rem;
+            padding: 5px 12px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        .metric-change.positive {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .metric-change.negative {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .chart {
+            height: 300px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            display: flex;
+            align-items: end;
+            justify-content: space-around;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .bar {
+            width: 40px;
+            background: linear-gradient(to top, #3498db, #2980b9);
+            border-radius: 5px 5px 0 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .bar:hover {
+            transform: scale(1.1);
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            white-space: nowrap;
+        }
+
+        .recent-activity {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .activity-icon.sale {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .activity-icon.user {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .activity-icon.payment {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-text {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .activity-time {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .refresh-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .metric-card {
+                padding: 20px;
+            }
+            
+            .metric-value {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-btn">← Back</a>
+        
+        <div class="header">
+            <h1>📊 Analytics Dashboard</h1>
+            <p>Real-time insights and business metrics</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="metric-card">
+                <div class="metric-title">Total Revenue</div>
+                <div class="metric-value" id="totalRevenue">$24,567</div>
+                <div class="metric-change positive">+12.5% vs last month</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-title">Active Users</div>
+                <div class="metric-value" id="activeUsers">1,847</div>
+                <div class="metric-change positive">+8.3% vs last week</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-title">Conversion Rate</div>
+                <div class="metric-value" id="conversionRate">3.2%</div>
+                <div class="metric-change positive">+0.4% vs last month</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-title">Average Order Value</div>
+                <div class="metric-value" id="avgOrderValue">$89.45</div>
+                <div class="metric-change positive">+5.2% vs last month</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-title">Products Sold</div>
+                <div class="metric-value" id="productsSold">274</div>
+                <div class="metric-change positive">+15.7% vs last month</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-title">Customer Satisfaction</div>
+                <div class="metric-value" id="satisfaction">4.8/5</div>
+                <div class="metric-change positive">+0.2 vs last month</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">Revenue Growth (Last 6 Months)</div>
+            <div class="chart" id="revenueChart">
+                <div class="bar" style="height: 60%;" data-value="15,200">
+                    <div class="bar-label">Jan</div>
+                </div>
+                <div class="bar" style="height: 70%;" data-value="17,800">
+                    <div class="bar-label">Feb</div>
+                </div>
+                <div class="bar" style="height: 65%;" data-value="16,500">
+                    <div class="bar-label">Mar</div>
+                </div>
+                <div class="bar" style="height: 80%;" data-value="19,200">
+                    <div class="bar-label">Apr</div>
+                </div>
+                <div class="bar" style="height: 85%;" data-value="20,400">
+                    <div class="bar-label">May</div>
+                </div>
+                <div class="bar" style="height: 100%;" data-value="24,567">
+                    <div class="bar-label">Jun</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recent-activity">
+            <div class="activity-title">Recent Activity</div>
+            <div class="activity-item">
+                <div class="activity-icon sale">💰</div>
+                <div class="activity-content">
+                    <div class="activity-text">New sale: HopeNocode Pro Plan - $299.99</div>
+                    <div class="activity-time">2 minutes ago</div>
+                </div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon user">👤</div>
+                <div class="activity-content">
+                    <div class="activity-text">New user registration: john.doe@email.com</div>
+                    <div class="activity-time">5 minutes ago</div>
+                </div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon payment">💳</div>
+                <div class="activity-content">
+                    <div class="activity-text">Payment processed: Enterprise Solution - $999.99</div>
+                    <div class="activity-time">12 minutes ago</div>
+                </div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon sale">💰</div>
+                <div class="activity-content">
+                    <div class="activity-text">New sale: React Template Bundle - $149.99</div>
+                    <div class="activity-time">18 minutes ago</div>
+                </div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon user">👤</div>
+                <div class="activity-content">
+                    <div class="activity-text">User completed onboarding: sarah.wilson@company.com</div>
+                    <div class="activity-time">25 minutes ago</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="refresh-btn" onclick="refreshData()">🔄 Refresh Data</button>
+    </div>
+
+    <script>
+        // Simulate real-time data updates
+        function refreshData() {
+            // Animate metric updates
+            const metrics = [
+                { id: 'totalRevenue', newValue: '$' + Math.floor(Math.random() * 50000 + 20000) },
+                { id: 'activeUsers', newValue: Math.floor(Math.random() * 3000 + 1500) },
+                { id: 'conversionRate', newValue: (Math.random() * 2 + 2.5).toFixed(1) + '%' },
+                { id: 'avgOrderValue', newValue: '$' + (Math.random() * 50 + 70).toFixed(2) },
+                { id: 'productsSold', newValue: Math.floor(Math.random() * 500 + 200) },
+                { id: 'satisfaction', newValue: (Math.random() * 0.5 + 4.5).toFixed(1) + '/5' }
+            ];
+
+            metrics.forEach(metric => {
+                const element = document.getElementById(metric.id);
+                element.style.transform = 'scale(1.1)';
+                element.style.color = '#e74c3c';
+                
+                setTimeout(() => {
+                    element.textContent = metric.newValue;
+                    element.style.transform = 'scale(1)';
+                    element.style.color = '#2c3e50';
+                }, 300);
+            });
+
+            // Update chart bars
+            const bars = document.querySelectorAll('.bar');
+            bars.forEach(bar => {
+                const newHeight = Math.random() * 100 + 20;
+                bar.style.height = newHeight + '%';
+                bar.style.background = `linear-gradient(to top, #${Math.floor(Math.random()*16777215).toString(16)}, #${Math.floor(Math.random()*16777215).toString(16)})`;
+            });
+
+            // Add new activity item
+            const activities = [
+                { icon: '💰', text: 'New sale: Premium Package - $199.99', time: 'Just now' },
+                { icon: '👤', text: 'New user registration: user@example.com', time: '1 minute ago' },
+                { icon: '💳', text: 'Payment processed: Subscription - $99.99', time: '3 minutes ago' }
+            ];
+
+            const activityContainer = document.querySelector('.recent-activity');
+            const activityList = activityContainer.querySelector('.activity-item').parentNode;
+            
+            const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+            const newActivity = document.createElement('div');
+            newActivity.className = 'activity-item';
+            newActivity.innerHTML = `
+                <div class="activity-icon ${randomActivity.icon === '💰' ? 'sale' : randomActivity.icon === '👤' ? 'user' : 'payment'}">${randomActivity.icon}</div>
+                <div class="activity-content">
+                    <div class="activity-text">${randomActivity.text}</div>
+                    <div class="activity-time">${randomActivity.time}</div>
+                </div>
+            `;
+            
+            activityList.insertBefore(newActivity, activityList.firstChild);
+            
+            // Remove oldest activity if more than 5
+            const allActivities = activityList.querySelectorAll('.activity-item');
+            if (allActivities.length > 5) {
+                allActivities[allActivities.length - 1].remove();
+            }
+
+            // Show success message
+            const btn = document.querySelector('.refresh-btn');
+            btn.textContent = '✅ Data Updated!';
+            setTimeout(() => {
+                btn.textContent = '🔄 Refresh Data';
+            }, 2000);
+        }
+
+        // Auto-refresh every 30 seconds
+        setInterval(refreshData, 30000);
+
+        // Add hover effects to chart bars
+        document.querySelectorAll('.bar').forEach(bar => {
+            bar.addEventListener('mouseenter', function() {
+                const value = this.getAttribute('data-value');
+                this.style.transform = 'scale(1.1)';
+                this.title = `Revenue: $${value}`;
+            });
+            
+            bar.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html> 
