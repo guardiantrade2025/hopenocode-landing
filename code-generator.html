@@ -56,6 +56,11 @@
             text-align: center;
             margin-bottom: 30px;
             margin-top: 40px;
+            background: rgba(255,255,255,0.1);
+            backdrop-blur: 10px;
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
         }
         
         .header h1 {
@@ -67,6 +72,7 @@
         .header p {
             font-size: 1.1rem;
             opacity: 0.9;
+            margin-bottom: 0;
         }
         
         .language-selector {
@@ -277,7 +283,7 @@
             
             document.getElementById('status').textContent = 'Language selected: ' + currentLanguage;
             generatedCode = '';
-            document.getElementById('codeOutput').textContent = 'Your generated code will appear here...';
+            document.getElementById('codeOutput').textContent = '';
         }
 
         // Code generation function
@@ -380,6 +386,8 @@
         window.onload = function() {
             console.log('Page loaded, initializing code generator...');
             document.getElementById('status').textContent = 'Ready to generate code';
+            // Clear any initial code display
+            document.getElementById('codeOutput').textContent = '';
         };
     </script>
 </head>
