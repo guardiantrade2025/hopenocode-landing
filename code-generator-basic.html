@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Code Generator - Working</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .status {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .language-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .lang-btn {
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .lang-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .lang-btn.active {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4) !important;
+            border-color: transparent !important;
+            box-shadow: 0 5px 15px rgba(255,107,107,0.3) !important;
+            transform: translateY(-2px) !important;
+            font-weight: bold !important;
+            color: white !important;
+        }
+        
+        .lang-btn.active::after {
+            content: ' ✓';
+            font-weight: bold;
+        }
+        
+        .input-area {
+            width: 100%;
+            min-height: 150px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            font-size: 16px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        
+        .input-area::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,107,107,0.4);
+        }
+        
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .output-area {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 20px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            min-height: 200px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #4ecdc4;
+        }
+        
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid #4ecdc4;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Basic Code Generator - Working</h1>
+        
+        <div class="status" id="status">
+            Status: Ready to test
+        </div>
+        
+        <div class="language-buttons">
+            <button class="lang-btn active" onclick="selectLanguage('javascript', this)">JavaScript</button>
+            <button class="lang-btn" onclick="selectLanguage('python', this)">Python</button>
+            <button class="lang-btn" onclick="selectLanguage('react', this)">React</button>
+            <button class="lang-btn" onclick="selectLanguage('vue', this)">Vue</button>
+        </div>
+        
+        <textarea class="input-area" id="codeInput" placeholder="Describe what you want to build..."></textarea>
+        
+        <button class="generate-btn" onclick="generateCode()">Generate Code</button>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <div>Generating code...</div>
+        </div>
+        
+        <div class="output-area" id="codeOutput">Your generated code will appear here...</div>
+    </div>
+
+    <script>
+        var currentLanguage = 'javascript';
+        var generatedCode = '';
+
+        function selectLanguage(lang, button) {
+            // Remove active class from all buttons
+            var allButtons = document.querySelectorAll('.lang-btn');
+            for (var i = 0; i < allButtons.length; i++) {
+                allButtons[i].classList.remove('active');
+            }
+            
+            // Add active class to clicked button
+            button.classList.add('active');
+            
+            // Update current language
+            currentLanguage = lang;
+            
+            // Update status
+            document.getElementById('status').textContent = 'Status: Language selected - ' + currentLanguage;
+            
+            // Clear existing code
+            generatedCode = '';
+            document.getElementById('codeOutput').textContent = 'Your generated code will appear here...';
+            
+            // Add visual feedback
+            button.style.transform = 'scale(1.05)';
+            setTimeout(function() {
+                button.style.transform = '';
+            }, 200);
+        }
+
+        function generateCode() {
+            var input = document.getElementById('codeInput').value.trim();
+            if (!input) {
+                alert('Please describe what you want to build');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('generateBtn').disabled = true;
+            document.getElementById('status').textContent = 'Status: Generating ' + currentLanguage + ' code...';
+
+            // Simulate AI processing delay
+            setTimeout(function() {
+                try {
+                    // Generate code using the local template system
+                    generatedCode = generateCodeForLanguage(input, currentLanguage);
+                    document.getElementById('codeOutput').textContent = generatedCode;
+                    
+                    // Update status
+                    document.getElementById('status').textContent = 'Status: Code generated successfully for ' + currentLanguage;
+                    
+                } catch (error) {
+                    console.error('Error generating code:', error);
+                    document.getElementById('codeOutput').textContent = 'Error: Failed to generate code. Please try again.';
+                    document.getElementById('status').textContent = 'Status: Error occurred';
+                } finally {
+                    // Hide loading
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('generateBtn').disabled = false;
+                }
+            }, 1500); // 1.5 second delay to simulate AI processing
+        }
+
+        function generateCodeForLanguage(description, language) {
+            var codeTemplates = {
+                'javascript': '// ' + description + '\nfunction ' + generateFunctionName(description) + '() {\n    console.log("Hello from JavaScript!");\n    return "Generated code";\n}\n\n// Usage\nvar result = ' + generateFunctionName(description) + '();\nconsole.log(result);',
+                'python': '# ' + description + '\nimport csv\n\ndef ' + generateFunctionName(description) + '():\n    try:\n        with open(\'data.csv\', \'r\') as file:\n            reader = csv.reader(file)\n            for row in reader:\n                print("Processing:", row)\n        return "Data processed successfully"\n    except Exception as e:\n        print("Error:", e)\n        return None\n\n# Usage\nresult = ' + generateFunctionName(description) + '()\nprint(result)',
+                'react': 'import React from \'react\';\n\n// ' + description + '\nvar ' + generateComponentName(description) + ' = function() {\n    return (\n        <div>\n            <h2>Generated React Component</h2>\n            <p>Hello from React!</p>\n        </div>\n    );\n};\n\nexport default ' + generateComponentName(description) + ';',
+                'vue': '<template>\n    <div>\n        <h2>Generated Vue Component</h2>\n        <p>Hello from Vue!</p>\n    </div>\n</template>\n\n<script>\n// ' + description + '\nexport default {\n    name: \'' + generateComponentName(description) + '\'\n}\n</script>'
+            };
+
+            return codeTemplates[language] || codeTemplates['javascript'];
+        }
+
+        function generateFunctionName(description) {
+            var words = description.toLowerCase().split(' ').slice(0, 3);
+            var result = '';
+            for (var i = 0; i < words.length; i++) {
+                result += words[i].charAt(0).toUpperCase() + words[i].slice(1);
+            }
+            return result + 'Function';
+        }
+
+        function generateComponentName(description) {
+            var words = description.toLowerCase().split(' ').slice(0, 3);
+            var result = '';
+            for (var i = 0; i < words.length; i++) {
+                result += words[i].charAt(0).toUpperCase() + words[i].slice(1);
+            }
+            return result + 'Component';
+        }
+    </script>
+</body>
+</html> 
