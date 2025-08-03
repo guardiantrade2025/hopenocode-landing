@@ -559,6 +559,7 @@
                     <button class="btn btn-secondary" onclick="previewPage()">👁️ Preview</button>
                     <button class="btn btn-primary" onclick="showExportModal()">📤 Export</button>
                     <button class="btn btn-secondary" onclick="saveProject()">💾 Save</button>
+                    <button class="btn btn-secondary" onclick="testFunction()" style="background: #ff6b6b;">🧪 Test JS</button>
                 </div>
             </div>
             
@@ -989,6 +990,7 @@
         }
 
         function addComponent(type) {
+            console.log('addComponent called with:', type);
             const dropZone = document.getElementById('dropZone');
             const component = components[type];
             
@@ -1014,6 +1016,9 @@
                 });
                 
                 showNotification(`Added ${component.name} to your page`);
+                console.log('Component added successfully');
+            } else {
+                console.log('Component not found:', type);
             }
         }
 
@@ -1041,6 +1046,7 @@
         }
 
         function switchTab(tab, event) {
+            console.log('switchTab called with:', tab, event);
             const tabs = document.querySelectorAll('.sidebar-tab');
             const componentsSection = document.getElementById('componentsSection');
             const marketplaceSection = document.getElementById('marketplaceSection');
@@ -1055,6 +1061,7 @@
                 componentsSection.style.display = 'none';
                 marketplaceSection.style.display = 'block';
             }
+            console.log('Tab switched successfully');
         }
 
         function purchaseComponent(componentType) {
@@ -1062,6 +1069,7 @@
         }
 
         function previewPage() {
+            console.log('previewPage called');
             const dropZone = document.getElementById('dropZone');
             const previewWindow = window.open('', '_blank');
             previewWindow.document.write(`
@@ -1080,9 +1088,11 @@
                 </html>
             `);
             previewWindow.document.close();
+            console.log('Preview window opened');
         }
 
         function showExportModal() {
+            console.log('showExportModal called');
             document.getElementById('exportModal').style.display = 'block';
         }
 
@@ -1099,6 +1109,7 @@
         }
 
         function exportProject() {
+            console.log('exportProject called');
             const dropZone = document.getElementById('dropZone');
             const content = dropZone.innerHTML.replace(/class="element-controls"[^>]*>.*?<\/div>/gs, '');
             
@@ -1162,9 +1173,11 @@ export default {
             
             hideExportModal();
             showNotification(`Project exported as ${selectedExport.toUpperCase()}!`);
+            console.log('Project exported successfully');
         }
 
         function saveProject() {
+            console.log('saveProject called');
             const projectData = {
                 elements: currentElements,
                 timestamp: new Date().toISOString()
@@ -1172,6 +1185,7 @@ export default {
             
             localStorage.setItem('builderProject', JSON.stringify(projectData));
             showNotification('Project saved successfully!');
+            console.log('Project saved');
         }
 
         function showNotification(message) {
@@ -1184,10 +1198,31 @@ export default {
             }, 3000);
         }
 
+        function hideExportModal() {
+            console.log('hideExportModal called');
+            document.getElementById('exportModal').style.display = 'none';
+        }
+
+        function selectExport(type) {
+            console.log('selectExport called with:', type);
+            selectedExport = type;
+            document.querySelectorAll('.export-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.target.closest('.export-option').classList.add('selected');
+        }
+
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing builder...');
             initializeDragAndDrop();
             showNotification('Enhanced Visual Builder Pro loaded! Drag components to start building.');
+            
+            // Test function to verify JavaScript is working
+            window.testFunction = function() {
+                console.log('Test function called successfully!');
+                alert('JavaScript is working!');
+            };
         });
     </script>
 </body>
