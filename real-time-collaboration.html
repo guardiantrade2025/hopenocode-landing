@@ -11,6 +11,16 @@
             box-sizing: border-box;
         }
 
+        /* Hide script tags from being visible on the page */
+        script {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            position: absolute !important;
+            left: -9999px !important;
+            top: -9999px !important;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -483,7 +493,7 @@
         }
     </style>
 
-    <script>
+    <script style="display: none;">
         // Global variables
         var teamMembers = [
             { name: 'John Doe', avatar: 'JD', status: 'online' },
