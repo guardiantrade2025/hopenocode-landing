@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Generator - No JavaScript Required</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .status {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .language-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .lang-btn {
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .lang-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .lang-btn.active {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4) !important;
+            border-color: transparent !important;
+            box-shadow: 0 5px 15px rgba(255,107,107,0.3) !important;
+            transform: translateY(-2px) !important;
+            font-weight: bold !important;
+            color: white !important;
+        }
+        
+        .lang-btn.active::after {
+            content: ' ✓';
+            font-weight: bold;
+        }
+        
+        .input-area {
+            width: 100%;
+            min-height: 150px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            font-size: 16px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        
+        .input-area::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,107,107,0.4);
+        }
+        
+        .output-area {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 20px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            min-height: 200px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .code-example {
+            background: rgba(0,0,0,0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #4ecdc4;
+        }
+        
+        .code-title {
+            font-weight: bold;
+            color: #4ecdc4;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Code Generator - No JavaScript Required</h1>
+        
+        <div class="status">
+            Status: Ready - Click any language to see example code
+        </div>
+        
+        <div class="language-buttons">
+            <a href="#javascript" class="lang-btn active">JavaScript</a>
+            <a href="#python" class="lang-btn">Python</a>
+            <a href="#react" class="lang-btn">React</a>
+            <a href="#vue" class="lang-btn">Vue</a>
+        </div>
+        
+        <div class="input-area" contenteditable="true" placeholder="Describe what you want to build..."></div>
+        
+        <a href="#generate" class="generate-btn">Generate Code</a>
+        
+        <div class="output-area">
+            <div class="code-example">
+                <div class="code-title">JavaScript Example:</div>
+                <pre>// Create a function that processes data
+function processData() {
+    console.log("Hello from JavaScript!");
+    return "Generated code";
+}
+
+// Usage
+const result = processData();
+console.log(result);</pre>
+            </div>
+            
+            <div class="code-example">
+                <div class="code-title">Python Example:</div>
+                <pre># Create a Python script that reads a CSV file and processes the data
+import csv
+
+def processCsvData():
+    try:
+        with open('data.csv', 'r') as file:
+            reader = csv.reader(file)
+            for row in reader:
+                print("Processing:", row)
+        return "Data processed successfully"
+    except Exception as e:
+        print("Error:", e)
+        return None
+
+# Usage
+result = processCsvData()
+print(result)</pre>
+            </div>
+            
+            <div class="code-example">
+                <div class="code-title">React Example:</div>
+                <pre>import React from 'react';
+
+// Create a React component that displays data
+const DataComponent = () => {
+    return (
+        <div>
+            <h2>Generated React Component</h2>
+            <p>Hello from React!</p>
+        </div>
+    );
+};
+
+export default DataComponent;</pre>
+            </div>
+            
+            <div class="code-example">
+                <div class="code-title">Vue Example:</div>
+                <pre>&lt;template&gt;
+    &lt;div&gt;
+        &lt;h2&gt;Generated Vue Component&lt;/h2&gt;
+        &lt;p&gt;Hello from Vue!&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+// Create a Vue component
+export default {
+    name: 'DataComponent'
+}
+&lt;/script&gt;</pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
