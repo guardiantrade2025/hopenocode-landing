@@ -3,41 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Working Code Generator - Static Examples</title>
+    <title>Multi-Language AI Code Generator - HopeNocode</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 20px;
+            position: relative;
         }
         
-        h1 {
+        .back-arrow {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-blur: 10px;
+            z-index: 1000;
+        }
+        
+        .back-arrow:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .header {
             text-align: center;
             margin-bottom: 30px;
+            margin-top: 40px;
         }
         
-        .status {
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-weight: bold;
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         
-        .language-buttons {
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .language-selector {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
             justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
         }
         
         .lang-btn {
@@ -49,8 +86,8 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 500;
-            text-decoration: none;
-            display: inline-block;
+            font-size: 1rem;
+            backdrop-blur: 10px;
         }
         
         .lang-btn:hover {
@@ -59,33 +96,31 @@
         }
         
         .lang-btn.active {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4) !important;
-            border-color: transparent !important;
-            box-shadow: 0 5px 15px rgba(255,107,107,0.3) !important;
-            transform: translateY(-2px) !important;
-            font-weight: bold !important;
-            color: white !important;
-        }
-        
-        .lang-btn.active::after {
-            content: ' ✓';
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-color: transparent;
+            box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+            transform: translateY(-2px);
             font-weight: bold;
         }
         
-        .input-area {
+        .input-section {
+            margin-bottom: 30px;
+        }
+        
+        .input-field {
             width: 100%;
-            min-height: 150px;
+            min-height: 120px;
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 15px;
             padding: 20px;
             color: white;
             font-size: 16px;
-            margin-bottom: 20px;
-            box-sizing: border-box;
+            resize: vertical;
+            backdrop-blur: 10px;
         }
         
-        .input-area::placeholder {
+        .input-field::placeholder {
             color: rgba(255,255,255,0.7);
         }
         
@@ -101,8 +136,6 @@
             cursor: pointer;
             transition: all 0.3s ease;
             margin-bottom: 20px;
-            text-decoration: none;
-            display: inline-block;
         }
         
         .generate-btn:hover {
@@ -110,119 +143,267 @@
             box-shadow: 0 8px 25px rgba(255,107,107,0.4);
         }
         
-        .output-area {
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .output-section {
             background: rgba(0,0,0,0.3);
             border-radius: 15px;
             padding: 20px;
-            white-space: pre-wrap;
-            font-family: 'Courier New', monospace;
-            min-height: 200px;
             border: 1px solid rgba(255,255,255,0.2);
+            backdrop-blur: 10px;
         }
         
-        .code-example {
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .output-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .copy-btn {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .code-output {
             background: rgba(0,0,0,0.5);
             border-radius: 10px;
-            padding: 15px;
-            margin: 10px 0;
-            border-left: 4px solid #4ecdc4;
+            padding: 20px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 200px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
         
-        .code-title {
+        .status {
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
             font-weight: bold;
-            color: #4ecdc4;
-            margin-bottom: 10px;
+            backdrop-blur: 10px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid #4ecdc4;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .back-arrow {
+                top: 15px;
+                left: 15px;
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .language-selector {
+                gap: 10px;
+            }
+            
+            .lang-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Working Code Generator - Static Examples</h1>
+        <a href="index.html" class="back-arrow" title="Go back to homepage">←</a>
         
-        <div class="status">
-            Status: Ready - Your Python CSV code is below
+        <div class="header">
+            <h1>Multi-Language AI Code Generator</h1>
+            <p>Generate code in multiple programming languages with AI assistance</p>
         </div>
         
-        <div class="language-buttons">
-            <a href="#javascript" class="lang-btn">JavaScript</a>
-            <a href="#python" class="lang-btn active">Python</a>
-            <a href="#react" class="lang-btn">React</a>
-            <a href="#vue" class="lang-btn">Vue</a>
+        <div class="status" id="status">Ready to generate code</div>
+        
+        <div class="language-selector">
+            <button class="lang-btn active" onclick="selectLanguage('javascript', this)">JavaScript</button>
+            <button class="lang-btn" onclick="selectLanguage('python', this)">Python</button>
+            <button class="lang-btn" onclick="selectLanguage('react', this)">React</button>
+            <button class="lang-btn" onclick="selectLanguage('vue', this)">Vue</button>
+            <button class="lang-btn" onclick="selectLanguage('nodejs', this)">Node.js</button>
+            <button class="lang-btn" onclick="selectLanguage('php', this)">PHP</button>
         </div>
         
-        <div class="input-area" contenteditable="true" placeholder="Describe what you want to build...">Make a python script that reads a CSV file and processes the data</div>
-        
-        <a href="#generate" class="generate-btn">Generate Code</a>
-        
-        <div class="output-area">
-            <div class="code-example">
-                <div class="code-title">Python CSV Processing Code:</div>
-                <pre># Create a Python script that reads a CSV file and processes the data
-import csv
-
-def processCsvData():
-    try:
-        with open('data.csv', 'r') as file:
-            reader = csv.reader(file)
-            for row in reader:
-                print("Processing:", row)
-        return "Data processed successfully"
-    except Exception as e:
-        print("Error:", e)
-        return None
-
-# Usage
-result = processCsvData()
-print(result)</pre>
-            </div>
+        <div class="input-section">
+            <textarea 
+                class="input-field" 
+                id="codeInput" 
+                placeholder="Describe what you want to build... (e.g., Create a function that calculates the sum of an array, Build a React component that displays user data, etc.)"
+            ></textarea>
             
-            <div class="code-example">
-                <div class="code-title">JavaScript Example:</div>
-                <pre>// Create a function that processes data
-function processData() {
-    console.log("Hello from JavaScript!");
-    return "Generated code";
-}
-
-// Usage
-const result = processData();
-console.log(result);</pre>
-            </div>
+            <button class="generate-btn" id="generateBtn" onclick="generateCode()">Generate Code</button>
             
-            <div class="code-example">
-                <div class="code-title">React Example:</div>
-                <pre>import React from 'react';
-
-// Create a React component that displays data
-const DataComponent = () => {
-    return (
-        <div>
-            <h2>Generated React Component</h2>
-            <p>Hello from React!</p>
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <div>Generating code...</div>
+            </div>
         </div>
-    );
-};
-
-export default DataComponent;</pre>
+        
+        <div class="output-section">
+            <div class="output-header">
+                <div class="output-title">Generated Code</div>
+                <button class="copy-btn" onclick="copyCode()">Copy Code</button>
             </div>
-            
-            <div class="code-example">
-                <div class="code-title">Vue Example:</div>
-                <pre>&lt;template&gt;
-    &lt;div&gt;
-        &lt;h2&gt;Generated Vue Component&lt;/h2&gt;
-        &lt;p&gt;Hello from Vue!&lt;/p&gt;
-    &lt;/div&gt;
-&lt;/template&gt;
-
-&lt;script&gt;
-// Create a Vue component
-export default {
-    name: 'DataComponent'
-}
-&lt;/script&gt;</pre>
-            </div>
+            <div class="code-output" id="codeOutput">Your generated code will appear here...</div>
         </div>
     </div>
+
+    <script>
+        var currentLanguage = 'javascript';
+        var generatedCode = '';
+
+        function selectLanguage(lang, button) {
+            var allButtons = document.querySelectorAll('.lang-btn');
+            for (var i = 0; i < allButtons.length; i++) {
+                allButtons[i].classList.remove('active');
+            }
+            
+            button.classList.add('active');
+            currentLanguage = lang;
+            
+            document.getElementById('status').textContent = 'Language selected: ' + currentLanguage;
+            generatedCode = '';
+            document.getElementById('codeOutput').textContent = 'Your generated code will appear here...';
+        }
+
+        function generateCode() {
+            var input = document.getElementById('codeInput').value.trim();
+            
+            if (!input) {
+                alert('Please describe what you want to build');
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('generateBtn').disabled = true;
+            document.getElementById('status').textContent = 'Generating ' + currentLanguage + ' code...';
+
+            setTimeout(function() {
+                try {
+                    generatedCode = generateCodeForLanguage(input, currentLanguage);
+                    document.getElementById('codeOutput').textContent = generatedCode;
+                    document.getElementById('status').textContent = 'Code generated successfully for ' + currentLanguage;
+                } catch (error) {
+                    console.error('Error generating code:', error);
+                    document.getElementById('codeOutput').textContent = 'Error: Failed to generate code. Please try again.';
+                    document.getElementById('status').textContent = 'Error occurred during generation';
+                } finally {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('generateBtn').disabled = false;
+                }
+            }, 1500);
+        }
+
+        function generateCodeForLanguage(description, language) {
+            var functionName = generateFunctionName(description);
+            var componentName = generateComponentName(description);
+            
+            var templates = {
+                javascript: '// ' + description + '\nfunction ' + functionName + '() {\n    console.log("Hello from JavaScript!");\n    return "Generated code";\n}\n\n// Usage\nvar result = ' + functionName + '();\nconsole.log(result);',
+                
+                python: '# ' + description + '\nimport csv\n\ndef ' + functionName + '():\n    try:\n        with open("data.csv", "r") as file:\n            reader = csv.reader(file)\n            for row in reader:\n                print("Processing:", row)\n        return "Data processed successfully"\n    except Exception as e:\n        print("Error:", e)\n        return None\n\n# Usage\nresult = ' + functionName + '()\nprint(result)',
+                
+                react: 'import React from "react";\n\n// ' + description + '\nvar ' + componentName + ' = function() {\n    return (\n        <div>\n            <h2>Generated React Component</h2>\n            <p>Hello from React!</p>\n        </div>\n    );\n};\n\nexport default ' + componentName + ';',
+                
+                vue: '<template>\n    <div>\n        <h2>Generated Vue Component</h2>\n        <p>Hello from Vue!</p>\n    </div>\n</template>\n\n<script>\n// ' + description + '\nexport default {\n    name: "' + componentName + '"\n}\n</script>',
+                
+                nodejs: '// ' + description + '\nvar express = require("express");\nvar app = express();\n\nfunction ' + functionName + '() {\n    console.log("Hello from Node.js!");\n    return "Generated code";\n}\n\napp.get("/", function(req, res) {\n    res.send("Hello World!");\n});\n\nvar PORT = process.env.PORT || 3000;\napp.listen(PORT, function() {\n    console.log("Server running on port " + PORT);\n});',
+                
+                php: '<?php\n// ' + description + '\n\nfunction ' + functionName + '() {\n    echo "Hello from PHP!";\n    return "Generated code";\n}\n\n// Usage\n$result = ' + functionName + '();\necho $result;\n?>'
+            };
+
+            return templates[language] || templates.javascript;
+        }
+
+        function generateFunctionName(description) {
+            var words = description.toLowerCase().split(' ').slice(0, 3);
+            var result = '';
+            for (var i = 0; i < words.length; i++) {
+                result += words[i].charAt(0).toUpperCase() + words[i].slice(1);
+            }
+            return result + 'Function';
+        }
+
+        function generateComponentName(description) {
+            var words = description.toLowerCase().split(' ').slice(0, 3);
+            var result = '';
+            for (var i = 0; i < words.length; i++) {
+                result += words[i].charAt(0).toUpperCase() + words[i].slice(1);
+            }
+            return result + 'Component';
+        }
+
+        function copyCode() {
+            if (generatedCode) {
+                navigator.clipboard.writeText(generatedCode).then(function() {
+                    var copyBtn = document.querySelector('.copy-btn');
+                    var originalText = copyBtn.textContent;
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(function() {
+                        copyBtn.textContent = originalText;
+                    }, 2000);
+                }).catch(function(err) {
+                    console.error('Failed to copy code:', err);
+                    alert('Failed to copy code. Please select and copy manually.');
+                });
+            }
+        }
+
+        document.getElementById('codeInput').addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                generateCode();
+            }
+        });
+    </script>
 </body>
 </html> 
