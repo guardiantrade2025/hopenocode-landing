@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marketplace Dashboard - HopeNocode</title>
+    <title>Marketplace - Premium Components, Templates & Tools</title>
     <style>
         * {
             margin: 0;
@@ -25,309 +25,419 @@
         }
 
         .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 15px;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .header h1 {
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
             color: white;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-align: center;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
         }
 
-        .header p {
-            color: rgba(255, 255, 255, 0.8);
-            text-align: center;
-            font-size: 1.1rem;
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
         }
 
-        .stats-grid {
+        .title {
+            color: white;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .marketplace-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .marketplace-section {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .marketplace-section.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 10px 15px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 300px;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .filter-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .items-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
 
-        .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            text-align: center;
-            transition: transform 0.3s ease;
+        .item-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .stat-card:hover {
+        .item-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
         }
 
-        .stat-card h3 {
-            color: white;
-            font-size: 2rem;
+        .item-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .item-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
             margin-bottom: 5px;
         }
 
-        .stat-card p {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
+        .item-category {
+            font-size: 12px;
+            color: #667eea;
+            font-weight: 500;
+            text-transform: uppercase;
         }
 
-        .marketplace-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .marketplace-section {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+        .item-price {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 12px;
             border-radius: 20px;
-            padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+            font-size: 14px;
         }
 
-        .section-title {
-            color: white;
-            font-size: 1.5rem;
+        .item-description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .item-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
             margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
-        .vendor-list {
-            max-height: 400px;
-            overflow-y: auto;
+        .feature-tag {
+            background: #f0f4ff;
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
         }
 
-        .vendor-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .vendor-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
-        }
-
-        .vendor-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .vendor-name {
-            color: white;
-            font-weight: bold;
-        }
-
-        .vendor-status {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .status-approved {
-            background: rgba(76, 175, 80, 0.2);
-            color: #4CAF50;
-            border: 1px solid rgba(76, 175, 80, 0.3);
-        }
-
-        .status-pending {
-            background: rgba(255, 193, 7, 0.2);
-            color: #FFC107;
-            border: 1px solid rgba(255, 193, 7, 0.3);
-        }
-
-        .status-rejected {
-            background: rgba(244, 67, 54, 0.2);
-            color: #F44336;
-            border: 1px solid rgba(244, 67, 54, 0.3);
-        }
-
-        .vendor-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            font-size: 0.8rem;
-        }
-
-        .vendor-stat {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .vendor-stat strong {
-            color: white;
-            display: block;
-        }
-
-        .product-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .product-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
-        }
-
-        .product-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .product-name {
-            color: white;
-            font-weight: bold;
-        }
-
-        .product-price {
-            color: #4CAF50;
-            font-weight: bold;
-        }
-
-        .product-meta {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .commission-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .commission-header {
+        .item-stats {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
+            font-size: 12px;
+            color: #666;
         }
 
-        .commission-title {
-            color: white;
-            font-size: 1.2rem;
-            font-weight: bold;
+        .item-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        .commission-amount {
-            color: #4CAF50;
-            font-size: 1.5rem;
-            font-weight: bold;
+        .stars {
+            color: #ffd700;
         }
 
-        .commission-progress {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            height: 8px;
-            margin-bottom: 10px;
-            overflow: hidden;
-        }
-
-        .commission-bar {
-            background: linear-gradient(90deg, #4CAF50, #45a049);
-            height: 100%;
-            border-radius: 10px;
-            transition: width 0.3s ease;
-        }
-
-        .commission-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .commission-stat {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .commission-stat strong {
-            color: white;
-            display: block;
-            font-size: 1.1rem;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .action-buttons {
+        .item-actions {
             display: flex;
             gap: 10px;
-            margin-top: 15px;
         }
 
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 0.8rem;
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn.primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .action-btn.secondary {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .action-btn.primary:hover {
+            background: #5a6fd8;
+        }
+
+        .action-btn.secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .premium-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #ffd700, #ffb347);
+            color: #333;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .new-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .featured-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .featured-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .featured-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .featured-item:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .featured-item-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .featured-item-description {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .featured-item-price {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
         }
 
         @media (max-width: 768px) {
-            .marketplace-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .vendor-stats {
-                grid-template-columns: 1fr;
-                gap: 5px;
-            }
-
-            .commission-stats {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-
-            .action-buttons {
+            .header {
                 flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .marketplace-nav {
+                flex-wrap: wrap;
+            }
+
+            .search-bar {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .featured-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -335,257 +445,549 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🛒 Marketplace Dashboard</h1>
-            <p>Multi-vendor marketplace management with commission tracking and vendor analytics</p>
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>247</h3>
-                <p>Active Vendors</p>
-            </div>
-            <div class="stat-card">
-                <h3>1,234</h3>
-                <p>Products Listed</p>
-            </div>
-            <div class="stat-card">
-                <h3>$45,678</h3>
-                <p>Total Revenue</p>
-            </div>
-            <div class="stat-card">
-                <h3>12.5%</h3>
-                <p>Commission Rate</p>
+            <button class="back-btn" onclick="window.location.href='index.html'">← Back to Home</button>
+            <h1 class="title">Marketplace</h1>
+            <div class="status">
+                <div class="status-dot"></div>
+                <span>Live Marketplace</span>
             </div>
         </div>
 
-        <div class="marketplace-grid">
-            <!-- Vendor Management -->
-            <div class="marketplace-section">
-                <div class="section-title">
-                    <span>👥</span>
-                    Vendor Management
+        <div class="marketplace-nav">
+            <button class="nav-btn active" onclick="showSection('components')">🧩 Components</button>
+            <button class="nav-btn" onclick="showSection('templates')">📄 Templates</button>
+            <button class="nav-btn" onclick="showSection('plugins')">🔌 Plugins</button>
+            <button class="nav-btn" onclick="showSection('tools')">🛠️ Developer Tools</button>
+        </div>
+
+        <!-- Components Section -->
+        <div class="marketplace-section active" id="components">
+            <div class="section-header">
+                <h2 class="section-title">Premium Components</h2>
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search components..." id="componentSearch">
+                    <button class="filter-btn">Filter</button>
                 </div>
-                <div class="vendor-list">
-                    <div class="vendor-item">
-                        <div class="vendor-header">
-                            <div class="vendor-name">TechCorp Solutions</div>
-                            <div class="vendor-status status-approved">Approved</div>
-                        </div>
-                        <div class="vendor-stats">
-                            <div class="vendor-stat">
-                                <strong>45</strong>
-                                Products
-                            </div>
-                            <div class="vendor-stat">
-                                <strong>$12,450</strong>
-                                Revenue
-                            </div>
-                            <div class="vendor-stat">
-                                <strong>4.8★</strong>
-                                Rating
-                            </div>
-                        </div>
-                        <div class="action-buttons">
-                            <button class="btn btn-small" onclick="viewVendor('techcorp')">View Details</button>
-                            <button class="btn btn-secondary btn-small" onclick="manageVendor('techcorp')">Manage</button>
-                        </div>
-                    </div>
+            </div>
 
-                    <div class="vendor-item">
-                        <div class="vendor-header">
-                            <div class="vendor-name">Digital Innovations</div>
-                            <div class="vendor-status status-pending">Pending</div>
-                        </div>
-                        <div class="vendor-stats">
-                            <div class="vendor-stat">
-                                <strong>23</strong>
-                                Products
-                            </div>
-                            <div class="vendor-stat">
-                                <strong>$8,920</strong>
-                                Revenue
-                            </div>
-                            <div class="vendor-stat">
-                                <strong>4.6★</strong>
-                                Rating
-                            </div>
-                        </div>
-                        <div class="action-buttons">
-                            <button class="btn btn-small" onclick="approveVendor('digital')">Approve</button>
-                            <button class="btn btn-secondary btn-small" onclick="rejectVendor('digital')">Reject</button>
-                        </div>
+            <div class="featured-section">
+                <h3 class="featured-title">🔥 Featured Components</h3>
+                <div class="featured-grid">
+                    <div class="featured-item">
+                        <div class="featured-item-title">Advanced Data Table</div>
+                        <div class="featured-item-description">Sortable, filterable data table with pagination</div>
+                        <div class="featured-item-price">$29</div>
                     </div>
-
-                    <div class="vendor-item">
-                        <div class="vendor-header">
-                            <div class="vendor-name">Cloud Systems Pro</div>
-                            <div class="vendor-status status-approved">Approved</div>
-                        </div>
-                        <div class="vendor-stats">
-                            <div class="vendor-stat">
-                                <strong>67</strong>
-                                Products
-                            </div>
-                            <div class="vendor-stat">
-                                <strong>$18,750</strong>
-                                Revenue
-                            </div>
-                            <div class="vendor-stat">
-                                <strong>4.9★</strong>
-                                Rating
-                            </div>
-                        </div>
-                        <div class="action-buttons">
-                            <button class="btn btn-small" onclick="viewVendor('cloud')">View Details</button>
-                            <button class="btn btn-secondary btn-small" onclick="manageVendor('cloud')">Manage</button>
-                        </div>
+                    <div class="featured-item">
+                        <div class="featured-item-title">Interactive Charts</div>
+                        <div class="featured-item-description">Beautiful charts and graphs library</div>
+                        <div class="featured-item-price">$39</div>
+                    </div>
+                    <div class="featured-item">
+                        <div class="featured-item-title">E-commerce Cart</div>
+                        <div class="featured-item-description">Complete shopping cart with Stripe integration</div>
+                        <div class="featured-item-price">$49</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Product Management -->
-            <div class="marketplace-section">
-                <div class="section-title">
-                    <span>📦</span>
-                    Product Management
+            <div class="items-grid">
+                <div class="item-card">
+                    <div class="premium-badge">Premium</div>
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">Pricing Table Pro</div>
+                            <div class="item-category">UI Component</div>
+                        </div>
+                        <div class="item-price">$19</div>
+                    </div>
+                    <div class="item-description">
+                        Professional pricing table with toggle switches, feature comparison, and responsive design.
+                    </div>
+                    <div class="item-features">
+                        <span class="feature-tag">Responsive</span>
+                        <span class="feature-tag">Customizable</span>
+                        <span class="feature-tag">Animation</span>
+                    </div>
+                    <div class="item-stats">
+                        <div class="item-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>4.8 (127 reviews)</span>
+                        </div>
+                        <span>2.3k downloads</span>
+                    </div>
+                    <div class="item-actions">
+                        <button class="action-btn primary" onclick="purchaseItem('Pricing Table Pro', 19)">Purchase</button>
+                        <button class="action-btn secondary" onclick="previewItem('Pricing Table Pro')">Preview</button>
+                    </div>
                 </div>
-                <div class="vendor-list">
-                    <div class="product-item">
-                        <div class="product-header">
-                            <div class="product-name">AI Code Assistant Pro</div>
-                            <div class="product-price">$299</div>
-                        </div>
-                        <div class="product-meta">
-                            <span>Vendor: TechCorp</span>
-                            <span>Sales: 156</span>
-                            <span>Rating: 4.8★</span>
-                        </div>
-                        <div class="action-buttons">
-                            <button class="btn btn-small" onclick="viewProduct('ai-assistant')">View</button>
-                            <button class="btn btn-secondary btn-small" onclick="editProduct('ai-assistant')">Edit</button>
-                        </div>
-                    </div>
 
-                    <div class="product-item">
-                        <div class="product-header">
-                            <div class="product-name">No-Code Website Builder</div>
-                            <div class="product-price">$199</div>
+                <div class="item-card">
+                    <div class="new-badge">New</div>
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">Testimonials Slider</div>
+                            <div class="item-category">UI Component</div>
                         </div>
-                        <div class="product-meta">
-                            <span>Vendor: Digital Innovations</span>
-                            <span>Sales: 89</span>
-                            <span>Rating: 4.6★</span>
-                        </div>
-                        <div class="action-buttons">
-                            <button class="btn btn-small" onclick="viewProduct('website-builder')">View</button>
-                            <button class="btn btn-secondary btn-small" onclick="editProduct('website-builder')">Edit</button>
-                        </div>
+                        <div class="item-price">$15</div>
                     </div>
+                    <div class="item-description">
+                        Beautiful testimonials slider with auto-play, navigation dots, and smooth transitions.
+                    </div>
+                    <div class="item-features">
+                        <span class="feature-tag">Auto-play</span>
+                        <span class="feature-tag">Touch Support</span>
+                        <span class="feature-tag">Customizable</span>
+                    </div>
+                    <div class="item-stats">
+                        <div class="item-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span>4.6 (89 reviews)</span>
+                        </div>
+                        <span>1.8k downloads</span>
+                    </div>
+                    <div class="item-actions">
+                        <button class="action-btn primary" onclick="purchaseItem('Testimonials Slider', 15)">Purchase</button>
+                        <button class="action-btn secondary" onclick="previewItem('Testimonials Slider')">Preview</button>
+                    </div>
+                </div>
 
-                    <div class="product-item">
-                        <div class="product-header">
-                            <div class="product-name">Cloud Database Manager</div>
-                            <div class="product-price">$399</div>
+                <div class="item-card">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">Contact Form Pro</div>
+                            <div class="item-category">Form Component</div>
                         </div>
-                        <div class="product-meta">
-                            <span>Vendor: Cloud Systems Pro</span>
-                            <span>Sales: 234</span>
-                            <span>Rating: 4.9★</span>
+                        <div class="item-price">$12</div>
+                    </div>
+                    <div class="item-description">
+                        Advanced contact form with validation, file upload, and email integration.
+                    </div>
+                    <div class="item-features">
+                        <span class="feature-tag">Validation</span>
+                        <span class="feature-tag">File Upload</span>
+                        <span class="feature-tag">Email Integration</span>
+                    </div>
+                    <div class="item-stats">
+                        <div class="item-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>4.9 (203 reviews)</span>
                         </div>
-                        <div class="action-buttons">
-                            <button class="btn btn-small" onclick="viewProduct('database-manager')">View</button>
-                            <button class="btn btn-secondary btn-small" onclick="editProduct('database-manager')">Edit</button>
-                        </div>
+                        <span>3.1k downloads</span>
+                    </div>
+                    <div class="item-actions">
+                        <button class="action-btn primary" onclick="purchaseItem('Contact Form Pro', 12)">Purchase</button>
+                        <button class="action-btn secondary" onclick="previewItem('Contact Form Pro')">Preview</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Commission Tracking -->
-        <div class="marketplace-section">
-            <div class="section-title">
-                <span>💰</span>
-                Commission Tracking
+        <!-- Templates Section -->
+        <div class="marketplace-section" id="templates">
+            <div class="section-header">
+                <h2 class="section-title">Website Templates</h2>
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search templates..." id="templateSearch">
+                    <button class="filter-btn">Filter</button>
+                </div>
             </div>
-            <div class="commission-card">
-                <div class="commission-header">
-                    <div class="commission-title">This Month's Commission</div>
-                    <div class="commission-amount">$5,678</div>
-                </div>
-                <div class="commission-progress">
-                    <div class="commission-bar" style="width: 75%"></div>
-                </div>
-                <div class="commission-stats">
-                    <div class="commission-stat">
-                        <strong>247</strong>
-                        Vendors
+
+            <div class="items-grid">
+                <div class="item-card">
+                    <div class="premium-badge">Premium</div>
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">E-commerce Store</div>
+                            <div class="item-category">Business Template</div>
+                        </div>
+                        <div class="item-price">$89</div>
                     </div>
-                    <div class="commission-stat">
-                        <strong>1,234</strong>
-                        Products
+                    <div class="item-description">
+                        Complete e-commerce website template with product catalog, shopping cart, and checkout.
                     </div>
-                    <div class="commission-stat">
-                        <strong>12.5%</strong>
-                        Rate
+                    <div class="item-features">
+                        <span class="feature-tag">Responsive</span>
+                        <span class="feature-tag">SEO Optimized</span>
+                        <span class="feature-tag">Payment Ready</span>
+                    </div>
+                    <div class="item-stats">
+                        <div class="item-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>4.9 (156 reviews)</span>
+                        </div>
+                        <span>2.8k downloads</span>
+                    </div>
+                    <div class="item-actions">
+                        <button class="action-btn primary" onclick="purchaseItem('E-commerce Store', 89)">Purchase</button>
+                        <button class="action-btn secondary" onclick="previewItem('E-commerce Store')">Preview</button>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="new-badge">New</div>
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">Portfolio Website</div>
+                            <div class="item-category">Personal Template</div>
+                        </div>
+                        <div class="item-price">$45</div>
+                    </div>
+                    <div class="item-description">
+                        Modern portfolio template with project showcase, about section, and contact form.
+                    </div>
+                    <div class="item-features">
+                        <span class="feature-tag">Portfolio</span>
+                        <span class="feature-tag">Blog Ready</span>
+                        <span class="feature-tag">Contact Form</span>
+                    </div>
+                    <div class="item-stats">
+                        <div class="item-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span>4.7 (98 reviews)</span>
+                        </div>
+                        <span>1.5k downloads</span>
+                    </div>
+                    <div class="item-actions">
+                        <button class="action-btn primary" onclick="purchaseItem('Portfolio Website', 45)">Purchase</button>
+                        <button class="action-btn secondary" onclick="previewItem('Portfolio Website')">Preview</button>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">Landing Page Pro</div>
+                            <div class="item-category">Marketing Template</div>
+                        </div>
+                        <div class="item-price">$35</div>
+                    </div>
+                    <div class="item-description">
+                        High-converting landing page template with lead capture and analytics integration.
+                    </div>
+                    <div class="item-features">
+                        <span class="feature-tag">Lead Capture</span>
+                        <span class="feature-tag">Analytics</span>
+                        <span class="feature-tag">A/B Testing</span>
+                    </div>
+                    <div class="item-stats">
+                        <div class="item-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>4.8 (134 reviews)</span>
+                        </div>
+                        <span>2.2k downloads</span>
+                    </div>
+                    <div class="item-actions">
+                        <button class="action-btn primary" onclick="purchaseItem('Landing Page Pro', 35)">Purchase</button>
+                        <button class="action-btn secondary" onclick="previewItem('Landing Page Pro')">Preview</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="action-buttons" style="justify-content: center; margin-top: 30px;">
-            <button class="btn" onclick="addVendor()">➕ Add Vendor</button>
-            <button class="btn btn-secondary" onclick="exportData()">📊 Export Data</button>
-            <button class="btn btn-secondary" onclick="settings()">⚙️ Settings</button>
+        <!-- Plugins Section -->
+        <div class="marketplace-section" id="plugins">
+            <div class="section-header">
+                <h2 class="section-title">Plugin Marketplace</h2>
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search plugins..." id="pluginSearch">
+                    <button class="filter-btn">Filter</button>
+                </div>
+            </div>
+
+            <div class="items-grid">
+                <div class="item-card">
+                    <div class="premium-badge">Premium</div>
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">Analytics Pro</div>
+                            <div class="item-category">Analytics Plugin</div>
+                        </div>
+                        <div class="item-price">$29/month</div>
+                    </div>
+                    <div class="item-description">
+                        Advanced analytics plugin with heatmaps, user behavior tracking, and conversion funnels.
+                    </div>
+                    <div class="item-features">
+                        <span class="feature-tag">Heatmaps</span>
+                        <span class="feature-tag">User Tracking</span>
+                        <span class="feature-tag">Funnels</span>
+                    </div>
+                    <div class="item-stats">
+                        <div class="item-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>4.9 (89 reviews)</span>
+                        </div>
+                        <span>1.2k active</span>
+                    </div>
+                    <div class="item-actions">
+                        <button class="action-btn primary" onclick="purchaseItem('Analytics Pro', 29)">Subscribe</button>
+                        <button class="action-btn secondary" onclick="previewItem('Analytics Pro')">Demo</button>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="new-badge">New</div>
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">SEO Optimizer</div>
+                            <div class="item-category">SEO Plugin</div>
+                        </div>
+                        <div class="item-price">$19/month</div>
+                    </div>
+                    <div class="item-description">
+                        Comprehensive SEO plugin with keyword optimization, meta tag management, and sitemap generation.
+                    </div>
+                    <div class="item-features">
+                        <span class="feature-tag">Keyword Analysis</span>
+                        <span class="feature-tag">Meta Tags</span>
+                        <span class="feature-tag">Sitemap</span>
+                    </div>
+                    <div class="item-stats">
+                        <div class="item-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span>4.6 (67 reviews)</span>
+                        </div>
+                        <span>856 active</span>
+                    </div>
+                    <div class="item-actions">
+                        <button class="action-btn primary" onclick="purchaseItem('SEO Optimizer', 19)">Subscribe</button>
+                        <button class="action-btn secondary" onclick="previewItem('SEO Optimizer')">Demo</button>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">Security Shield</div>
+                            <div class="item-category">Security Plugin</div>
+                        </div>
+                        <div class="item-price">$15/month</div>
+                    </div>
+                    <div class="item-description">
+                        Advanced security plugin with firewall, malware scanning, and threat detection.
+                    </div>
+                    <div class="item-features">
+                        <span class="feature-tag">Firewall</span>
+                        <span class="feature-tag">Malware Scan</span>
+                        <span class="feature-tag">Threat Detection</span>
+                    </div>
+                    <div class="item-stats">
+                        <div class="item-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>4.8 (112 reviews)</span>
+                        </div>
+                        <span>1.5k active</span>
+                    </div>
+                    <div class="item-actions">
+                        <button class="action-btn primary" onclick="purchaseItem('Security Shield', 15)">Subscribe</button>
+                        <button class="action-btn secondary" onclick="previewItem('Security Shield')">Demo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Developer Tools Section -->
+        <div class="marketplace-section" id="tools">
+            <div class="section-header">
+                <h2 class="section-title">Developer Tools</h2>
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search tools..." id="toolSearch">
+                    <button class="filter-btn">Filter</button>
+                </div>
+            </div>
+
+            <div class="items-grid">
+                <div class="item-card">
+                    <div class="premium-badge">Premium</div>
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">Code Generator Pro</div>
+                            <div class="item-category">Development Tool</div>
+                        </div>
+                        <div class="item-price">$49</div>
+                    </div>
+                    <div class="item-description">
+                        Advanced code generator with multiple language support, custom templates, and AI assistance.
+                    </div>
+                    <div class="item-features">
+                        <span class="feature-tag">Multi-language</span>
+                        <span class="feature-tag">AI Assisted</span>
+                        <span class="feature-tag">Custom Templates</span>
+                    </div>
+                    <div class="item-stats">
+                        <div class="item-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>4.9 (203 reviews)</span>
+                        </div>
+                        <span>3.2k downloads</span>
+                    </div>
+                    <div class="item-actions">
+                        <button class="action-btn primary" onclick="purchaseItem('Code Generator Pro', 49)">Purchase</button>
+                        <button class="action-btn secondary" onclick="previewItem('Code Generator Pro')">Preview</button>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="new-badge">New</div>
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">API Testing Suite</div>
+                            <div class="item-category">Testing Tool</div>
+                        </div>
+                        <div class="item-price">$39</div>
+                    </div>
+                    <div class="item-description">
+                        Comprehensive API testing tool with automated testing, documentation generation, and monitoring.
+                    </div>
+                    <div class="item-features">
+                        <span class="feature-tag">Automated Testing</span>
+                        <span class="feature-tag">Documentation</span>
+                        <span class="feature-tag">Monitoring</span>
+                    </div>
+                    <div class="item-stats">
+                        <div class="item-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span>4.7 (156 reviews)</span>
+                        </div>
+                        <span>1.8k downloads</span>
+                    </div>
+                    <div class="item-actions">
+                        <button class="action-btn primary" onclick="purchaseItem('API Testing Suite', 39)">Purchase</button>
+                        <button class="action-btn secondary" onclick="previewItem('API Testing Suite')">Preview</button>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">Performance Monitor</div>
+                            <div class="item-category">Monitoring Tool</div>
+                        </div>
+                        <div class="item-price">$25</div>
+                    </div>
+                    <div class="item-description">
+                        Real-time performance monitoring tool with alerts, reporting, and optimization suggestions.
+                    </div>
+                    <div class="item-features">
+                        <span class="feature-tag">Real-time</span>
+                        <span class="feature-tag">Alerts</span>
+                        <span class="feature-tag">Optimization</span>
+                    </div>
+                    <div class="item-stats">
+                        <div class="item-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>4.8 (178 reviews)</span>
+                        </div>
+                        <span>2.1k downloads</span>
+                    </div>
+                    <div class="item-actions">
+                        <button class="action-btn primary" onclick="purchaseItem('Performance Monitor', 25)">Purchase</button>
+                        <button class="action-btn secondary" onclick="previewItem('Performance Monitor')">Preview</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
+    <div class="notification" id="notification"></div>
+
     <script>
-        function viewVendor(vendorId) {
-            alert(`Viewing vendor: ${vendorId}`);
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            showNotification('Marketplace loaded successfully! 🛒');
+        });
+
+        function setupEventListeners() {
+            // Search functionality
+            document.getElementById('componentSearch').addEventListener('input', function() {
+                filterItems('components', this.value);
+            });
+
+            document.getElementById('templateSearch').addEventListener('input', function() {
+                filterItems('templates', this.value);
+            });
+
+            document.getElementById('pluginSearch').addEventListener('input', function() {
+                filterItems('plugins', this.value);
+            });
+
+            document.getElementById('toolSearch').addEventListener('input', function() {
+                filterItems('tools', this.value);
+            });
         }
 
-        function manageVendor(vendorId) {
-            alert(`Managing vendor: ${vendorId}`);
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.marketplace-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
         }
 
-        function approveVendor(vendorId) {
-            alert(`Approved vendor: ${vendorId}`);
-            // Update UI to show approved status
+        function filterItems(section, searchTerm) {
+            const items = document.querySelectorAll(`#${section} .item-card`);
+            
+            items.forEach(item => {
+                const title = item.querySelector('.item-title').textContent.toLowerCase();
+                const description = item.querySelector('.item-description').textContent.toLowerCase();
+                const category = item.querySelector('.item-category').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm.toLowerCase()) || 
+                    description.includes(searchTerm.toLowerCase()) || 
+                    category.includes(searchTerm.toLowerCase())) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
         }
 
-        function rejectVendor(vendorId) {
-            alert(`Rejected vendor: ${vendorId}`);
-            // Update UI to show rejected status
+        function purchaseItem(itemName, price) {
+            showNotification(`Processing purchase for ${itemName}...`, 'info');
+            
+            // Simulate purchase process
+            setTimeout(() => {
+                showNotification(`Successfully purchased ${itemName} for $${price}!`, 'success');
+                
+                // Redirect to billing page for subscription items
+                if (price.toString().includes('/month')) {
+                    setTimeout(() => {
+                        window.location.href = 'billing.html';
+                    }, 2000);
+                }
+            }, 2000);
         }
 
-        function viewProduct(productId) {
-            alert(`Viewing product: ${productId}`);
+        function previewItem(itemName) {
+            showNotification(`Opening preview for ${itemName}...`, 'info');
+            
+            // Simulate preview opening
+            setTimeout(() => {
+                showNotification(`Preview opened for ${itemName}!`, 'success');
+            }, 1500);
         }
 
-        function editProduct(productId) {
-            alert(`Editing product: ${productId}`);
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
         }
-
-        function addVendor() {
-            alert('Opening vendor registration form...');
-        }
-
-        function exportData() {
-            alert('Exporting marketplace data...');
-        }
-
-        function settings() {
-            alert('Opening marketplace settings...');
-        }
-
-        // Simulate real-time updates
-        setInterval(() => {
-            // Update commission progress
-            const progressBar = document.querySelector('.commission-bar');
-            const currentWidth = parseInt(progressBar.style.width) || 75;
-            const newWidth = Math.min(100, currentWidth + Math.random() * 5);
-            progressBar.style.width = newWidth + '%';
-        }, 5000);
     </script>
 </body>
 </html> 
