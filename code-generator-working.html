@@ -266,12 +266,12 @@
         <div class="status" id="status">Ready to generate code</div>
         
         <div class="language-selector">
-            <button class="lang-btn active" onclick="selectLanguage('javascript', this)">JavaScript</button>
-            <button class="lang-btn" onclick="selectLanguage('python', this)">Python</button>
-            <button class="lang-btn" onclick="selectLanguage('react', this)">React</button>
-            <button class="lang-btn" onclick="selectLanguage('vue', this)">Vue</button>
-            <button class="lang-btn" onclick="selectLanguage('nodejs', this)">Node.js</button>
-            <button class="lang-btn" onclick="selectLanguage('php', this)">PHP</button>
+            <button class="lang-btn active" data-lang="javascript">JavaScript</button>
+            <button class="lang-btn" data-lang="python">Python</button>
+            <button class="lang-btn" data-lang="react">React</button>
+            <button class="lang-btn" data-lang="vue">Vue</button>
+            <button class="lang-btn" data-lang="nodejs">Node.js</button>
+            <button class="lang-btn" data-lang="php">PHP</button>
         </div>
         
         <div class="input-section">
@@ -281,7 +281,7 @@
                 placeholder="Describe what you want to build... (e.g., Create a function that calculates the sum of an array, Build a React component that displays user data, etc.)"
             ></textarea>
             
-            <button class="generate-btn" id="generateBtn" onclick="generateCode()">Generate Code</button>
+            <button class="generate-btn" id="generateBtn">Generate Code</button>
             
             <div class="loading" id="loading">
                 <div class="spinner"></div>
@@ -292,42 +292,92 @@
         <div class="output-section">
             <div class="output-header">
                 <div class="output-title">Generated Code</div>
-                <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+                <button class="copy-btn" id="copyBtn">Copy Code</button>
             </div>
             <div class="code-output" id="codeOutput">Your generated code will appear here...</div>
         </div>
     </div>
 
     <script>
+        // Global variables
         var currentLanguage = 'javascript';
         var generatedCode = '';
-
-        function selectLanguage(lang, button) {
-            var allButtons = document.querySelectorAll('.lang-btn');
-            for (var i = 0; i < allButtons.length; i++) {
-                allButtons[i].classList.remove('active');
-            }
+        
+        // Initialize when page loads
+        window.onload = function() {
+            console.log('Page loaded, setting up event listeners');
+            setupEventListeners();
+        };
+        
+        function setupEventListeners() {
+            // Language selection buttons
+            var langButtons = document.querySelectorAll('.lang-btn');
+            langButtons.forEach(function(button) {
+                button.onclick = function() {
+                    var lang = this.getAttribute('data-lang');
+                    selectLanguage(lang, this);
+                };
+            });
             
+            // Generate button
+            var generateBtn = document.getElementById('generateBtn');
+            generateBtn.onclick = function() {
+                generateCode();
+            };
+            
+            // Copy button
+            var copyBtn = document.getElementById('copyBtn');
+            copyBtn.onclick = function() {
+                copyCode();
+            };
+            
+            // Keyboard shortcut
+            var codeInput = document.getElementById('codeInput');
+            codeInput.onkeydown = function(e) {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    generateCode();
+                }
+            };
+            
+            console.log('Event listeners set up successfully');
+        }
+        
+        function selectLanguage(lang, button) {
+            console.log('Language selected:', lang);
+            
+            // Remove active class from all buttons
+            var allButtons = document.querySelectorAll('.lang-btn');
+            allButtons.forEach(function(btn) {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to clicked button
             button.classList.add('active');
             currentLanguage = lang;
             
+            // Update status
             document.getElementById('status').textContent = 'Language selected: ' + currentLanguage;
             generatedCode = '';
             document.getElementById('codeOutput').textContent = 'Your generated code will appear here...';
         }
-
+        
         function generateCode() {
+            console.log('Generate button clicked');
+            
             var input = document.getElementById('codeInput').value.trim();
+            console.log('Input:', input);
             
             if (!input) {
                 alert('Please describe what you want to build');
                 return;
             }
-
+            
+            // Show loading
             document.getElementById('loading').style.display = 'block';
             document.getElementById('generateBtn').disabled = true;
             document.getElementById('status').textContent = 'Generating ' + currentLanguage + ' code...';
-
+            
+            // Simulate generation delay
             setTimeout(function() {
                 try {
                     generatedCode = generateCodeForLanguage(input, currentLanguage);
@@ -343,8 +393,10 @@
                 }
             }, 1500);
         }
-
+        
         function generateCodeForLanguage(description, language) {
+            console.log('Generating code for:', description, 'in', language);
+            
             var functionName = generateFunctionName(description);
             var componentName = generateComponentName(description);
             
@@ -361,10 +413,10 @@
                 
                 php: '<?php\n// ' + description + '\n\nfunction ' + functionName + '() {\n    echo "Hello from PHP!";\n    return "Generated code";\n}\n\n// Usage\n$result = ' + functionName + '();\necho $result;\n?>'
             };
-
+            
             return templates[language] || templates.javascript;
         }
-
+        
         function generateFunctionName(description) {
             var words = description.toLowerCase().split(' ').slice(0, 3);
             var result = '';
@@ -373,7 +425,7 @@
             }
             return result + 'Function';
         }
-
+        
         function generateComponentName(description) {
             var words = description.toLowerCase().split(' ').slice(0, 3);
             var result = '';
@@ -382,11 +434,11 @@
             }
             return result + 'Component';
         }
-
+        
         function copyCode() {
             if (generatedCode) {
                 navigator.clipboard.writeText(generatedCode).then(function() {
-                    var copyBtn = document.querySelector('.copy-btn');
+                    var copyBtn = document.getElementById('copyBtn');
                     var originalText = copyBtn.textContent;
                     copyBtn.textContent = 'Copied!';
                     setTimeout(function() {
@@ -398,12 +450,6 @@
                 });
             }
         }
-
-        document.getElementById('codeInput').addEventListener('keydown', function(e) {
-            if (e.ctrlKey && e.key === 'Enter') {
-                generateCode();
-            }
-        });
     </script>
 </body>
 </html> 
