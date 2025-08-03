@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictive Analytics - HopeNocode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .forecast-chart {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .chart-line {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            right: 40px;
+            height: 2px;
+            background: #e0e0e0;
+        }
+
+        .chart-point {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #667eea;
+            transform: translate(-50%, -50%);
+        }
+
+        .chart-point.predicted {
+            background: #28a745;
+            border: 2px solid #fff;
+        }
+
+        .chart-label {
+            position: absolute;
+            bottom: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .chart-value {
+            position: absolute;
+            top: 10px;
+            font-size: 12px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .insight-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .insight-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .insight-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .insight-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .insight-icon.positive {
+            background: #28a745;
+        }
+
+        .insight-icon.warning {
+            background: #ffc107;
+        }
+
+        .insight-icon.negative {
+            background: #dc3545;
+        }
+
+        .insight-icon.info {
+            background: #667eea;
+        }
+
+        .insight-title {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .insight-description {
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .insight-metrics {
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        .metric {
+            background: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: #666;
+        }
+
+        .metric-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .prediction-model {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .model-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .model-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .model-accuracy {
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+
+        .model-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .model-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .model-metric {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .metric-number {
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .trend-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .trend-up {
+            color: #28a745;
+        }
+
+        .trend-down {
+            color: #dc3545;
+        }
+
+        .trend-stable {
+            color: #6c757d;
+        }
+
+        .ai-insights {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .ai-insight {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #28a745;
+        }
+
+        .ai-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .ai-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #28a745;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .ai-title {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .ai-description {
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .ai-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .action-btn.secondary {
+            background: #6c757d;
+        }
+
+        .action-btn.secondary:hover {
+            background: #5a6268;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="window.location.href='index.html'">← Back</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🔮 Predictive Analytics</h1>
+            <p>AI-powered insights and forecasting to drive business growth and optimize performance</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">94.2%</div>
+                <div class="stat-label">Model Accuracy</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">$127K</div>
+                <div class="stat-label">Predicted Revenue</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">+23%</div>
+                <div class="stat-label">Growth Forecast</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">156</div>
+                <div class="stat-label">AI Insights</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Revenue Forecasting -->
+            <div class="section">
+                <h2 class="section-title">📈 Revenue Forecasting</h2>
+                
+                <div class="forecast-chart">
+                    <div class="chart-container">
+                        <div class="chart-line"></div>
+                        <div class="chart-point" style="left: 10%; bottom: 30%;"></div>
+                        <div class="chart-point" style="left: 25%; bottom: 45%;"></div>
+                        <div class="chart-point" style="left: 40%; bottom: 60%;"></div>
+                        <div class="chart-point" style="left: 55%; bottom: 55%;"></div>
+                        <div class="chart-point" style="left: 70%; bottom: 70%;"></div>
+                        <div class="chart-point predicted" style="left: 85%; bottom: 80%;"></div>
+                        <div class="chart-point predicted" style="left: 100%; bottom: 85%;"></div>
+                        
+                        <div class="chart-label" style="left: 10%;">Jan</div>
+                        <div class="chart-label" style="left: 25%;">Feb</div>
+                        <div class="chart-label" style="left: 40%;">Mar</div>
+                        <div class="chart-label" style="left: 55%;">Apr</div>
+                        <div class="chart-label" style="left: 70%;">May</div>
+                        <div class="chart-label" style="left: 85%;">Jun</div>
+                        <div class="chart-label" style="left: 100%;">Jul</div>
+                        
+                        <div class="chart-value" style="left: 10%;">$45K</div>
+                        <div class="chart-value" style="left: 25%;">$52K</div>
+                        <div class="chart-value" style="left: 40%;">$68K</div>
+                        <div class="chart-value" style="left: 55%;">$61K</div>
+                        <div class="chart-value" style="left: 70%;">$78K</div>
+                        <div class="chart-value" style="left: 85%;">$89K</div>
+                        <div class="chart-value" style="left: 100%;">$95K</div>
+                    </div>
+                </div>
+
+                <div class="prediction-model">
+                    <div class="model-header">
+                        <div class="model-name">Revenue Prediction Model</div>
+                        <div class="model-accuracy">94.2% Accuracy</div>
+                    </div>
+                    <div class="model-description">
+                        Advanced machine learning model analyzing historical data, market trends, and seasonal patterns to predict future revenue with high accuracy.
+                    </div>
+                    <div class="model-metrics">
+                        <div class="model-metric">
+                            <div class="metric-number">$127K</div>
+                            <div class="metric-label">Next Quarter</div>
+                            <div class="trend-indicator trend-up">↗ +15%</div>
+                        </div>
+                        <div class="model-metric">
+                            <div class="metric-number">$89K</div>
+                            <div class="metric-label">This Month</div>
+                            <div class="trend-indicator trend-up">↗ +12%</div>
+                        </div>
+                        <div class="model-metric">
+                            <div class="metric-number">23%</div>
+                            <div class="metric-label">Growth Rate</div>
+                            <div class="trend-indicator trend-up">↗ +5%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Insights -->
+            <div class="section">
+                <h2 class="section-title">🤖 AI Insights</h2>
+                
+                <div class="insight-card">
+                    <div class="insight-header">
+                        <div class="insight-icon positive">📈</div>
+                        <div class="insight-title">Revenue Growth Opportunity</div>
+                    </div>
+                    <div class="insight-description">
+                        Based on user behavior analysis, implementing a premium tier could increase revenue by 34% within 3 months. Users show high engagement with advanced features.
+                    </div>
+                    <div class="insight-metrics">
+                        <div class="metric">
+                            <span class="metric-value">34%</span> potential increase
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value">3 months</span> timeline
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value">87%</span> confidence
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-header">
+                        <div class="insight-icon warning">⚠️</div>
+                        <div class="insight-title">Churn Risk Alert</div>
+                    </div>
+                    <div class="insight-description">
+                        Users who haven't logged in for 14+ days show 67% higher churn probability. Recommend re-engagement campaign targeting 1,247 users.
+                    </div>
+                    <div class="insight-metrics">
+                        <div class="metric">
+                            <span class="metric-value">67%</span> churn risk
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value">1,247</span> users at risk
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value">14 days</span> inactive
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-header">
+                        <div class="insight-icon info">💡</div>
+                        <div class="insight-title">Feature Adoption Prediction</div>
+                    </div>
+                    <div class="insight-description">
+                        AI Code Assistant feature shows 89% adoption rate among new users. Recommend promoting this feature to increase user retention and satisfaction.
+                    </div>
+                    <div class="insight-metrics">
+                        <div class="metric">
+                            <span class="metric-value">89%</span> adoption rate
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value">+23%</span> retention impact
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value">4.8/5</span> satisfaction
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI-Powered Insights -->
+        <div class="ai-insights">
+            <h2 class="section-title">🧠 AI-Powered Business Intelligence</h2>
+            
+            <div class="ai-insight">
+                <div class="ai-header">
+                    <div class="ai-icon">🤖</div>
+                    <div class="ai-title">Market Expansion Opportunity</div>
+                </div>
+                <div class="ai-description">
+                    Analysis of user demographics and market data suggests strong potential for expansion into the European market. Current user base shows 23% European users with high engagement rates. Recommended launch timeline: Q3 2024.
+                </div>
+                <div class="ai-actions">
+                    <button class="action-btn">View Detailed Analysis</button>
+                    <button class="action-btn secondary">Create Expansion Plan</button>
+                </div>
+            </div>
+
+            <div class="ai-insight">
+                <div class="ai-header">
+                    <div class="ai-icon">📊</div>
+                    <div class="ai-title">Product Optimization Recommendation</div>
+                </div>
+                <div class="ai-description">
+                    User behavior analysis indicates that the subscription flow has a 23% drop-off rate at the payment step. Implementing a simplified checkout process could increase conversions by 18%. A/B testing recommended.
+                </div>
+                <div class="ai-actions">
+                    <button class="action-btn">View A/B Test Plan</button>
+                    <button class="action-btn secondary">Implement Changes</button>
+                </div>
+            </div>
+
+            <div class="ai-insight">
+                <div class="ai-header">
+                    <div class="ai-icon">🎯</div>
+                    <div class="ai-title">Customer Segmentation Insights</div>
+                </div>
+                <div class="ai-description">
+                    AI analysis identified 4 distinct customer segments with different usage patterns and preferences. Personalized marketing campaigns could increase conversion rates by 31% and reduce customer acquisition costs by 24%.
+                </div>
+                <div class="ai-actions">
+                    <button class="action-btn">View Segmentation</button>
+                    <button class="action-btn secondary">Create Campaigns</button>
+                </div>
+            </div>
+
+            <div class="ai-insight">
+                <div class="ai-header">
+                    <div class="ai-icon">⚡</div>
+                    <div class="ai-title">Performance Optimization</div>
+                </div>
+                <div class="ai-description">
+                    Machine learning analysis of system performance data suggests that implementing caching strategies and database optimization could improve page load times by 47% and reduce server costs by 23%.
+                </div>
+                <div class="ai-actions">
+                    <button class="action-btn">View Optimization Plan</button>
+                    <button class="action-btn secondary">Schedule Implementation</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulate real-time data updates
+        setInterval(() => {
+            updateForecastData();
+            updateInsights();
+        }, 30000); // Every 30 seconds
+
+        function updateForecastData() {
+            // Simulate updating forecast data
+            const chartPoints = document.querySelectorAll('.chart-point');
+            chartPoints.forEach((point, index) => {
+                if (index >= 5) { // Only update predicted points
+                    const randomChange = (Math.random() - 0.5) * 20;
+                    const currentBottom = parseFloat(point.style.bottom);
+                    const newBottom = Math.max(20, Math.min(80, currentBottom + randomChange));
+                    point.style.bottom = newBottom + '%';
+                }
+            });
+        }
+
+        function updateInsights() {
+            // Simulate updating insight metrics
+            const metricValues = document.querySelectorAll('.metric-value');
+            metricValues.forEach(metric => {
+                if (Math.random() > 0.7) { // 30% chance of update
+                    const currentValue = metric.textContent;
+                    if (currentValue.includes('%')) {
+                        const number = parseInt(currentValue);
+                        const change = Math.floor((Math.random() - 0.5) * 5);
+                        metric.textContent = Math.max(0, Math.min(100, number + change)) + '%';
+                    } else if (currentValue.includes('$')) {
+                        const number = parseInt(currentValue.replace(/[^0-9]/g, ''));
+                        const change = Math.floor((Math.random() - 0.5) * 5000);
+                        metric.textContent = '$' + Math.max(0, number + change) + 'K';
+                    }
+                }
+            });
+        }
+
+        // Initialize with some random variations
+        setTimeout(() => {
+            updateForecastData();
+            updateInsights();
+        }, 5000);
+    </script>
+</body>
+</html> 

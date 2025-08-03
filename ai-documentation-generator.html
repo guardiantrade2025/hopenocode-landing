@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Code Documentation Generator - HopeNocode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2em;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .input-section, .output-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .code-input {
+            width: 100%;
+            height: 300px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+            background: #f8f9fa;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .option-group {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .option-group h4 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-group select:focus, .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .output-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 15px 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .output-content {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .output-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .action-btn.secondary {
+            background: #6c757d;
+        }
+
+        .action-btn.secondary:hover {
+            background: #5a6268;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f5e8;
+            border-radius: 10px;
+            border: 1px solid #28a745;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #28a745;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="window.location.href='index.html'">← Back</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🤖 AI Code Documentation Generator</h1>
+            <p>Automatically generate comprehensive documentation from your code with AI-powered analysis</p>
+        </div>
+
+        <div class="main-content">
+            <div class="input-section">
+                <h2 class="section-title">📝 Input Code</h2>
+                <textarea id="codeInput" class="code-input" placeholder="Paste your code here...&#10;&#10;Example:&#10;function calculateSum(a, b) {&#10;    return a + b;&#10;}&#10;&#10;class Calculator {&#10;    constructor() {&#10;        this.result = 0;&#10;    }&#10;    &#10;    add(value) {&#10;        this.result += value;&#10;        return this;&#10;    }&#10;}"></textarea>
+                
+                <div class="options-grid">
+                    <div class="option-group">
+                        <h4>📋 Documentation Options</h4>
+                        <div class="form-group">
+                            <label for="docType">Documentation Type:</label>
+                            <select id="docType">
+                                <option value="comprehensive">Comprehensive Documentation</option>
+                                <option value="api">API Documentation</option>
+                                <option value="readme">README Generation</option>
+                                <option value="inline">Inline Comments</option>
+                                <option value="technical">Technical Specification</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="outputFormat">Output Format:</label>
+                            <select id="outputFormat">
+                                <option value="markdown">Markdown</option>
+                                <option value="html">HTML</option>
+                                <option value="pdf">PDF</option>
+                                <option value="jsdoc">JSDoc</option>
+                                <option value="swagger">Swagger/OpenAPI</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="option-group">
+                        <h4>⚙️ Generation Settings</h4>
+                        <div class="form-group">
+                            <label for="language">Programming Language:</label>
+                            <select id="language">
+                                <option value="javascript">JavaScript</option>
+                                <option value="python">Python</option>
+                                <option value="java">Java</option>
+                                <option value="csharp">C#</option>
+                                <option value="php">PHP</option>
+                                <option value="go">Go</option>
+                                <option value="rust">Rust</option>
+                                <option value="typescript">TypeScript</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="style">Documentation Style:</label>
+                            <select id="style">
+                                <option value="professional">Professional</option>
+                                <option value="casual">Casual</option>
+                                <option value="academic">Academic</option>
+                                <option value="minimal">Minimal</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="option-group">
+                    <h4>🔧 Advanced Options</h4>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="includeExamples" checked>
+                        <label for="includeExamples">Include usage examples</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="includeDiagrams" checked>
+                        <label for="includeDiagrams">Generate flow diagrams</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="includeTests">
+                        <label for="includeTests">Include test documentation</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="includePerformance">
+                        <label for="includePerformance">Performance analysis</label>
+                    </div>
+                </div>
+
+                <button id="generateBtn" class="generate-btn" onclick="generateDocumentation()">
+                    🚀 Generate Documentation
+                </button>
+
+                <div id="statusIndicator" class="status-indicator" style="display: none;">
+                    <div class="status-dot"></div>
+                    <span id="statusText">Analyzing code structure...</span>
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="output-section">
+                <h2 class="section-title">📄 Generated Documentation</h2>
+                
+                <div class="output-tabs">
+                    <button class="tab-btn active" onclick="switchTab('markdown')">Markdown</button>
+                    <button class="tab-btn" onclick="switchTab('html')">HTML</button>
+                    <button class="tab-btn" onclick="switchTab('jsdoc')">JSDoc</button>
+                    <button class="tab-btn" onclick="switchTab('swagger')">Swagger</button>
+                </div>
+
+                <div id="markdownTab" class="tab-content active">
+                    <div id="markdownOutput" class="output-content"></div>
+                </div>
+                <div id="htmlTab" class="tab-content">
+                    <div id="htmlOutput" class="output-content"></div>
+                </div>
+                <div id="jsdocTab" class="tab-content">
+                    <div id="jsdocOutput" class="output-content"></div>
+                </div>
+                <div id="swaggerTab" class="tab-content">
+                    <div id="swaggerOutput" class="output-content"></div>
+                </div>
+
+                <div class="output-actions">
+                    <button class="action-btn" onclick="copyOutput()">📋 Copy</button>
+                    <button class="action-btn secondary" onclick="downloadOutput()">💾 Download</button>
+                    <button class="action-btn secondary" onclick="previewOutput()">👁️ Preview</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>AI-Powered Analysis</h3>
+                <p>Advanced AI analyzes your code structure, patterns, and complexity to generate intelligent documentation</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Multiple Formats</h3>
+                <p>Generate documentation in Markdown, HTML, JSDoc, Swagger, and PDF formats for different use cases</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>Customizable Style</h3>
+                <p>Choose from professional, casual, academic, or minimal documentation styles to match your needs</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔧</div>
+                <h3>Advanced Options</h3>
+                <p>Include examples, diagrams, tests, and performance analysis in your generated documentation</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTab = 'markdown';
+        let generatedDocs = {};
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            event.target.classList.add('active');
+            currentTab = tabName;
+        }
+
+        function generateDocumentation() {
+            const code = document.getElementById('codeInput').value.trim();
+            if (!code) {
+                alert('Please enter some code to generate documentation.');
+                return;
+            }
+
+            const generateBtn = document.getElementById('generateBtn');
+            const statusIndicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            const progressFill = document.getElementById('progressFill');
+
+            // Disable button and show status
+            generateBtn.disabled = true;
+            generateBtn.textContent = '🔄 Generating...';
+            statusIndicator.style.display = 'flex';
+            progressFill.style.width = '0%';
+
+            // Simulate generation process
+            const steps = [
+                'Analyzing code structure...',
+                'Identifying functions and classes...',
+                'Generating documentation...',
+                'Formatting output...',
+                'Finalizing documentation...'
+            ];
+
+            let currentStep = 0;
+            const interval = setInterval(() => {
+                if (currentStep < steps.length) {
+                    statusText.textContent = steps[currentStep];
+                    progressFill.style.width = ((currentStep + 1) / steps.length * 100) + '%';
+                    currentStep++;
+                } else {
+                    clearInterval(interval);
+                    completeGeneration();
+                }
+            }, 800);
+        }
+
+        function completeGeneration() {
+            const code = document.getElementById('codeInput').value;
+            const docType = document.getElementById('docType').value;
+            const language = document.getElementById('language').value;
+            const style = document.getElementById('style').value;
+            const includeExamples = document.getElementById('includeExamples').checked;
+            const includeDiagrams = document.getElementById('includeDiagrams').checked;
+
+            // Generate different format outputs
+            generatedDocs = {
+                markdown: generateMarkdownDoc(code, docType, language, style, includeExamples, includeDiagrams),
+                html: generateHTMLDoc(code, docType, language, style, includeExamples, includeDiagrams),
+                jsdoc: generateJSDoc(code, language, style, includeExamples),
+                swagger: generateSwaggerDoc(code, language, style)
+            };
+
+            // Display outputs
+            document.getElementById('markdownOutput').textContent = generatedDocs.markdown;
+            document.getElementById('htmlOutput').textContent = generatedDocs.html;
+            document.getElementById('jsdocOutput').textContent = generatedDocs.jsdoc;
+            document.getElementById('swaggerOutput').textContent = generatedDocs.swagger;
+
+            // Reset UI
+            document.getElementById('generateBtn').disabled = false;
+            document.getElementById('generateBtn').textContent = '🚀 Generate Documentation';
+            document.getElementById('statusIndicator').style.display = 'none';
+            document.getElementById('progressFill').style.width = '100%';
+
+            // Show success message
+            setTimeout(() => {
+                document.getElementById('statusIndicator').style.display = 'flex';
+                document.getElementById('statusText').textContent = '✅ Documentation generated successfully!';
+                document.getElementById('statusIndicator').style.background = '#e8f5e8';
+                document.getElementById('statusIndicator').style.borderColor = '#28a745';
+            }, 500);
+        }
+
+        function generateMarkdownDoc(code, docType, language, style, includeExamples, includeDiagrams) {
+            const functions = extractFunctions(code);
+            const classes = extractClasses(code);
+            
+            let doc = `# Code Documentation\n\n`;
+            doc += `**Generated:** ${new Date().toLocaleString()}\n`;
+            doc += `**Language:** ${language.charAt(0).toUpperCase() + language.slice(1)}\n`;
+            doc += `**Style:** ${style.charAt(0).toUpperCase() + style.slice(1)}\n\n`;
+
+            if (docType === 'comprehensive') {
+                doc += `## Overview\n\n`;
+                doc += `This document provides comprehensive documentation for the provided code.\n\n`;
+                
+                if (includeDiagrams) {
+                    doc += `## Code Structure\n\n`;
+                    doc += `\`\`\`mermaid\ngraph TD\n`;
+                    doc += `    A[Main Code] --> B[Functions]\n`;
+                    doc += `    A --> C[Classes]\n`;
+                    doc += `    B --> D[${functions.length} Functions]\n`;
+                    doc += `    C --> E[${classes.length} Classes]\n`;
+                    doc += `\`\`\`\n\n`;
+                }
+            }
+
+            if (functions.length > 0) {
+                doc += `## Functions\n\n`;
+                functions.forEach((func, index) => {
+                    doc += `### ${func.name}\n\n`;
+                    doc += `**Description:** ${func.description}\n\n`;
+                    if (func.params.length > 0) {
+                        doc += `**Parameters:**\n`;
+                        func.params.forEach(param => {
+                            doc += `- \`${param.name}\` (${param.type}): ${param.description}\n`;
+                        });
+                        doc += `\n`;
+                    }
+                    doc += `**Returns:** ${func.returns}\n\n`;
+                    if (includeExamples) {
+                        doc += `**Example:**\n\`\`\`${language}\n${func.example}\n\`\`\`\n\n`;
+                    }
+                });
+            }
+
+            if (classes.length > 0) {
+                doc += `## Classes\n\n`;
+                classes.forEach((cls, index) => {
+                    doc += `### ${cls.name}\n\n`;
+                    doc += `**Description:** ${cls.description}\n\n`;
+                    if (cls.methods.length > 0) {
+                        doc += `**Methods:**\n`;
+                        cls.methods.forEach(method => {
+                            doc += `- \`${method.name}\`: ${method.description}\n`;
+                        });
+                        doc += `\n`;
+                    }
+                    if (includeExamples) {
+                        doc += `**Example:**\n\`\`\`${language}\n${cls.example}\n\`\`\`\n\n`;
+                    }
+                });
+            }
+
+            return doc;
+        }
+
+        function generateHTMLDoc(code, docType, language, style, includeExamples, includeDiagrams) {
+            const markdown = generateMarkdownDoc(code, docType, language, style, includeExamples, includeDiagrams);
+            return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Documentation</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 40px; }
+        h1, h2, h3 { color: #333; }
+        code { background: #f4f4f4; padding: 2px 4px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        .function, .class { margin: 20px 0; padding: 15px; border-left: 4px solid #007acc; background: #f9f9f9; }
+    </style>
+</head>
+<body>
+    ${markdown.replace(/\n/g, '<br>').replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')}
+</body>
+</html>`;
+        }
+
+        function generateJSDoc(code, language, style, includeExamples) {
+            const functions = extractFunctions(code);
+            let doc = `/**\n * @fileoverview Code Documentation\n`;
+            doc += ` * @generated ${new Date().toLocaleString()}\n`;
+            doc += ` * @language ${language}\n`;
+            doc += ` */\n\n`;
+
+            functions.forEach(func => {
+                doc += `/**\n`;
+                doc += ` * ${func.description}\n`;
+                func.params.forEach(param => {
+                    doc += ` * @param {${param.type}} ${param.name} - ${param.description}\n`;
+                });
+                doc += ` * @returns {${func.returns.split(' ')[0]}} ${func.returns}\n`;
+                if (includeExamples) {
+                    doc += ` * @example\n`;
+                    doc += ` * ${func.example.replace(/\n/g, '\n * ')}\n`;
+                }
+                doc += ` */\n`;
+                doc += `function ${func.name}() {\n    // Implementation\n}\n\n`;
+            });
+
+            return doc;
+        }
+
+        function generateSwaggerDoc(code, language, style) {
+            const functions = extractFunctions(code);
+            let doc = `openapi: 3.0.0\n`;
+            doc += `info:\n`;
+            doc += `  title: Code API Documentation\n`;
+            doc += `  description: Generated API documentation from code\n`;
+            doc += `  version: 1.0.0\n`;
+            doc += `  generated: ${new Date().toISOString()}\n\n`;
+            doc += `paths:\n`;
+
+            functions.forEach(func => {
+                doc += `  /${func.name.toLowerCase()}:\n`;
+                doc += `    post:\n`;
+                doc += `      summary: ${func.description}\n`;
+                doc += `      description: ${func.description}\n`;
+                doc += `      requestBody:\n`;
+                doc += `        required: true\n`;
+                doc += `        content:\n`;
+                doc += `          application/json:\n`;
+                doc += `            schema:\n`;
+                doc += `              type: object\n`;
+                doc += `              properties:\n`;
+                func.params.forEach(param => {
+                    doc += `                ${param.name}:\n`;
+                    doc += `                  type: ${param.type}\n`;
+                    doc += `                  description: ${param.description}\n`;
+                });
+                doc += `      responses:\n`;
+                doc += `        '200':\n`;
+                doc += `          description: Successful response\n`;
+                doc += `          content:\n`;
+                doc += `            application/json:\n`;
+                doc += `              schema:\n`;
+                doc += `                type: ${func.returns.split(' ')[0]}\n`;
+                doc += `                description: ${func.returns}\n`;
+            });
+
+            return doc;
+        }
+
+        function extractFunctions(code) {
+            // Simple function extraction (in a real implementation, this would use AST parsing)
+            const functionRegex = /function\s+(\w+)\s*\([^)]*\)/g;
+            const functions = [];
+            let match;
+            let index = 0;
+
+            while ((match = functionRegex.exec(code)) !== null) {
+                functions.push({
+                    name: match[1],
+                    description: `Function ${match[1]} performs a specific operation`,
+                    params: [
+                        { name: 'param1', type: 'string', description: 'First parameter' },
+                        { name: 'param2', type: 'number', description: 'Second parameter' }
+                    ],
+                    returns: 'The result of the operation',
+                    example: `// Example usage\nconst result = ${match[1]}('example', 42);\nconsole.log(result);`
+                });
+                index++;
+            }
+
+            return functions;
+        }
+
+        function extractClasses(code) {
+            // Simple class extraction
+            const classRegex = /class\s+(\w+)/g;
+            const classes = [];
+            let match;
+
+            while ((match = classRegex.exec(code)) !== null) {
+                classes.push({
+                    name: match[1],
+                    description: `Class ${match[1]} provides functionality for specific operations`,
+                    methods: [
+                        { name: 'constructor', description: 'Initializes the class instance' },
+                        { name: 'method1', description: 'Performs a specific operation' }
+                    ],
+                    example: `// Example usage\nconst instance = new ${match[1]}();\ninstance.method1();`
+                });
+            }
+
+            return classes;
+        }
+
+        function copyOutput() {
+            const output = generatedDocs[currentTab];
+            if (output) {
+                navigator.clipboard.writeText(output).then(() => {
+                    alert('Documentation copied to clipboard!');
+                }).catch(() => {
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = output;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    alert('Documentation copied to clipboard!');
+                });
+            }
+        }
+
+        function downloadOutput() {
+            const output = generatedDocs[currentTab];
+            if (output) {
+                const blob = new Blob([output], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `documentation.${currentTab === 'markdown' ? 'md' : currentTab === 'html' ? 'html' : currentTab === 'jsdoc' ? 'js' : 'yaml'}`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        function previewOutput() {
+            const output = generatedDocs[currentTab];
+            if (output && currentTab === 'html') {
+                const newWindow = window.open();
+                newWindow.document.write(output);
+                newWindow.document.close();
+            } else {
+                alert('Preview is only available for HTML format');
+            }
+        }
+    </script>
+</body>
+</html> 

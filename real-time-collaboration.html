@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Code Collaboration - HopeNocode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2em;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 20px;
+            height: calc(100vh - 200px);
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 8px;
+        }
+
+        .team-member {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #28a745;
+        }
+
+        .member-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .member-info h4 {
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .member-status {
+            font-size: 12px;
+            color: #28a745;
+        }
+
+        .member-status.away {
+            color: #ffc107;
+        }
+
+        .member-status.offline {
+            color: #6c757d;
+        }
+
+        .editor-container {
+            flex: 1;
+            background: #1e1e1e;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .editor-header {
+            background: #2d2d2d;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-icon {
+            font-size: 18px;
+        }
+
+        .file-name {
+            font-weight: 600;
+        }
+
+        .editor-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-btn {
+            background: #3d3d3d;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: #4d4d4d;
+        }
+
+        .control-btn.active {
+            background: #667eea;
+        }
+
+        .code-editor {
+            width: 100%;
+            height: calc(100% - 50px);
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border: none;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: none;
+            outline: none;
+        }
+
+        .cursor-indicator {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background: #667eea;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .chat-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            max-height: 300px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        .message.sent {
+            background: #667eea;
+            color: white;
+            margin-left: auto;
+        }
+
+        .message.received {
+            background: #e9ecef;
+            color: #333;
+        }
+
+        .message-header {
+            font-size: 12px;
+            margin-bottom: 4px;
+            opacity: 0.8;
+        }
+
+        .message-content {
+            font-size: 14px;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .chat-input input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .send-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .send-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .activity-feed {
+            margin-top: 20px;
+        }
+
+        .activity-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-time {
+            color: #999;
+            font-size: 10px;
+        }
+
+        .file-explorer {
+            margin-top: 20px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            margin-bottom: 5px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .file-item:hover {
+            background: #e9ecef;
+        }
+
+        .file-item.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .file-icon {
+            font-size: 16px;
+        }
+
+        .file-name {
+            font-size: 14px;
+        }
+
+        .collaboration-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .invite-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .invite-input {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .invite-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .invite-btn:hover {
+            background: #218838;
+        }
+
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 250px 1fr 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            
+            .sidebar, .chat-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="window.location.href='index.html'">← Back</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>👥 Real-time Code Collaboration</h1>
+            <p>Collaborate with your team in real-time with live editing, cursor tracking, and instant messaging</p>
+        </div>
+
+        <div class="main-layout">
+            <!-- Left Sidebar - Team & Files -->
+            <div class="sidebar">
+                <h3 class="section-title">👥 Team Members</h3>
+                <div id="teamMembers">
+                    <div class="team-member">
+                        <div class="member-avatar">JD</div>
+                        <div class="member-info">
+                            <h4>John Doe</h4>
+                            <div class="member-status">Online</div>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar">JS</div>
+                        <div class="member-info">
+                            <h4>Jane Smith</h4>
+                            <div class="member-status">Online</div>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar">MJ</div>
+                        <div class="member-info">
+                            <h4>Mike Johnson</h4>
+                            <div class="member-status away">Away</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="file-explorer">
+                    <h3 class="section-title">📁 Files</h3>
+                    <div id="fileList">
+                        <div class="file-item active" onclick="switchFile('main.js')">
+                            <span class="file-icon">📄</span>
+                            <span class="file-name">main.js</span>
+                        </div>
+                        <div class="file-item" onclick="switchFile('styles.css')">
+                            <span class="file-icon">📄</span>
+                            <span class="file-name">styles.css</span>
+                        </div>
+                        <div class="file-item" onclick="switchFile('index.html')">
+                            <span class="file-icon">📄</span>
+                            <span class="file-name">index.html</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collaboration-stats">
+                    <div class="stat-card">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Active Users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">127</div>
+                        <div class="stat-label">Lines Changed</div>
+                    </div>
+                </div>
+
+                <div class="invite-section">
+                    <h4>Invite Team Member</h4>
+                    <input type="email" class="invite-input" placeholder="Enter email address">
+                    <button class="invite-btn" onclick="inviteMember()">Send Invite</button>
+                </div>
+            </div>
+
+            <!-- Main Editor -->
+            <div class="main-content">
+                <div class="editor-container">
+                    <div class="editor-header">
+                        <div class="file-info">
+                            <span class="file-icon">📄</span>
+                            <span class="file-name" id="currentFileName">main.js</span>
+                        </div>
+                        <div class="editor-controls">
+                            <button class="control-btn active" onclick="toggleFeature('auto-save')">Auto Save</button>
+                            <button class="control-btn" onclick="toggleFeature('syntax-highlight')">Syntax Highlight</button>
+                            <button class="control-btn" onclick="toggleFeature('line-numbers')">Line Numbers</button>
+                        </div>
+                    </div>
+                    <textarea id="codeEditor" class="code-editor" placeholder="Start coding with your team...&#10;&#10;Example:&#10;function calculateSum(a, b) {&#10;    return a + b;&#10;}&#10;&#10;class Calculator {&#10;    constructor() {&#10;        this.result = 0;&#10;    }&#10;    &#10;    add(value) {&#10;        this.result += value;&#10;        return this;&#10;    }&#10;}&#10;&#10;// Your team can see your changes in real-time!"></textarea>
+                </div>
+            </div>
+
+            <!-- Right Sidebar - Chat & Activity -->
+            <div class="chat-container">
+                <h3 class="section-title">💬 Team Chat</h3>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message received">
+                        <div class="message-header">John Doe • 2 min ago</div>
+                        <div class="message-content">Hey team! I'm working on the main function</div>
+                    </div>
+                    <div class="message sent">
+                        <div class="message-header">You • 1 min ago</div>
+                        <div class="message-content">Great! I can see your changes live</div>
+                    </div>
+                    <div class="message received">
+                        <div class="message-header">Jane Smith • 30 sec ago</div>
+                        <div class="message-content">I'll add the CSS styling next</div>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="handleChatKeyPress(event)">
+                    <button class="send-btn" onclick="sendMessage()">Send</button>
+                </div>
+
+                <div class="activity-feed">
+                    <h3 class="section-title">📊 Activity Feed</h3>
+                    <div id="activityFeed">
+                        <div class="activity-item">
+                            <div>John Doe edited main.js</div>
+                            <div class="activity-time">2 minutes ago</div>
+                        </div>
+                        <div class="activity-item">
+                            <div>Jane Smith joined the session</div>
+                            <div class="activity-time">5 minutes ago</div>
+                        </div>
+                        <div class="activity-item">
+                            <div>You saved the project</div>
+                            <div class="activity-time">10 minutes ago</div>
+                        </div>
+                        <div class="activity-item">
+                            <div>Mike Johnson went away</div>
+                            <div class="activity-time">15 minutes ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentFile = 'main.js';
+        let teamMembers = [
+            { id: 1, name: 'John Doe', avatar: 'JD', status: 'online', color: '#667eea' },
+            { id: 2, name: 'Jane Smith', avatar: 'JS', status: 'online', color: '#28a745' },
+            { id: 3, name: 'Mike Johnson', avatar: 'MJ', status: 'away', color: '#ffc107' }
+        ];
+
+        let chatMessages = [
+            { sender: 'John Doe', message: 'Hey team! I\'m working on the main function', time: '2 min ago', type: 'received' },
+            { sender: 'You', message: 'Great! I can see your changes live', time: '1 min ago', type: 'sent' },
+            { sender: 'Jane Smith', message: 'I\'ll add the CSS styling next', time: '30 sec ago', type: 'received' }
+        ];
+
+        let activityFeed = [
+            { action: 'John Doe edited main.js', time: '2 minutes ago' },
+            { action: 'Jane Smith joined the session', time: '5 minutes ago' },
+            { action: 'You saved the project', time: '10 minutes ago' },
+            { action: 'Mike Johnson went away', time: '15 minutes ago' }
+        ];
+
+        // Simulate real-time updates
+        setInterval(() => {
+            updateTeamStatus();
+            simulateTyping();
+        }, 5000);
+
+        function switchFile(fileName) {
+            currentFile = fileName;
+            document.getElementById('currentFileName').textContent = fileName;
+            
+            // Update active file in file list
+            document.querySelectorAll('.file-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.file-item').classList.add('active');
+
+            // Simulate loading file content
+            const editor = document.getElementById('codeEditor');
+            if (fileName === 'main.js') {
+                editor.value = `function calculateSum(a, b) {
+    return a + b;
+}
+
+class Calculator {
+    constructor() {
+        this.result = 0;
+    }
+    
+    add(value) {
+        this.result += value;
+        return this;
+    }
+}
+
+// Your team can see your changes in real-time!`;
+            } else if (fileName === 'styles.css') {
+                editor.value = `body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}`;
+            } else if (fileName === 'index.html') {
+                editor.value = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collaborative Project</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to our collaborative project!</h1>
+        <p>This is a real-time collaborative coding session.</p>
+        <div id="app"></div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>`;
+            }
+
+            addActivity(`Switched to ${fileName}`);
+        }
+
+        function toggleFeature(feature) {
+            const btn = event.target;
+            btn.classList.toggle('active');
+            
+            if (feature === 'auto-save') {
+                if (btn.classList.contains('active')) {
+                    addActivity('Auto-save enabled');
+                } else {
+                    addActivity('Auto-save disabled');
+                }
+            } else if (feature === 'syntax-highlight') {
+                if (btn.classList.contains('active')) {
+                    addActivity('Syntax highlighting enabled');
+                } else {
+                    addActivity('Syntax highlighting disabled');
+                }
+            } else if (feature === 'line-numbers') {
+                if (btn.classList.contains('active')) {
+                    addActivity('Line numbers enabled');
+                } else {
+                    addActivity('Line numbers disabled');
+                }
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addChatMessage('You', message, 'sent');
+                input.value = '';
+                
+                // Simulate team response
+                setTimeout(() => {
+                    const responses = [
+                        'Thanks for the update!',
+                        'I can see your changes live',
+                        'Great work!',
+                        'I\'ll review that now',
+                        'Perfect timing!'
+                    ];
+                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                    const randomMember = teamMembers[Math.floor(Math.random() * teamMembers.length)];
+                    addChatMessage(randomMember.name, randomResponse, 'received');
+                }, 2000);
+            }
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function addChatMessage(sender, message, type) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.innerHTML = `
+                <div class="message-header">${sender} • just now</div>
+                <div class="message-content">${message}</div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addActivity(action) {
+            const activityFeed = document.getElementById('activityFeed');
+            const activityDiv = document.createElement('div');
+            activityDiv.className = 'activity-item';
+            activityDiv.innerHTML = `
+                <div>${action}</div>
+                <div class="activity-time">just now</div>
+            `;
+            activityFeed.insertBefore(activityDiv, activityFeed.firstChild);
+            
+            // Remove old activities if too many
+            if (activityFeed.children.length > 10) {
+                activityFeed.removeChild(activityFeed.lastChild);
+            }
+        }
+
+        function updateTeamStatus() {
+            // Simulate status changes
+            const randomMember = teamMembers[Math.floor(Math.random() * teamMembers.length)];
+            const statuses = ['online', 'away', 'offline'];
+            const newStatus = statuses[Math.floor(Math.random() * statuses.length)];
+            
+            if (Math.random() > 0.7) { // 30% chance of status change
+                randomMember.status = newStatus;
+                updateTeamDisplay();
+                addActivity(`${randomMember.name} is now ${newStatus}`);
+            }
+        }
+
+        function updateTeamDisplay() {
+            const teamContainer = document.getElementById('teamMembers');
+            teamContainer.innerHTML = '';
+            
+            teamMembers.forEach(member => {
+                const memberDiv = document.createElement('div');
+                memberDiv.className = 'team-member';
+                memberDiv.innerHTML = `
+                    <div class="member-avatar">${member.avatar}</div>
+                    <div class="member-info">
+                        <h4>${member.name}</h4>
+                        <div class="member-status ${member.status}">${member.status.charAt(0).toUpperCase() + member.status.slice(1)}</div>
+                    </div>
+                `;
+                teamContainer.appendChild(memberDiv);
+            });
+        }
+
+        function simulateTyping() {
+            // Simulate other team members typing
+            if (Math.random() > 0.8) { // 20% chance
+                const randomMember = teamMembers[Math.floor(Math.random() * teamMembers.length)];
+                addActivity(`${randomMember.name} is typing...`);
+            }
+        }
+
+        function inviteMember() {
+            const emailInput = document.querySelector('.invite-input');
+            const email = emailInput.value.trim();
+            
+            if (email) {
+                addActivity(`Invitation sent to ${email}`);
+                emailInput.value = '';
+                
+                // Simulate invitation response
+                setTimeout(() => {
+                    addChatMessage('System', `Invitation sent to ${email}`, 'received');
+                }, 1000);
+            }
+        }
+
+        // Initialize
+        updateTeamDisplay();
+        
+        // Auto-save simulation
+        setInterval(() => {
+            const autoSaveBtn = document.querySelector('.control-btn.active');
+            if (autoSaveBtn && autoSaveBtn.textContent === 'Auto Save') {
+                addActivity('Project auto-saved');
+            }
+        }, 30000); // Every 30 seconds
+    </script>
+</body>
+</html> 

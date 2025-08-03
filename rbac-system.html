@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Role-Based Access Control - HopeNocode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2em;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .user-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .user-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .user-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .user-details h3 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .user-email {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .user-role {
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .user-role.admin {
+            background: #dc3545;
+        }
+
+        .user-role.moderator {
+            background: #fd7e14;
+        }
+
+        .user-role.user {
+            background: #28a745;
+        }
+
+        .user-role.guest {
+            background: #6c757d;
+        }
+
+        .permissions-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .permission-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .permission-icon {
+            font-size: 16px;
+        }
+
+        .permission-item.read {
+            border-left: 4px solid #28a745;
+        }
+
+        .permission-item.write {
+            border-left: 4px solid #fd7e14;
+        }
+
+        .permission-item.delete {
+            border-left: 4px solid #dc3545;
+        }
+
+        .permission-item.admin {
+            border-left: 4px solid #6f42c1;
+        }
+
+        .role-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .role-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .role-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .role-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .role-count {
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        .role-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .role-permissions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .role-permission {
+            background: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .add-user-form {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-1px);
+        }
+
+        .btn.secondary {
+            background: #6c757d;
+        }
+
+        .btn.secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn.danger {
+            background: #dc3545;
+        }
+
+        .btn.danger:hover {
+            background: #c82333;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .activity-log {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .log-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .log-item:last-child {
+            border-bottom: none;
+        }
+
+        .log-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        .log-icon.user-added {
+            background: #28a745;
+        }
+
+        .log-icon.role-changed {
+            background: #fd7e14;
+        }
+
+        .log-icon.permission-updated {
+            background: #667eea;
+        }
+
+        .log-icon.user-removed {
+            background: #dc3545;
+        }
+
+        .log-content h4 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .log-time {
+            color: #666;
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="window.location.href='index.html'">← Back</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Role-Based Access Control</h1>
+            <p>Manage user roles, permissions, and access control for your enterprise platform</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">24</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">4</div>
+                <div class="stat-label">User Roles</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">12</div>
+                <div class="stat-label">Active Permissions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">156</div>
+                <div class="stat-label">Access Logs</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- User Management -->
+            <div class="section">
+                <h2 class="section-title">👥 User Management</h2>
+                
+                <div class="add-user-form">
+                    <h3>Add New User</h3>
+                    <div class="form-group">
+                        <label for="userName">Full Name</label>
+                        <input type="text" id="userName" placeholder="Enter full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="userEmail">Email Address</label>
+                        <input type="email" id="userEmail" placeholder="Enter email address">
+                    </div>
+                    <div class="form-group">
+                        <label for="userRole">Role</label>
+                        <select id="userRole">
+                            <option value="user">User</option>
+                            <option value="moderator">Moderator</option>
+                            <option value="admin">Administrator</option>
+                            <option value="guest">Guest</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="addUser()">Add User</button>
+                </div>
+
+                <div id="usersList">
+                    <div class="user-card">
+                        <div class="user-header">
+                            <div class="user-info">
+                                <div class="user-avatar">JD</div>
+                                <div class="user-details">
+                                    <h3>John Doe</h3>
+                                    <div class="user-email">john.doe@company.com</div>
+                                </div>
+                            </div>
+                            <div class="user-role admin">Administrator</div>
+                        </div>
+                        <div class="permissions-list">
+                            <div class="permission-item read">
+                                <span class="permission-icon">👁️</span>
+                                <span>Read Access</span>
+                            </div>
+                            <div class="permission-item write">
+                                <span class="permission-icon">✏️</span>
+                                <span>Write Access</span>
+                            </div>
+                            <div class="permission-item delete">
+                                <span class="permission-icon">🗑️</span>
+                                <span>Delete Access</span>
+                            </div>
+                            <div class="permission-item admin">
+                                <span class="permission-icon">⚙️</span>
+                                <span>Admin Access</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="user-card">
+                        <div class="user-header">
+                            <div class="user-info">
+                                <div class="user-avatar">JS</div>
+                                <div class="user-details">
+                                    <h3>Jane Smith</h3>
+                                    <div class="user-email">jane.smith@company.com</div>
+                                </div>
+                            </div>
+                            <div class="user-role moderator">Moderator</div>
+                        </div>
+                        <div class="permissions-list">
+                            <div class="permission-item read">
+                                <span class="permission-icon">👁️</span>
+                                <span>Read Access</span>
+                            </div>
+                            <div class="permission-item write">
+                                <span class="permission-icon">✏️</span>
+                                <span>Write Access</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="user-card">
+                        <div class="user-header">
+                            <div class="user-info">
+                                <div class="user-avatar">MJ</div>
+                                <div class="user-details">
+                                    <h3>Mike Johnson</h3>
+                                    <div class="user-email">mike.johnson@company.com</div>
+                                </div>
+                            </div>
+                            <div class="user-role user">User</div>
+                        </div>
+                        <div class="permissions-list">
+                            <div class="permission-item read">
+                                <span class="permission-icon">👁️</span>
+                                <span>Read Access</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Role Management -->
+            <div class="section">
+                <h2 class="section-title">🎭 Role Management</h2>
+                
+                <div class="role-card">
+                    <div class="role-header">
+                        <div class="role-name">Administrator</div>
+                        <div class="role-count">2 users</div>
+                    </div>
+                    <div class="role-description">
+                        Full system access with all permissions including user management, system configuration, and data administration.
+                    </div>
+                    <div class="role-permissions">
+                        <span class="role-permission">Read Access</span>
+                        <span class="role-permission">Write Access</span>
+                        <span class="role-permission">Delete Access</span>
+                        <span class="role-permission">Admin Access</span>
+                        <span class="role-permission">User Management</span>
+                        <span class="role-permission">System Config</span>
+                    </div>
+                </div>
+
+                <div class="role-card">
+                    <div class="role-header">
+                        <div class="role-name">Moderator</div>
+                        <div class="role-count">5 users</div>
+                    </div>
+                    <div class="role-description">
+                        Content management and user moderation capabilities with limited administrative functions.
+                    </div>
+                    <div class="role-permissions">
+                        <span class="role-permission">Read Access</span>
+                        <span class="role-permission">Write Access</span>
+                        <span class="role-permission">Content Moderation</span>
+                        <span class="role-permission">User Reports</span>
+                    </div>
+                </div>
+
+                <div class="role-card">
+                    <div class="role-header">
+                        <div class="role-name">User</div>
+                        <div class="role-count">15 users</div>
+                    </div>
+                    <div class="role-description">
+                        Standard user access with basic read and write permissions for regular platform usage.
+                    </div>
+                    <div class="role-permissions">
+                        <span class="role-permission">Read Access</span>
+                        <span class="role-permission">Write Access</span>
+                        <span class="role-permission">Profile Management</span>
+                    </div>
+                </div>
+
+                <div class="role-card">
+                    <div class="role-header">
+                        <div class="role-name">Guest</div>
+                        <div class="role-count">2 users</div>
+                    </div>
+                    <div class="role-description">
+                        Limited read-only access for temporary or external users with restricted functionality.
+                    </div>
+                    <div class="role-permissions">
+                        <span class="role-permission">Read Access</span>
+                        <span class="role-permission">Public Content</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Log -->
+        <div class="activity-log">
+            <h2 class="section-title">📊 Activity Log</h2>
+            <div id="activityLog">
+                <div class="log-item">
+                    <div class="log-icon user-added">➕</div>
+                    <div class="log-content">
+                        <h4>New user added</h4>
+                        <p>Sarah Wilson (sarah.wilson@company.com) was added as a User</p>
+                        <div class="log-time">2 minutes ago</div>
+                    </div>
+                </div>
+                <div class="log-item">
+                    <div class="log-icon role-changed">🔄</div>
+                    <div class="log-content">
+                        <h4>Role updated</h4>
+                        <p>Mike Johnson's role changed from User to Moderator</p>
+                        <div class="log-time">15 minutes ago</div>
+                    </div>
+                </div>
+                <div class="log-item">
+                    <div class="log-icon permission-updated">🔧</div>
+                    <div class="log-content">
+                        <h4>Permissions updated</h4>
+                        <p>Moderator role permissions updated to include content moderation</p>
+                        <div class="log-time">1 hour ago</div>
+                    </div>
+                </div>
+                <div class="log-item">
+                    <div class="log-icon user-removed">➖</div>
+                    <div class="log-content">
+                        <h4>User removed</h4>
+                        <p>Tom Brown (tom.brown@company.com) was removed from the system</p>
+                        <div class="log-time">2 hours ago</div>
+                    </div>
+                </div>
+                <div class="log-item">
+                    <div class="log-icon user-added">➕</div>
+                    <div class="log-content">
+                        <h4>New user added</h4>
+                        <p>Emily Davis (emily.davis@company.com) was added as a Guest</p>
+                        <div class="log-time">3 hours ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let users = [
+            {
+                id: 1,
+                name: 'John Doe',
+                email: 'john.doe@company.com',
+                role: 'admin',
+                avatar: 'JD',
+                permissions: ['read', 'write', 'delete', 'admin']
+            },
+            {
+                id: 2,
+                name: 'Jane Smith',
+                email: 'jane.smith@company.com',
+                role: 'moderator',
+                avatar: 'JS',
+                permissions: ['read', 'write']
+            },
+            {
+                id: 3,
+                name: 'Mike Johnson',
+                email: 'mike.johnson@company.com',
+                role: 'user',
+                avatar: 'MJ',
+                permissions: ['read']
+            }
+        ];
+
+        let roles = {
+            admin: {
+                name: 'Administrator',
+                description: 'Full system access with all permissions including user management, system configuration, and data administration.',
+                permissions: ['read', 'write', 'delete', 'admin', 'user_management', 'system_config'],
+                userCount: 2
+            },
+            moderator: {
+                name: 'Moderator',
+                description: 'Content management and user moderation capabilities with limited administrative functions.',
+                permissions: ['read', 'write', 'content_moderation', 'user_reports'],
+                userCount: 5
+            },
+            user: {
+                name: 'User',
+                description: 'Standard user access with basic read and write permissions for regular platform usage.',
+                permissions: ['read', 'write', 'profile_management'],
+                userCount: 15
+            },
+            guest: {
+                name: 'Guest',
+                description: 'Limited read-only access for temporary or external users with restricted functionality.',
+                permissions: ['read', 'public_content'],
+                userCount: 2
+            }
+        };
+
+        function addUser() {
+            const name = document.getElementById('userName').value.trim();
+            const email = document.getElementById('userEmail').value.trim();
+            const role = document.getElementById('userRole').value;
+
+            if (!name || !email) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const newUser = {
+                id: users.length + 1,
+                name: name,
+                email: email,
+                role: role,
+                avatar: name.split(' ').map(n => n[0]).join(''),
+                permissions: roles[role].permissions
+            };
+
+            users.push(newUser);
+            updateUsersDisplay();
+            addActivityLog('user-added', `New user added: ${name} (${email}) as ${roles[role].name}`);
+            
+            // Clear form
+            document.getElementById('userName').value = '';
+            document.getElementById('userEmail').value = '';
+            document.getElementById('userRole').value = 'user';
+        }
+
+        function updateUsersDisplay() {
+            const usersList = document.getElementById('usersList');
+            usersList.innerHTML = '';
+
+            users.forEach(user => {
+                const userCard = document.createElement('div');
+                userCard.className = 'user-card';
+                userCard.innerHTML = `
+                    <div class="user-header">
+                        <div class="user-info">
+                            <div class="user-avatar">${user.avatar}</div>
+                            <div class="user-details">
+                                <h3>${user.name}</h3>
+                                <div class="user-email">${user.email}</div>
+                            </div>
+                        </div>
+                        <div class="user-role ${user.role}">${roles[user.role].name}</div>
+                    </div>
+                    <div class="permissions-list">
+                        ${user.permissions.map(permission => `
+                            <div class="permission-item ${permission}">
+                                <span class="permission-icon">${getPermissionIcon(permission)}</span>
+                                <span>${getPermissionName(permission)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                usersList.appendChild(userCard);
+            });
+        }
+
+        function getPermissionIcon(permission) {
+            const icons = {
+                'read': '👁️',
+                'write': '✏️',
+                'delete': '🗑️',
+                'admin': '⚙️',
+                'user_management': '👥',
+                'system_config': '🔧',
+                'content_moderation': '🛡️',
+                'user_reports': '📊',
+                'profile_management': '👤',
+                'public_content': '🌐'
+            };
+            return icons[permission] || '🔑';
+        }
+
+        function getPermissionName(permission) {
+            const names = {
+                'read': 'Read Access',
+                'write': 'Write Access',
+                'delete': 'Delete Access',
+                'admin': 'Admin Access',
+                'user_management': 'User Management',
+                'system_config': 'System Config',
+                'content_moderation': 'Content Moderation',
+                'user_reports': 'User Reports',
+                'profile_management': 'Profile Management',
+                'public_content': 'Public Content'
+            };
+            return names[permission] || permission.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+        }
+
+        function addActivityLog(type, message) {
+            const activityLog = document.getElementById('activityLog');
+            const logItem = document.createElement('div');
+            logItem.className = 'log-item';
+            
+            const icons = {
+                'user-added': '➕',
+                'role-changed': '🔄',
+                'permission-updated': '🔧',
+                'user-removed': '➖'
+            };
+
+            logItem.innerHTML = `
+                <div class="log-icon ${type}">${icons[type] || '📝'}</div>
+                <div class="log-content">
+                    <h4>${getActivityTitle(type)}</h4>
+                    <p>${message}</p>
+                    <div class="log-time">just now</div>
+                </div>
+            `;
+
+            activityLog.insertBefore(logItem, activityLog.firstChild);
+
+            // Remove old logs if too many
+            if (activityLog.children.length > 10) {
+                activityLog.removeChild(activityLog.lastChild);
+            }
+        }
+
+        function getActivityTitle(type) {
+            const titles = {
+                'user-added': 'New user added',
+                'role-changed': 'Role updated',
+                'permission-updated': 'Permissions updated',
+                'user-removed': 'User removed'
+            };
+            return titles[type] || 'Activity logged';
+        }
+
+        // Initialize
+        updateUsersDisplay();
+
+        // Simulate real-time updates
+        setInterval(() => {
+            if (Math.random() > 0.8) { // 20% chance
+                const activities = [
+                    { type: 'role-changed', message: 'A user role was automatically updated based on activity patterns' },
+                    { type: 'permission-updated', message: 'System permissions were refreshed for security compliance' },
+                    { type: 'user-added', message: 'A new user joined the platform through invitation' }
+                ];
+                const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+                addActivityLog(randomActivity.type, randomActivity.message);
+            }
+        }, 30000); // Every 30 seconds
+    </script>
+</body>
+</html> 
