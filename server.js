@@ -121,8 +121,13 @@ app.post('/api/analytics/pageview', (req, res) => {
 // AI Routes
 app.post('/api/ai/generate-code', async (req, res) => {
     try {
-        const { description, language, template } = req.body;
-        const result = await aiService.generateCode(description, language, template);
+        const { description, language } = req.body;
+        
+        if (!description) {
+            return res.status(400).json({ error: 'Description is required' });
+        }
+
+        const result = await aiService.generateCode(description, language);
         res.json(result);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -132,6 +137,11 @@ app.post('/api/ai/generate-code', async (req, res) => {
 app.post('/api/ai/chat', async (req, res) => {
     try {
         const { message, conversationId } = req.body;
+        
+        if (!message) {
+            return res.status(400).json({ error: 'Message is required' });
+        }
+
         const result = await aiService.chat(message, conversationId);
         res.json(result);
     } catch (error) {
